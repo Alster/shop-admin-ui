@@ -14,11 +14,18 @@ export class SideMenuComponent implements OnInit {
       {
         label: 'Products',
         icon: 'pi pi-fw pi-file',
+        expanded: true,
         items: [
           {
             label: 'New',
-            icon: 'pi pi-fw pi-plus'
+            icon: 'pi pi-fw pi-plus',
+            routerLink: ['/create-product'],
           },
+          {
+            label: "List",
+            icon: 'pi pi-fw pi-list',
+            routerLink: ['/list-product'],
+          }
         ]
       }
     ];
