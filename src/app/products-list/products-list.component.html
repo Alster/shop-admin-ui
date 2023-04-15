@@ -20,6 +20,7 @@
       <th>Active</th>
       <th>Price</th>
       <th>Quantity</th>
+      <th>Attributes</th>
       <th>.</th>
     </tr>
   </ng-template>
@@ -29,6 +30,11 @@
       <td><p-tag [value]="getTitleForActive(product.active)" [severity]="getSeverityForActive(product.active)"></p-tag></td>
       <td>{{product.price | currency:'UAH'}}</td>
       <td>{{product.quantity}}</td>
+      <td>
+        <p-tag *ngFor="let attr of attrStrings.get(product)">
+          {{attr}}
+        </p-tag>
+      </td>
       <td class="flex flex-wrap gap-3 justify-content-end">
         <p-button
           icon="pi pi-pencil"

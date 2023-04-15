@@ -22,6 +22,9 @@ import {InputSwitchModule} from "primeng/inputswitch";
 import {KeyFilterModule} from "primeng/keyfilter";
 import {MultiSelectModule} from "primeng/multiselect";
 import {DropdownModule} from "primeng/dropdown";
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import {ConfirmationService, MessageService} from "primeng/api";
+import {ToastModule} from "primeng/toast";
 
 @NgModule({
   declarations: [
@@ -49,8 +52,13 @@ import {DropdownModule} from "primeng/dropdown";
     KeyFilterModule,
     MultiSelectModule,
     DropdownModule,
+    ConfirmDialogModule,
+    ToastModule,
   ],
-  providers: [],
+  providers: [
+    ConfirmationService,
+    MessageService,
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

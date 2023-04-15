@@ -89,7 +89,7 @@ export class EditProductComponent implements OnInit {
     this.product?.items.push({
       _id: uuid(),
       attributes: Object.fromEntries(this.selectedAttributes.map((attribute) => [attribute.code, []])),
-      quantity: 0,
+      quantity: 1,
     });
   }
 
