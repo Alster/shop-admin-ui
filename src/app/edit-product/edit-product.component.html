@@ -1,0 +1,39 @@
+<p-card header="Edit product" [hidden]="!product">
+  <div class="grid">
+    <div class="col-6">
+      <label class="block font-bold mb-2" for="name">Name</label>
+      <input
+        id="name"
+        type="text"
+        pInputText [(ngModel)]="product!.title"
+      />
+    </div>
+    <div class="col-6">
+      <label class="block font-bold mb-2" for="price">Price</label>
+      <p-inputNumber
+        id="price"
+        [(ngModel)]="product!.price"
+        inputId="minmaxfraction"
+        mode="currency"
+        [minFractionDigits]="2"
+        [maxFractionDigits]="5"
+        currency="UAH"
+      > </p-inputNumber>
+    </div>
+  </div>
+  <div class="grid">
+    <div class="col-12">items</div>
+  </div>
+  <div class="grid">
+    <div class="col-12">
+      <p-button
+        type="button"
+        label="Save"
+        icon="pi pi-save"
+        [disabled]="isLoading"
+        [loading]="isLoading"
+        (click)="updateProduct()"
+      ></p-button>
+    </div>
+  </div>
+</p-card>
