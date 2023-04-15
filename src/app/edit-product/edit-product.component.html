@@ -1,6 +1,6 @@
-<p-card header="Edit product" [hidden]="!product">
+<p-card header="Edit product" *ngIf="product">
   <div class="grid">
-    <div class="col-6">
+    <div class="col-3">
       <label class="block font-bold mb-2" for="name">Name</label>
       <input
         id="name"
@@ -8,7 +8,7 @@
         pInputText [(ngModel)]="product!.title"
       />
     </div>
-    <div class="col-6">
+    <div class="col-3">
       <label class="block font-bold mb-2" for="price">Price</label>
       <p-inputNumber
         id="price"
@@ -20,10 +20,64 @@
         currency="UAH"
       > </p-inputNumber>
     </div>
+    <div class="col-1">
+      <label class="block font-bold mb-2" for="active">Active</label>
+      <p-inputSwitch
+        id="active"
+        [(ngModel)]="product!.active"
+      ></p-inputSwitch>
+    </div>
   </div>
   <div class="grid">
-    <div class="col-12">items</div>
+    <div class="col-3">
+
+    </div>
   </div>
+  <p-table [value]="product!.items" styleClass="p-datatable-striped p-datatable-sm">
+    <ng-template pTemplate="caption">
+      <div class="flex align-items-center justify-content-between">
+        <p-multiSelect
+          (onChange)="onSelectedAttributesChange()"
+          [options]="attributes"
+          [(ngModel)]="selectedAttributes"
+          defaultLabel="Select attributes"
+          optionLabel="name"
+          display="chip"
+        ></p-multiSelect>
+        <p-button icon="pi pi-plus" (onClick)="addItem()"></p-button>
+      </div>
+    </ng-template>
+    <ng-template pTemplate="header">
+      <tr>
+        <th>Quantity</th>
+        <th *ngFor="let attr of selectedAttributes">
+          {{ attr.name }}
+        </th>
+        <th></th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-item>
+      <tr>
+        <td [pEditableColumn]="item.quantity">
+          <input pInputText type="number" [(ngModel)]="item.quantity" />
+        </td>
+        <td *ngFor="let attr of selectedAttributes">
+          <p-dropdown
+            *ngIf="attr.type === attributeTypeEnum.SELECT"
+            [options]="attr.values"
+            [(ngModel)]="item.attributes[attr.key][0]"
+          ></p-dropdown>
+        </td>
+        <td class="flex flex-wrap gap-3 justify-content-end">
+          <p-button
+            icon="pi pi-minus"
+            styleClass="p-button-danger"
+            (onClick)="removeItem(item)"
+          ></p-button>
+      </tr>
+    </ng-template>
+  </p-table>
+  <br>
   <div class="grid">
     <div class="col-12">
       <p-button

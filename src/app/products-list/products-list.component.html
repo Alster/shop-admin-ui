@@ -1,12 +1,12 @@
 
 <p-table
-  [tableStyle]="{'min-width': '70rem'}"
   [value]="products"
   [lazy]="true"
   (onLazyLoad)="fetchData()"
   [scrollable]="true"
   [responsive]="true"
   [resizableColumns]="true"
+  styleClass="p-datatable-striped"
 >
   <ng-template pTemplate="caption">
     <div class="flex align-items-center justify-content-between">

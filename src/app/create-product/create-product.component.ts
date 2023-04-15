@@ -21,9 +21,6 @@ export class CreateProductComponent {
     this.isLoading = true;
     const response = await fetchAPI('product/create', {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
       body: JSON.stringify({
         name: this.name,
         price: this.price,

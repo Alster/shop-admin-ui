@@ -18,6 +18,10 @@ import { ProductsListComponent } from './products-list/products-list.component';
 import {TableModule} from "primeng/table";
 import {ButtonModule} from "primeng/button";
 import {TagModule} from "primeng/tag";
+import {InputSwitchModule} from "primeng/inputswitch";
+import {KeyFilterModule} from "primeng/keyfilter";
+import {MultiSelectModule} from "primeng/multiselect";
+import {DropdownModule} from "primeng/dropdown";
 
 @NgModule({
   declarations: [
@@ -41,6 +45,10 @@ import {TagModule} from "primeng/tag";
     TableModule,
     ButtonModule,
     TagModule,
+    InputSwitchModule,
+    KeyFilterModule,
+    MultiSelectModule,
+    DropdownModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

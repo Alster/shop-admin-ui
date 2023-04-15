@@ -1,7 +1,15 @@
 import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute} from "@angular/router";
-import { ProductDto } from '@shop/shared/dto/product.dto';
+import { v4 as uuid } from 'uuid';
+import {ProductDto, ProductItemDto} from '@shop/shared/dto/product.dto';
 import {fetchAPI} from "../helpers/fetchAPI";
+import {AttributeDto} from "@shop/shared/dto/attribute.dto"
+import {AttributeType} from "../constants/product";
+
+interface MultiselectEntry extends AttributeDto {
+  name: string,
+  code: string,
+}
 
 @Component({
   selector: 'app-edit-product',
@@ -10,6 +18,11 @@ import {fetchAPI} from "../helpers/fetchAPI";
 })
 export class EditProductComponent implements OnInit {
   product?: ProductDto;
+  availableAttributes: AttributeDto[] = [];
+  attributes: MultiselectEntry[] = [];
+  selectedAttributes: MultiselectEntry[] = [];
+
+  attributeTypeEnum = AttributeType;
 
   isLoading: boolean = false;
 
@@ -19,12 +32,39 @@ export class EditProductComponent implements OnInit {
   async ngOnInit() {
     this.route.queryParams.subscribe(async params => {
       const id = params['id'];
-      const res = await fetchAPI(`product/get/${id}`, {
-        method: 'GET',
+      const fetchProduct = async () => {
+        const res = await fetchAPI(`product/get/${id}`, {
+          method: 'GET',
+        });
+        const json: ProductDto = await res.json();
+        this.product = json;
+        console.log(this.product);
+      }
+
+      await Promise.all([fetchProduct(), this.fetchAttributes()]);
+
+      if (!this.product) {
+        return;
+      }
+
+      this.selectedAttributes = this.attributes.filter((attribute) => {
+        return this.product?.attrs[attribute.key] ?? false;
       });
-      const json: ProductDto = await res.json();
-      this.product = json;
-      console.log(json);
+    });
+  }
+
+  async fetchAttributes() {
+    const res = await fetchAPI(`product/attribute/list`, {
+      method: 'GET',
+    });
+    const json: AttributeDto[] = await res.json();
+    this.availableAttributes = json;
+    this.attributes = json.map((attribute) => {
+      return {
+        ...attribute,
+        name: attribute.title,
+        code: attribute.key,
+      };
     });
   }
 
@@ -43,5 +83,36 @@ export class EditProductComponent implements OnInit {
     this.product = json;
     console.log(json);
     this.isLoading = false;
+  }
+
+  addItem() {
+    this.product?.items.push({
+      _id: uuid(),
+      attributes: Object.fromEntries(this.selectedAttributes.map((attribute) => [attribute.code, []])),
+      quantity: 0,
+    });
+  }
+
+  removeItem(item: ProductItemDto) {
+    if (!this.product) {
+      return;
+    }
+    this.product.items = this.product.items.filter((i) => i._id !== item._id);
+  }
+
+  onSelectedAttributesChange() {
+    if (!this.product) {
+      return;
+    }
+    this.product.items.forEach((item) => {
+      this.availableAttributes.forEach((attribute) => {
+        item.attributes[attribute.key] = item.attributes[attribute.key] ?? [];
+      });
+      Object.keys(item.attributes).forEach((key) => {
+        if (!this.selectedAttributes.find((attribute) => attribute.key === key)) {
+          delete item.attributes[key];
+        }
+      });
+    });
   }
 }
