@@ -49,7 +49,6 @@
     </ng-template>
     <ng-template pTemplate="header">
       <tr>
-        <th>Quantity</th>
         <th *ngFor="let attr of selectedAttributes">
           {{ attr.name }}
         </th>
@@ -58,9 +57,6 @@
     </ng-template>
     <ng-template pTemplate="body" let-item>
       <tr>
-        <td [pEditableColumn]="item.quantity">
-          <input pInputText type="number" [(ngModel)]="item.quantity" />
-        </td>
         <td *ngFor="let attr of selectedAttributes">
           <p-dropdown
             *ngIf="attr.type === attributeTypeEnum.SELECT"

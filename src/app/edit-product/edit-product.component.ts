@@ -89,7 +89,6 @@ export class EditProductComponent implements OnInit {
     this.product?.items.push({
       sku: uuid(),
       attributes: Object.fromEntries(this.selectedAttributes.map((attribute) => [attribute.code, []])),
-      quantity: 1,
     });
   }
 
