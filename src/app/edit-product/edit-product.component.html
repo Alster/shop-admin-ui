@@ -71,7 +71,9 @@
         display="chip"
       ></p-multiSelect>
     </div>
-    <div class="col-3" *ngFor="let attr of selectedCharacteristics">
+  </div>
+  <div class="grid">
+    <div class="col-2" *ngFor="let attr of selectedCharacteristics">
       <label class="block font-bold mb-2">{{attr.name}}</label>
       <p-dropdown
         *ngIf="attr.type === attributeTypeEnum.SELECT"
@@ -80,6 +82,18 @@
         optionValue="code"
         [(ngModel)]="product.characteristics[attr.key][0]"
       ></p-dropdown>
+      <span
+        *ngIf="attr.type === attributeTypeEnum.BOOLEAN"
+        class="p-buttonset"
+      >
+        <button
+          pButton
+          *ngFor="let val of attr.values"
+          label="{{val.title}}"
+          [class.p-button-success]="product.characteristics[attr.key][0] == val.key"
+          (click)="onCharacteristicBooleanChange(attr.key, val.key)"
+        ></button>
+      </span>
     </div>
   </div>
   <h3>Items</h3>
@@ -115,6 +129,18 @@
             optionValue="code"
             [(ngModel)]="item.attributes[attr.key][0]"
           ></p-dropdown>
+          <span
+            *ngIf="attr.type === attributeTypeEnum.BOOLEAN"
+            class="p-buttonset"
+          >
+          <button
+            pButton
+            *ngFor="let val of attr.values"
+            label="{{val.title}}"
+            [class.p-button-success]="item.attributes[attr.key][0] == val.key"
+            (click)="onItemBooleanChange(item, attr.key, val.key)"
+          ></button>
+        </span>
         </td>
         <td class="flex flex-wrap gap-3 justify-content-end">
           <p-button

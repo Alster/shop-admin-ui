@@ -168,4 +168,18 @@ export class EditProductComponent implements OnInit {
       return !this.selectedAttributes.find((attr) => attr.key === attribute.key);
     });
   }
+
+  onItemBooleanChange(item: ProductItemDto, attributeKey: string, valueKey: string) {
+    if (!this.product) {
+      return;
+    }
+    item.attributes[attributeKey][0] = valueKey;
+  }
+
+  onCharacteristicBooleanChange(attributeKey: string, valueKey: string) {
+    if (!this.product) {
+      return;
+    }
+    this.product.characteristics[attributeKey][0] = valueKey;
+  }
 }
