@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {ProductListResponseDto} from "@shop/shared/dto/product-list.response.dto";
-import {ProductDto} from "@shop/shared/dto/product.dto";
+import {ProductAdminDto, ProductDto} from "@shop/shared/dto/product.dto";
 import {fetchAPI} from "../helpers/fetchAPI";
 import {ConfirmationService, ConfirmEventType, MessageService} from "primeng/api";
 
@@ -10,8 +10,8 @@ import {ConfirmationService, ConfirmEventType, MessageService} from "primeng/api
   styleUrls: ['./products-list.component.scss']
 })
 export class ProductsListComponent implements OnInit {
-  products: ProductDto[] = [];
-  attrStrings = new WeakMap<ProductDto, string[]>();
+  products: ProductAdminDto[] = [];
+  attrStrings = new WeakMap<ProductAdminDto, string[]>();
 
   constructor(private confirmationService: ConfirmationService, private messageService: MessageService) {
   }
@@ -34,7 +34,7 @@ export class ProductsListComponent implements OnInit {
     const json: ProductListResponseDto = await response.json();
     console.log(json);
     this.products = json.products;
-    this.attrStrings = new WeakMap<ProductDto, string[]>();
+    this.attrStrings = new WeakMap<ProductAdminDto, string[]>();
     this.products?.forEach((product) => {
       const attrStrings = Object.keys(product.attrs).map((key) => {
         return `${key}: ${product.attrs[key].join(", ")}`;

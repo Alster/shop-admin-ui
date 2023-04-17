@@ -19,6 +19,7 @@
       <th>Title</th>
       <th>Active</th>
       <th>Price</th>
+      <th>Discount</th>
       <th>Quantity</th>
       <th>Attributes</th>
       <th>.</th>
@@ -26,9 +27,10 @@
   </ng-template>
   <ng-template pTemplate="body" let-product>
     <tr>
-      <td>{{product.title}}</td>
+      <td>{{product.title['ua']}}</td>
       <td><p-tag [value]="getTitleForActive(product.active)" [severity]="getSeverityForActive(product.active)"></p-tag></td>
-      <td>{{product.price | currency:'UAH'}}</td>
+      <td>{{product.price | currency: product.currency}}</td>
+      <td>{{product.discount}}%</td>
       <td>{{product.quantity}}</td>
       <td>
         <p-tag *ngFor="let attr of attrStrings.get(product)">
