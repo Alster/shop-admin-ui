@@ -100,6 +100,16 @@ export class EditProductComponent implements OnInit {
     this.product.items = this.product.items.filter((i) => i._id !== item._id);
   }
 
+  cloneItem(item: ProductItemDto) {
+    if (!this.product) {
+      return;
+    }
+    this.product.items.push({
+      ...item,
+      _id: uuid(),
+    });
+  }
+
   onSelectedAttributesChange() {
     if (!this.product) {
       return;

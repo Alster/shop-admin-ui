@@ -70,6 +70,11 @@
         </td>
         <td class="flex flex-wrap gap-3 justify-content-end">
           <p-button
+            icon="pi pi-clone"
+            styleClass="p-button-success"
+            (onClick)="cloneItem(item)"
+          ></p-button>
+          <p-button
             icon="pi pi-minus"
             styleClass="p-button-danger"
             (onClick)="removeItem(item)"
