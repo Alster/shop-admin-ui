@@ -87,7 +87,7 @@ export class EditProductComponent implements OnInit {
 
   addItem() {
     this.product?.items.push({
-      _id: uuid(),
+      sku: uuid(),
       attributes: Object.fromEntries(this.selectedAttributes.map((attribute) => [attribute.code, []])),
       quantity: 1,
     });
@@ -97,7 +97,7 @@ export class EditProductComponent implements OnInit {
     if (!this.product) {
       return;
     }
-    this.product.items = this.product.items.filter((i) => i._id !== item._id);
+    this.product.items = this.product.items.filter((i) => i.sku !== item.sku);
   }
 
   cloneItem(item: ProductItemDto) {
@@ -106,7 +106,7 @@ export class EditProductComponent implements OnInit {
     }
     this.product.items.push({
       ...item,
-      _id: uuid(),
+      sku: uuid(),
     });
   }
 
