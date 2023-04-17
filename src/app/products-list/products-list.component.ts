@@ -35,7 +35,7 @@ export class ProductsListComponent implements OnInit {
     console.log(json);
     this.products = json.products;
     this.attrStrings = new WeakMap<ProductDto, string[]>();
-    this.products.forEach((product) => {
+    this.products?.forEach((product) => {
       const attrStrings = Object.keys(product.attrs).map((key) => {
         return `${key}: ${product.attrs[key].join(", ")}`;
       });

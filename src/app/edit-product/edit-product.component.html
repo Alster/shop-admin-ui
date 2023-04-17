@@ -28,6 +28,8 @@
         ></button>
       </span>
     </div>
+  </div>
+  <div class="grid">
     <div class="col-3">
       <label class="block font-bold mb-2" for="price">Price</label>
       <p-inputNumber
@@ -40,12 +42,21 @@
         currency="{{product!.currency}}"
       > </p-inputNumber>
     </div>
-    <div class="col-1">
+    <div class="col-2">
       <label class="block font-bold mb-2">Currency</label>
       <p-dropdown
         [options]="['UAH']"
         [(ngModel)]="product!.currency"
       ></p-dropdown>
+    </div>
+    <div class="col-3">
+      <label class="block font-bold mb-2">Discount %</label>
+      <p-inputNumber
+        [(ngModel)]="product!.discount"
+        inputId="integeronly"
+        [min]="0"
+        [max]="90"
+      > </p-inputNumber>
     </div>
   </div>
   <p-table [value]="product!.items" styleClass="p-datatable-striped p-datatable-sm">
