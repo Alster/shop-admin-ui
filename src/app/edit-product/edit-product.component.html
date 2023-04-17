@@ -72,7 +72,9 @@
         <td *ngFor="let attr of selectedAttributes">
           <p-dropdown
             *ngIf="attr.type === attributeTypeEnum.SELECT"
-            [options]="attr.values"
+            [options]="getAttributeValues(attr)"
+            optionLabel="name"
+            optionValue="code"
             [(ngModel)]="item.attributes[attr.key][0]"
           ></p-dropdown>
         </td>

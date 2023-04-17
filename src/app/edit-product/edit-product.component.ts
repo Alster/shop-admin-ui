@@ -3,8 +3,8 @@ import {ActivatedRoute} from "@angular/router";
 import { v4 as uuid } from 'uuid';
 import {ProductAdminDto, ProductDto, ProductItemDto} from '@shop/shared/dto/product.dto';
 import {fetchAPI} from "../helpers/fetchAPI";
-import {AttributeDto} from "@shop/shared/dto/attribute.dto"
 import {AttributeType} from "../constants/product";
+import {AttributeDto} from '@shop/shared/dto/attribute.dto';
 
 interface MultiselectEntry extends AttributeDto {
   name: string,
@@ -129,5 +129,12 @@ export class EditProductComponent implements OnInit {
 
   changeLanguage(lang: string) {
     this.currentLanguage = lang;
+  }
+
+  getAttributeValues(attribute: AttributeDto): { name: string, code: string }[] {
+    return attribute.values.map((value) => ({
+      name: value.title,
+      code: value.key,
+    }));
   }
 }
