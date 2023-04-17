@@ -15,7 +15,7 @@
         pInputText [(ngModel)]="product!.title[currentLanguage]"
       />
     </div>
-    <div class="col-3">
+    <div class="col-2">
       <label class="block font-bold mb-2">Languages</label>
       <span class="p-buttonset">
         <button
@@ -28,21 +28,24 @@
         ></button>
       </span>
     </div>
-  </div>
-  <div class="grid">
     <div class="col-3">
-      <div class="col-3">
-        <label class="block font-bold mb-2" for="price">Price</label>
-        <p-inputNumber
-          id="price"
-          [(ngModel)]="product!.price"
-          inputId="minmaxfraction"
-          mode="currency"
-          [minFractionDigits]="2"
-          [maxFractionDigits]="5"
-          currency="UAH"
-        > </p-inputNumber>
-      </div>
+      <label class="block font-bold mb-2" for="price">Price</label>
+      <p-inputNumber
+        id="price"
+        [(ngModel)]="product!.price"
+        inputId="minmaxfraction"
+        mode="currency"
+        [minFractionDigits]="2"
+        [maxFractionDigits]="5"
+        currency="{{product!.currency}}"
+      > </p-inputNumber>
+    </div>
+    <div class="col-1">
+      <label class="block font-bold mb-2">Currency</label>
+      <p-dropdown
+        [options]="['UAH']"
+        [(ngModel)]="product!.currency"
+      ></p-dropdown>
     </div>
   </div>
   <p-table [value]="product!.items" styleClass="p-datatable-striped p-datatable-sm">
