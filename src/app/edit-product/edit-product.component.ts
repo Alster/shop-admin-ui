@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute} from "@angular/router";
 import { v4 as uuid } from 'uuid';
-import {ProductDto, ProductItemDto} from '@shop/shared/dto/product.dto';
+import {ProductAdminDto, ProductDto, ProductItemDto} from '@shop/shared/dto/product.dto';
 import {fetchAPI} from "../helpers/fetchAPI";
 import {AttributeDto} from "@shop/shared/dto/attribute.dto"
 import {AttributeType} from "../constants/product";
@@ -17,12 +17,14 @@ interface MultiselectEntry extends AttributeDto {
   styleUrls: ['./edit-product.component.scss']
 })
 export class EditProductComponent implements OnInit {
-  product?: ProductDto;
+  product?: ProductAdminDto;
   availableAttributes: AttributeDto[] = [];
   attributes: MultiselectEntry[] = [];
   selectedAttributes: MultiselectEntry[] = [];
 
   attributeTypeEnum = AttributeType;
+  currentLanguage = 'ua';
+  languages = ['en', 'ua'];
 
   isLoading: boolean = false;
 
@@ -36,7 +38,7 @@ export class EditProductComponent implements OnInit {
         const res = await fetchAPI(`product/get/${id}`, {
           method: 'GET',
         });
-        const json: ProductDto = await res.json();
+        const json: ProductAdminDto = await res.json();
         this.product = json;
         console.log(this.product);
       }
@@ -79,7 +81,7 @@ export class EditProductComponent implements OnInit {
       this.isLoading = false;
       return;
     }
-    const json: ProductDto = await res.json();
+    const json: ProductAdminDto = await res.json();
     this.product = json;
     console.log(json);
     this.isLoading = false;
@@ -123,5 +125,9 @@ export class EditProductComponent implements OnInit {
         }
       });
     });
+  }
+
+  changeLanguage(lang: string) {
+    this.currentLanguage = lang;
   }
 }

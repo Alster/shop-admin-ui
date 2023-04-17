@@ -1,25 +1,5 @@
 <p-card header="Edit product" *ngIf="product">
   <div class="grid">
-    <div class="col-3">
-      <label class="block font-bold mb-2" for="name">Name</label>
-      <input
-        id="name"
-        type="text"
-        pInputText [(ngModel)]="product!.title"
-      />
-    </div>
-    <div class="col-3">
-      <label class="block font-bold mb-2" for="price">Price</label>
-      <p-inputNumber
-        id="price"
-        [(ngModel)]="product!.price"
-        inputId="minmaxfraction"
-        mode="currency"
-        [minFractionDigits]="2"
-        [maxFractionDigits]="5"
-        currency="UAH"
-      > </p-inputNumber>
-    </div>
     <div class="col-1">
       <label class="block font-bold mb-2" for="active">Active</label>
       <p-inputSwitch
@@ -27,10 +7,42 @@
         [(ngModel)]="product!.active"
       ></p-inputSwitch>
     </div>
+    <div class="col-3">
+      <label class="block font-bold mb-2" for="name">Name</label>
+      <input
+        id="name"
+        type="text"
+        pInputText [(ngModel)]="product!.title[currentLanguage]"
+      />
+    </div>
+    <div class="col-3">
+      <label class="block font-bold mb-2">Languages</label>
+      <span class="p-buttonset">
+        <button
+          pButton
+          *ngFor="let lang of languages"
+          label="{{lang.toUpperCase()}}"
+          [class.p-button-secondary]="!product.title[lang]"
+          [class.p-button-success]="lang == currentLanguage"
+          (click)="changeLanguage(lang)"
+        ></button>
+      </span>
+    </div>
   </div>
   <div class="grid">
     <div class="col-3">
-
+      <div class="col-3">
+        <label class="block font-bold mb-2" for="price">Price</label>
+        <p-inputNumber
+          id="price"
+          [(ngModel)]="product!.price"
+          inputId="minmaxfraction"
+          mode="currency"
+          [minFractionDigits]="2"
+          [maxFractionDigits]="5"
+          currency="UAH"
+        > </p-inputNumber>
+      </div>
     </div>
   </div>
   <p-table [value]="product!.items" styleClass="p-datatable-striped p-datatable-sm">
