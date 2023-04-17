@@ -21,6 +21,7 @@ export class EditProductComponent implements OnInit {
   availableAttributes: AttributeDto[] = [];
   attributes: MultiselectEntry[] = [];
   selectedAttributes: MultiselectEntry[] = [];
+  selectedCharacteristics: MultiselectEntry[] = [];
 
   attributeTypeEnum = AttributeType;
   currentLanguage = 'ua';
@@ -50,7 +51,11 @@ export class EditProductComponent implements OnInit {
       }
 
       this.selectedAttributes = this.attributes.filter((attribute) => {
-        return this.product?.attrs[attribute.key] ?? false;
+        return (this.product?.attrs[attribute.key] && !this.product?.characteristics[attribute.key]) ?? false;
+      });
+
+      this.selectedCharacteristics = this.attributes.filter((attribute) => {
+        return this.product?.characteristics[attribute.key] ?? false;
       });
     });
   }
@@ -116,7 +121,7 @@ export class EditProductComponent implements OnInit {
       return;
     }
     this.product.items.forEach((item) => {
-      this.availableAttributes.forEach((attribute) => {
+      this.selectedAttributes.forEach((attribute) => {
         item.attributes[attribute.key] = item.attributes[attribute.key] ?? [];
       });
       Object.keys(item.attributes).forEach((key) => {
@@ -136,5 +141,31 @@ export class EditProductComponent implements OnInit {
       name: value.title,
       code: value.key,
     }));
+  }
+
+  onSelectedCharacteristicsChange() {
+    if (!this.product) {
+      return;
+    }
+    for (let attribute of this.selectedCharacteristics) {
+      this.product.characteristics[attribute.key] = this.product.characteristics[attribute.key] ?? [];
+    }
+    for (let key of Object.keys(this.product.characteristics)) {
+      if (!this.selectedCharacteristics.find((attribute) => attribute.key === key)) {
+        delete this.product.characteristics[key];
+      }
+    }
+  }
+
+  getAttributesForItems() {
+    return this.attributes.filter((attribute) => {
+      return !this.selectedCharacteristics.find((attr) => attr.key === attribute.key);
+    });
+  }
+
+  getAttributesForCharacteristics() {
+    return this.attributes.filter((attribute) => {
+      return !this.selectedAttributes.find((attr) => attr.key === attribute.key);
+    });
   }
 }

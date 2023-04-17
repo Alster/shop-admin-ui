@@ -59,12 +59,36 @@
       > </p-inputNumber>
     </div>
   </div>
+  <div class="grid">
+    <div class="col-3">
+      <label class="block font-bold mb-2">Characteristics</label>
+      <p-multiSelect
+        (onChange)="onSelectedCharacteristicsChange()"
+        [options]="getAttributesForCharacteristics()"
+        [(ngModel)]="selectedCharacteristics"
+        defaultLabel="Select characteristics"
+        optionLabel="name"
+        display="chip"
+      ></p-multiSelect>
+    </div>
+    <div class="col-3" *ngFor="let attr of selectedCharacteristics">
+      <label class="block font-bold mb-2">{{attr.name}}</label>
+      <p-dropdown
+        *ngIf="attr.type === attributeTypeEnum.SELECT"
+        [options]="getAttributeValues(attr)"
+        optionLabel="name"
+        optionValue="code"
+        [(ngModel)]="product.characteristics[attr.key][0]"
+      ></p-dropdown>
+    </div>
+  </div>
+  <h3>Items</h3>
   <p-table [value]="product!.items" styleClass="p-datatable-striped p-datatable-sm">
     <ng-template pTemplate="caption">
       <div class="flex align-items-center justify-content-between">
         <p-multiSelect
           (onChange)="onSelectedAttributesChange()"
-          [options]="attributes"
+          [options]="getAttributesForItems()"
           [(ngModel)]="selectedAttributes"
           defaultLabel="Select attributes"
           optionLabel="name"
