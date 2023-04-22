@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { TreeNode } from 'primeng/api';
 import ObjectId from 'bson-objectid';
+import {LanguageEnum} from "../../../shopshared/constants/localization";
 
 interface Category {
   title: {
@@ -100,6 +101,9 @@ export class EditCategoriesComponent {
   files: TreeNode[] = [];
   selectedFile?: TreeNode;
 
+  currentLanguage: LanguageEnum = LanguageEnum.UA;
+  languages = Object.values(LanguageEnum);
+
   constructor() {
     // Map tree to files
     this.tree.forEach((node) => {
@@ -109,7 +113,7 @@ export class EditCategoriesComponent {
 
   mapNode(node: Category): TreeNode {
     const treeNode: TreeNode = {
-      label: node.title.ua,
+      label: node.title[this.currentLanguage],
       data: node,
       children: [],
     };
@@ -145,5 +149,60 @@ export class EditCategoriesComponent {
     const index = childrens.indexOf(node);
     childrens.splice(index, 1);
     this.mapFiles(this.files);
+  }
+
+  addChild(node: TreeNode) {
+    const title = {
+      "en": "New category",
+      "ua": "Нова категорія",
+    };
+    const childrens = node.children || [];
+    childrens.push({
+      label: title[this.currentLanguage],
+      data: {
+        title,
+        id: new ObjectId().toString(),
+      },
+      children: [],
+    });
+    node.expanded = true;
+    this.mapFiles(this.files);
+  }
+
+  addRoot() {
+    const title = {
+      "en": "New category",
+      "ua": "Нова категорія",
+    };
+    this.files.push({
+      label: title[this.currentLanguage],
+      data: {
+        title,
+        id: new ObjectId().toString(),
+      },
+      children: [],
+    });
+    this.mapFiles(this.files);
+  }
+
+  changeLanguage(lang: string) {
+    this.currentLanguage = lang as LanguageEnum;
+    // Recursively change labels
+    this.files.forEach((file: TreeNode) => {
+      this.changeLabel(file);
+    });
+  }
+
+  changeLabel(node: TreeNode) {
+    node.label = node.data.title[this.currentLanguage];
+    if (node.children) {
+      node.children.forEach((child: TreeNode) => {
+        this.changeLabel(child);
+      });
+    }
+  }
+
+  async save() {
+    console.log(this.tree);
   }
 }

@@ -6,28 +6,56 @@
         [(selection)]="selectedFile"
         selectionMode="single"
       >
-        <ng-template let-node pTemplate="default">
-          <div class="grid">
-            <div class="col-6">
-              <p-button
-                icon="pi pi-times"
-                styleClass="p-button-danger p-button-text p-button-sm"
-                (click)="deleteNode(node)"
-              ></p-button>
-            </div>
-            <div class="col-6">{{ node.label }}</div>
-          </div>
-        </ng-template>
       </p-tree>
     </div>
     <div class="col-6" *ngIf="selectedFile">
+      <div class="grid">
+        <div class="col-12">
+          <span class="p-buttonset mr-5">
+            <button
+              pButton
+              *ngFor="let lang of languages"
+              label="{{lang.toUpperCase()}}"
+              [class.p-button-secondary]="!selectedFile.data.title[lang]"
+              [class.p-button-success]="lang == currentLanguage"
+              (click)="changeLanguage(lang)"
+            ></button>
+          </span>
+          <p-button
+            icon="pi pi-plus"
+            styleClass="mr-2"
+            label="Add child"
+            (click)="addChild(selectedFile)"
+          ></p-button>
+          <p-button
+            icon="pi pi-times"
+            styleClass="p-button-danger"
+            label="Remove"
+            (click)="deleteNode(selectedFile)"
+          ></p-button>
+        </div>
+      </div>
       <label class="block font-bold mb-2" for="name">Title</label>
       <input
         id="name"
         type="text"
-        pInputText [(ngModel)]="selectedFile.data.title.ua"
+        pInputText [(ngModel)]="selectedFile.data.title[currentLanguage]"
         (ngModelChange)="selectedFile.label = $event"
       />
+    </div>
+    <div class="col-12">
+      <p-button
+        icon="pi pi-plus"
+        styleClass="mr-2"
+        label="Add root category"
+        (click)="addRoot()"
+      ></p-button>
+      <p-button
+        icon="pi pi-save"
+        styleClass="p-button-success"
+        label="Save"
+        (click)="save()"
+      ></p-button>
     </div>
   </div>
 </p-card>

@@ -5,6 +5,7 @@ import {fetchAPI} from "../helpers/fetchAPI";
 import {AttributeDto} from "../../../shopshared/dto/attribute.dto";
 import {ATTRIBUTE_TYPE} from "../../../shopshared/constants/product";
 import {ProductAdminDto, ProductItemDto} from "../../../shopshared/dto/product.dto";
+import {LanguageEnum} from "../../../shopshared/constants/localization";
 
 interface MultiselectEntry extends AttributeDto {
   name: string,
@@ -24,8 +25,8 @@ export class EditProductComponent implements OnInit {
   selectedCharacteristics: MultiselectEntry[] = [];
 
   attributeTypeEnum = ATTRIBUTE_TYPE;
-  currentLanguage = 'ua';
-  languages = ['en', 'ua'];
+  currentLanguage: LanguageEnum = LanguageEnum.UA;
+  languages = Object.values(LanguageEnum);
 
   isLoading: boolean = false;
 
@@ -133,7 +134,7 @@ export class EditProductComponent implements OnInit {
   }
 
   changeLanguage(lang: string) {
-    this.currentLanguage = lang;
+    this.currentLanguage = lang as LanguageEnum;
   }
 
   getAttributeValues(attribute: AttributeDto): { name: string, code: string }[] {
