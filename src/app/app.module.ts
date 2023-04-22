@@ -26,6 +26,8 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import {ConfirmationService, MessageService} from "primeng/api";
 import {ToastModule} from "primeng/toast";
 import {CheckboxModule} from "primeng/checkbox";
+import { EditCategoriesComponent } from './edit-categories/edit-categories.component';
+import {TreeModule} from "primeng/tree";
 
 @NgModule({
   declarations: [
@@ -35,6 +37,7 @@ import {CheckboxModule} from "primeng/checkbox";
     CreateProductComponent,
     EditProductComponent,
     ProductsListComponent,
+    EditCategoriesComponent,
   ],
   imports: [
     BrowserModule,
@@ -56,6 +59,7 @@ import {CheckboxModule} from "primeng/checkbox";
     ConfirmDialogModule,
     ToastModule,
     CheckboxModule,
+    TreeModule,
   ],
   providers: [
     ConfirmationService,

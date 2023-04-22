@@ -1,8 +1,8 @@
 import {Component, OnInit} from '@angular/core';
-import {ProductListResponseDto} from "@shop/shared/dto/product-list.response.dto";
-import {ProductAdminDto, ProductDto} from "@shop/shared/dto/product.dto";
 import {fetchAPI} from "../helpers/fetchAPI";
 import {ConfirmationService, ConfirmEventType, MessageService} from "primeng/api";
+import {ProductAdminDto} from "../../../shopshared/dto/product.dto";
+import {ProductListResponseDto} from "../../../shopshared/dto/product-list.response.dto";
 
 @Component({
   selector: 'app-products-list',

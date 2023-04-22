@@ -1,0 +1,3 @@
+[submodule "shopshared"]
+	path = shopshared
+	url = git@gitlab.com:unicorn_project/shopshared.git

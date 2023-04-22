@@ -1,0 +1,33 @@
+<p-card header="Edit categories">
+  <div class="grid">
+    <div class="col-6">
+      <p-tree
+        [value]="files"
+        [(selection)]="selectedFile"
+        selectionMode="single"
+      >
+        <ng-template let-node pTemplate="default">
+          <div class="grid">
+            <div class="col-6">
+              <p-button
+                icon="pi pi-times"
+                styleClass="p-button-danger p-button-text p-button-sm"
+                (click)="deleteNode(node)"
+              ></p-button>
+            </div>
+            <div class="col-6">{{ node.label }}</div>
+          </div>
+        </ng-template>
+      </p-tree>
+    </div>
+    <div class="col-6" *ngIf="selectedFile">
+      <label class="block font-bold mb-2" for="name">Title</label>
+      <input
+        id="name"
+        type="text"
+        pInputText [(ngModel)]="selectedFile.data.title.ua"
+        (ngModelChange)="selectedFile.label = $event"
+      />
+    </div>
+  </div>
+</p-card>

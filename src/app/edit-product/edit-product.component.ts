@@ -1,10 +1,10 @@
 import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute} from "@angular/router";
 import { v4 as uuid } from 'uuid';
-import {ProductAdminDto, ProductDto, ProductItemDto} from '@shop/shared/dto/product.dto';
 import {fetchAPI} from "../helpers/fetchAPI";
-import {AttributeType} from "../constants/product";
-import {AttributeDto} from '@shop/shared/dto/attribute.dto';
+import {AttributeDto} from "../../../shopshared/dto/attribute.dto";
+import {ATTRIBUTE_TYPE} from "../../../shopshared/constants/product";
+import {ProductAdminDto, ProductItemDto} from "../../../shopshared/dto/product.dto";
 
 interface MultiselectEntry extends AttributeDto {
   name: string,
@@ -23,7 +23,7 @@ export class EditProductComponent implements OnInit {
   selectedAttributes: MultiselectEntry[] = [];
   selectedCharacteristics: MultiselectEntry[] = [];
 
-  attributeTypeEnum = AttributeType;
+  attributeTypeEnum = ATTRIBUTE_TYPE;
   currentLanguage = 'ua';
   languages = ['en', 'ua'];
 

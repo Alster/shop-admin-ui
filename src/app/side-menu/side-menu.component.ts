@@ -25,6 +25,11 @@ export class SideMenuComponent implements OnInit {
             label: "List",
             icon: 'pi pi-fw pi-list',
             routerLink: ['/list-product'],
+          },
+          {
+            label: "Categories",
+            icon: 'pi pi-fw pi-sitemap',
+            routerLink: ['/edit-categories'],
           }
         ]
       }
