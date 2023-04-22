@@ -2,14 +2,12 @@ import { Component } from '@angular/core';
 import { TreeNode } from 'primeng/api';
 import ObjectId from 'bson-objectid';
 import {LanguageEnum} from "../../../shopshared/constants/localization";
+import {fetchAPI} from "../helpers/fetchAPI";
+import {ProductAdminDto} from "../../../shopshared/dto/product.dto";
+import {CategoriesNodeDto} from "../../../shopshared/dto/categories-tree.dto";
 
-interface Category {
-  title: {
-    en: string;
-    ua: string;
-  },
-  id: string;
-  children?: Category[];
+interface Category extends CategoriesNodeDto {
+
 }
 
 @Component({
@@ -18,86 +16,7 @@ interface Category {
   styleUrls: ['./edit-categories.component.scss']
 })
 export class EditCategoriesComponent {
-  tree: Category[] = [
-    {
-      title: {
-        "en": "Man",
-        "ua": "Чоловікам",
-      },
-      id: new ObjectId().toString(),
-      children: [
-        {
-          title: {
-            "en": "Shoes",
-            "ua": "Взуття",
-          },
-          id: new ObjectId().toString(),
-        },
-        {
-          title: {
-            "en": "Clothes",
-            "ua": "Одяг",
-          },
-          id: new ObjectId().toString(),
-          children: [
-            {
-              title: {
-                "en": "T-shirts",
-                "ua": "Футболки",
-              },
-              id: new ObjectId().toString(),
-            },
-            {
-              title: {
-                "en": "Pants",
-                "ua": "Штани",
-              },
-              id: new ObjectId().toString(),
-            }
-          ]
-        },
-      ],
-    },
-    {
-      title: {
-        "en": "Woman",
-        "ua": "Жінкам",
-      },
-      id: new ObjectId().toString(),
-      children: [
-        {
-          title: {
-            "en": "Shoes",
-            "ua": "Взуття",
-          },
-          id: new ObjectId().toString(),
-        },
-        {
-          title: {
-            "en": "Clothes",
-            "ua": "Одяг",
-          },
-          id: new ObjectId().toString(),
-          children: [
-            {
-              title: {
-                "en": "T-shirts",
-                "ua": "Футболки",
-              },
-              id: new ObjectId().toString(),
-            },
-            {
-              title: {
-                "en": "Pants",
-                "ua": "Штани",
-              },
-              id: new ObjectId().toString(),
-            }
-          ]
-        }
-      ]
-    }
-  ];
+  tree: Category[] = [];
   files: TreeNode[] = [];
   selectedFile?: TreeNode;
 
@@ -105,6 +24,17 @@ export class EditCategoriesComponent {
   languages = Object.values(LanguageEnum);
 
   constructor() {
+    this.fetchTree();
+  }
+
+  async fetchTree() {
+    const res = await fetchAPI(`category/tree`, {
+      method: 'GET',
+    });
+    const json: CategoriesNodeDto[] = await res.json();
+    console.log(json);
+    this.tree = json;
+
     // Map tree to files
     this.tree.forEach((node) => {
       this.files.push(this.mapNode(node));
