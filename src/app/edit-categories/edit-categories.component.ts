@@ -3,7 +3,6 @@ import { TreeNode } from 'primeng/api';
 import ObjectId from 'bson-objectid';
 import {LanguageEnum} from "../../../shopshared/constants/localization";
 import {fetchAPI} from "../helpers/fetchAPI";
-import {ProductAdminDto} from "../../../shopshared/dto/product.dto";
 import {CategoriesNodeDto} from "../../../shopshared/dto/categories-tree.dto";
 
 interface Category extends CategoriesNodeDto {
@@ -13,12 +12,15 @@ interface Category extends CategoriesNodeDto {
 @Component({
   selector: 'app-edit-categories',
   templateUrl: './edit-categories.component.html',
-  styleUrls: ['./edit-categories.component.scss']
+  styleUrls: ['./edit-categories.component.scss'],
+  providers: [],
 })
 export class EditCategoriesComponent {
   tree: Category[] = [];
   files: TreeNode[] = [];
   selectedFile?: TreeNode;
+
+  isLoading: boolean = false;
 
   currentLanguage: LanguageEnum = LanguageEnum.UA;
   languages = Object.values(LanguageEnum);
@@ -41,10 +43,19 @@ export class EditCategoriesComponent {
     });
   }
 
+  async save() {
+    this.isLoading = true;
+    const res = await fetchAPI(`category/tree`, {
+      method: 'POST',
+      body: JSON.stringify(this.tree),
+    });
+  }
+
   mapNode(node: Category): TreeNode {
     const treeNode: TreeNode = {
       label: node.title[this.currentLanguage],
       data: node,
+      key: node.id,
       children: [],
     };
     if (node.children) {
@@ -132,7 +143,25 @@ export class EditCategoriesComponent {
     }
   }
 
-  async save() {
-    console.log(this.tree);
+  moveNodeUp(node: TreeNode) {
+    const childrens = node.parent ? (node.parent.children || []) : this.files;
+    const index = childrens.indexOf(node);
+    if (index > 0) {
+      const prevNode = childrens[index - 1];
+      childrens[index - 1] = node;
+      childrens[index] = prevNode;
+    }
+    this.mapFiles(this.files);
+  }
+
+  moveNodeDown(node: TreeNode) {
+    const childrens = node.parent ? (node.parent.children || []) : this.files;
+    const index = childrens.indexOf(node);
+    if (index < childrens.length - 1) {
+      const nextNode = childrens[index + 1];
+      childrens[index + 1] = node;
+      childrens[index] = nextNode;
+    }
+    this.mapFiles(this.files);
   }
 }

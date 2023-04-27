@@ -28,6 +28,7 @@ import {ToastModule} from "primeng/toast";
 import {CheckboxModule} from "primeng/checkbox";
 import { EditCategoriesComponent } from './edit-categories/edit-categories.component';
 import {TreeModule} from "primeng/tree";
+import {DragDropModule} from "primeng/dragdrop";
 
 @NgModule({
   declarations: [
@@ -60,6 +61,7 @@ import {TreeModule} from "primeng/tree";
     ToastModule,
     CheckboxModule,
     TreeModule,
+    DragDropModule,
   ],
   providers: [
     ConfirmationService,

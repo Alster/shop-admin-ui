@@ -5,7 +5,12 @@
         [value]="files"
         [(selection)]="selectedFile"
         selectionMode="single"
-      >
+      ><ng-template let-node pTemplate="default">
+        {{ node.label }}
+        &nbsp;&nbsp;
+        <span (click)="moveNodeUp(node)" class="pi pi-chevron-up up-tree-button"></span>
+        <span (click)="moveNodeDown(node)" class="pi pi-chevron-down up-tree-button"></span>
+      </ng-template>
       </p-tree>
     </div>
     <div class="col-6" *ngIf="selectedFile">
