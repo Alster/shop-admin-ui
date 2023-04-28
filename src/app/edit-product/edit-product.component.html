@@ -60,6 +60,35 @@
     </div>
   </div>
   <div class="grid">
+    <div class="col-12">
+      <p-accordion [activeIndex]="-1">
+        <p-accordionTab>
+          <ng-template pTemplate="header">
+            <div class="flex align-items-center">
+              <span class="font-bold mr-3">Categories</span>
+              <p-tag class="mr-1"  *ngFor="let id of product.categories">
+                {{findNodeById(id)?.label}}
+              </p-tag>
+            </div>
+          </ng-template>
+          <ng-template pTemplate="content">
+            <p-tree
+              [value]="files"
+              [filter]="true"
+              filterMode="strict"
+              filterPlaceholder="Strict Filter"
+            ><ng-template let-node pTemplate="default">
+              {{ node.label }}
+              &nbsp;&nbsp;
+              <p-checkbox *ngIf="!node.children.length" value="{{node.data.id}}" [(ngModel)]="product.categories"></p-checkbox>
+            </ng-template>
+            </p-tree>
+          </ng-template>
+        </p-accordionTab>
+      </p-accordion>
+    </div>
+  </div>
+  <div class="grid">
     <div class="col-3">
       <label class="block font-bold mb-2">Characteristics</label>
       <p-multiSelect
@@ -163,6 +192,7 @@
         type="button"
         label="Save"
         icon="pi pi-save"
+        styleClass="p-button-success"
         [disabled]="isLoading"
         [loading]="isLoading"
         (click)="updateProduct()"

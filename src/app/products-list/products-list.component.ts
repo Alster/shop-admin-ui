@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {fetchAPI} from "../helpers/fetchAPI";
-import {ConfirmationService, ConfirmEventType, MessageService} from "primeng/api";
+import {ConfirmationService, MessageService, TreeNode} from "primeng/api";
 import {ProductAdminDto} from "../../../shopshared/dto/product.dto";
 import {ProductListResponseDto} from "../../../shopshared/dto/product-list.response.dto";
 

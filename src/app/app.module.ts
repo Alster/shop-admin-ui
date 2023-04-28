@@ -29,6 +29,7 @@ import {CheckboxModule} from "primeng/checkbox";
 import { EditCategoriesComponent } from './edit-categories/edit-categories.component';
 import {TreeModule} from "primeng/tree";
 import {DragDropModule} from "primeng/dragdrop";
+import {AccordionModule} from "primeng/accordion";
 
 @NgModule({
   declarations: [
@@ -62,6 +63,7 @@ import {DragDropModule} from "primeng/dragdrop";
     CheckboxModule,
     TreeModule,
     DragDropModule,
+    AccordionModule,
   ],
   providers: [
     ConfirmationService,

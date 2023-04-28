@@ -6,6 +6,9 @@ import {AttributeDto} from "../../../shopshared/dto/attribute.dto";
 import {ATTRIBUTE_TYPE} from "../../../shopshared/constants/product";
 import {ProductAdminDto, ProductItemDto} from "../../../shopshared/dto/product.dto";
 import {LanguageEnum} from "../../../shopshared/constants/localization";
+import {CategoriesNodeDto} from "../../../shopshared/dto/categories-tree.dto";
+import {Category, fetchCategoryTree, mapNode} from "../helpers/categoriesTreHelpers";
+import {TreeNode} from "primeng/api";
 
 interface MultiselectEntry extends AttributeDto {
   name: string,
@@ -29,6 +32,9 @@ export class EditProductComponent implements OnInit {
   languages = Object.values(LanguageEnum);
 
   isLoading: boolean = false;
+
+  tree: Category[] = [];
+  files: TreeNode[] = [];
 
   constructor(private route: ActivatedRoute) {
   }
@@ -59,6 +65,7 @@ export class EditProductComponent implements OnInit {
         return this.product?.characteristics[attribute.key] ?? false;
       });
     });
+    await this.fetchCategoryTree();
   }
 
   async fetchAttributes() {
@@ -135,6 +142,18 @@ export class EditProductComponent implements OnInit {
 
   changeLanguage(lang: string) {
     this.currentLanguage = lang as LanguageEnum;
+    this.files.forEach((file: TreeNode) => {
+      this.changeLabel(file);
+    });
+  }
+
+  changeLabel(node: TreeNode) {
+    node.label = node.data.title[this.currentLanguage];
+    if (node.children) {
+      node.children.forEach((child: TreeNode) => {
+        this.changeLabel(child);
+      });
+    }
   }
 
   getAttributeValues(attribute: AttributeDto): { name: string, code: string }[] {
@@ -182,5 +201,41 @@ export class EditProductComponent implements OnInit {
       return;
     }
     this.product.characteristics[attributeKey][0] = valueKey;
+  }
+
+  async fetchCategoryTree() {
+    const json: CategoriesNodeDto[] = await fetchCategoryTree();
+    console.log(json);
+    this.tree = json;
+
+    // Map tree to files
+    this.tree.forEach((node) => {
+      this.files.push(mapNode(node, this.currentLanguage));
+    });
+  }
+
+  findNodeById(id: string): TreeNode | undefined {
+    for (let file of this.files) {
+      const node = this._findNodeById(id, file);
+      if (node) {
+        return node;
+      }
+    }
+    return undefined;
+  }
+
+  _findNodeById(id: string, node: TreeNode): TreeNode | undefined {
+    if (node.data.id === id) {
+      return node;
+    }
+    if (node.children) {
+      for (let child of node.children) {
+        const res = this._findNodeById(id, child);
+        if (res) {
+          return res;
+        }
+      }
+    }
+    return undefined;
   }
 }

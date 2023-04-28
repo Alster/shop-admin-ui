@@ -4,10 +4,7 @@ import ObjectId from 'bson-objectid';
 import {LanguageEnum} from "../../../shopshared/constants/localization";
 import {fetchAPI} from "../helpers/fetchAPI";
 import {CategoriesNodeDto} from "../../../shopshared/dto/categories-tree.dto";
-
-interface Category extends CategoriesNodeDto {
-
-}
+import {Category, mapNode} from "../helpers/categoriesTreHelpers";
 
 @Component({
   selector: 'app-edit-categories',
@@ -39,7 +36,7 @@ export class EditCategoriesComponent {
 
     // Map tree to files
     this.tree.forEach((node) => {
-      this.files.push(this.mapNode(node));
+      this.files.push(mapNode(node, this.currentLanguage));
     });
   }
 
@@ -49,21 +46,6 @@ export class EditCategoriesComponent {
       method: 'POST',
       body: JSON.stringify(this.tree),
     });
-  }
-
-  mapNode(node: Category): TreeNode {
-    const treeNode: TreeNode = {
-      label: node.title[this.currentLanguage],
-      data: node,
-      key: node.id,
-      children: [],
-    };
-    if (node.children) {
-      node.children.forEach((child: Category) => {
-        treeNode.children!.push(this.mapNode(child));
-      });
-    }
-    return treeNode;
   }
 
   // Map files to tree
