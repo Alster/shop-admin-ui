@@ -5,6 +5,7 @@ import {ProductAdminDto} from "../../../shopshared/dto/product.dto";
 import {ProductListResponseDto} from "../../../shopshared/dto/product-list.response.dto";
 import {Category} from "../helpers/categoriesTreHelpers";
 import {CategoryDto} from "../../../shopshared/dto/category.dto";
+import {AttributeDto} from "../../../shopshared/dto/attribute.dto";
 
 @Component({
   selector: 'app-products-list',
@@ -13,13 +14,14 @@ import {CategoryDto} from "../../../shopshared/dto/category.dto";
 })
 export class ProductsListComponent implements OnInit {
   products: ProductAdminDto[] = [];
-  attrStrings = new WeakMap<ProductAdminDto, string[]>();
   categories = new Map<string, CategoryDto>();
+  attributes = new Map<string, AttributeDto>();
 
   constructor(private confirmationService: ConfirmationService, private messageService: MessageService) {
   }
   async ngOnInit() {
     await this.fetchCategories();
+    await this.fetchAttributes();
   }
 
   getSeverityForActive(active: boolean): string {
@@ -37,13 +39,17 @@ export class ProductsListComponent implements OnInit {
     const json: ProductListResponseDto = await response.json();
     console.log("List:", json);
     this.products = json.products;
-    this.attrStrings = new WeakMap<ProductAdminDto, string[]>();
-    this.products?.forEach((product) => {
-      const attrStrings = Object.keys(product.attrs).map((key) => {
-        return `${key}: ${product.attrs[key].join(", ")}`;
+  }
+
+  getAttributeString(product: ProductAdminDto): string[] {
+    return Object
+      .entries(product.attrs)
+      .map(([nameKey, valueKeys]) => ({ attr: this.attributes.get(nameKey), valueKeys }))
+      .filter(({ attr }) => attr !== undefined)
+      .map(({ attr, valueKeys }) => {
+        const values = valueKeys.map((valueKey) => attr!.values.find((value) => value.key === valueKey)?.title);
+        return `${attr!.title}: ${values.join(", ")}`;
       });
-      this.attrStrings.set(product, attrStrings);
-    });
   }
 
   async fetchCategories() {
@@ -58,6 +64,17 @@ export class ProductsListComponent implements OnInit {
     });
   }
 
+  async fetchAttributes() {
+    const res = await fetchAPI(`product/attribute/list`, {
+      method: 'GET',
+    });
+    const json: AttributeDto[] = await res.json();
+    console.log("Attributes:", json);
+    this.attributes = new Map<string, AttributeDto>();
+    json.forEach((attribute) => {
+      this.attributes.set(attribute.key, attribute);
+    });
+  }
 
   async deleteProduct(id: string) {
     this.confirmationService.confirm({

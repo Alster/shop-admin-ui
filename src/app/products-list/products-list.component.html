@@ -39,7 +39,7 @@
       <td>{{product.discount}}%</td>
       <td>{{product.quantity}}</td>
       <td>
-        <p-tag *ngFor="let attr of attrStrings.get(product)" class="mr-1">
+        <p-tag *ngFor="let attr of getAttributeString(product)" class="mr-1">
           {{attr}}
         </p-tag>
       </td>
