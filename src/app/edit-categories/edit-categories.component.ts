@@ -80,14 +80,16 @@ export class EditCategoriesComponent {
       "ua": "Нова категорія",
     };
     const childrens = node.children || [];
-    childrens.push({
+    const newNode = {
       label: title[this.currentLanguage],
       data: {
         title,
         id: new ObjectId().toString(),
       },
       children: [],
-    });
+    };
+    this.selectedFile = newNode;
+    childrens.push(newNode);
     node.expanded = true;
     this.mapFiles(this.files);
   }
@@ -97,14 +99,16 @@ export class EditCategoriesComponent {
       "en": "New category",
       "ua": "Нова категорія",
     };
-    this.files.push({
+    const newNode = {
       label: title[this.currentLanguage],
       data: {
         title,
         id: new ObjectId().toString(),
       },
       children: [],
-    });
+    };
+    this.selectedFile = newNode;
+    this.files.push(newNode);
     this.mapFiles(this.files);
   }
 
