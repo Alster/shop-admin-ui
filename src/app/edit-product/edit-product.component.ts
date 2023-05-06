@@ -119,7 +119,7 @@ export class EditProductComponent implements OnInit {
       return;
     }
     this.product.items.push({
-      ...item,
+      ...JSON.parse(JSON.stringify(item)),
       sku: uuid(),
     });
   }
