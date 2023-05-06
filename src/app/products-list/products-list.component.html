@@ -18,6 +18,7 @@
     <tr>
       <th>Title</th>
       <th>Active</th>
+      <th>Category</th>
       <th>Price</th>
       <th>Discount</th>
       <th>Quantity</th>
@@ -29,11 +30,16 @@
     <tr>
       <td>{{product.title['ua']}}</td>
       <td><p-tag [value]="getTitleForActive(product.active)" [severity]="getSeverityForActive(product.active)"></p-tag></td>
+      <td>
+        <p-tag *ngFor="let categoryId of product.categories" class="mr-1">
+          {{categories.get(categoryId)?.title}}
+        </p-tag>
+      </td>
       <td>{{product.price | currency: product.currency}}</td>
       <td>{{product.discount}}%</td>
       <td>{{product.quantity}}</td>
       <td>
-        <p-tag *ngFor="let attr of attrStrings.get(product)">
+        <p-tag *ngFor="let attr of attrStrings.get(product)" class="mr-1">
           {{attr}}
         </p-tag>
       </td>

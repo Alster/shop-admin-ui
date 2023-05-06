@@ -3,6 +3,8 @@ import {fetchAPI} from "../helpers/fetchAPI";
 import {ConfirmationService, MessageService, TreeNode} from "primeng/api";
 import {ProductAdminDto} from "../../../shopshared/dto/product.dto";
 import {ProductListResponseDto} from "../../../shopshared/dto/product-list.response.dto";
+import {Category} from "../helpers/categoriesTreHelpers";
+import {CategoryDto} from "../../../shopshared/dto/category.dto";
 
 @Component({
   selector: 'app-products-list',
@@ -12,11 +14,12 @@ import {ProductListResponseDto} from "../../../shopshared/dto/product-list.respo
 export class ProductsListComponent implements OnInit {
   products: ProductAdminDto[] = [];
   attrStrings = new WeakMap<ProductAdminDto, string[]>();
+  categories = new Map<string, CategoryDto>();
 
   constructor(private confirmationService: ConfirmationService, private messageService: MessageService) {
   }
   async ngOnInit() {
-    // await this.fetchData();
+    await this.fetchCategories();
   }
 
   getSeverityForActive(active: boolean): string {
@@ -42,6 +45,19 @@ export class ProductsListComponent implements OnInit {
       this.attrStrings.set(product, attrStrings);
     });
   }
+
+  async fetchCategories() {
+    const response = await fetchAPI('category/list', {
+      method: 'GET',
+    });
+    const json: CategoryDto[] = await response.json();
+    console.log("Categories:", json);
+    this.categories = new Map<string, CategoryDto>();
+    json.forEach((category) => {
+      this.categories.set(category.id, category);
+    });
+  }
+
 
   async deleteProduct(id: string) {
     this.confirmationService.confirm({
