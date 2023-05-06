@@ -1,65 +1,81 @@
-
-<p-table
-  [value]="products"
-  [lazy]="true"
-  (onLazyLoad)="fetchData()"
-  [scrollable]="true"
-  [responsive]="true"
-  [resizableColumns]="true"
-  styleClass="p-datatable-striped"
->
-  <ng-template pTemplate="caption">
-    <div class="flex align-items-center justify-content-between">
-      Products
-      <p-button icon="pi pi-refresh" (onClick)="fetchData()"></p-button>
+<p-card header="Products">
+  <div class="grid">
+    <div class="col-2" *ngFor="let filter of filters;">
+      <div *ngIf="attributes.get(filter.key); let attr">
+        <label class="block font-bold mb-2">{{attr.title}}</label>
+        <p-dropdown
+          *ngIf="attr.type === attributeTypeEnum.SELECT"
+          [options]="getAttributeValues(attr)"
+          optionLabel="name"
+          optionValue="code"
+          [(ngModel)]="filter.selected[0]"
+          (onChange)="fetchData()"
+        ></p-dropdown>
+      </div>
     </div>
-  </ng-template>
-  <ng-template pTemplate="header">
-    <tr>
-      <th>Title</th>
-      <th>Active</th>
-      <th>Category</th>
-      <th>Price</th>
-      <th>Discount</th>
-      <th>Quantity</th>
-      <th>Attributes</th>
-      <th>.</th>
-    </tr>
-  </ng-template>
-  <ng-template pTemplate="body" let-product>
-    <tr>
-      <td>{{product.title['ua']}}</td>
-      <td><p-tag [value]="getTitleForActive(product.active)" [severity]="getSeverityForActive(product.active)"></p-tag></td>
-      <td>
-        <p-tag *ngFor="let categoryId of product.categories" class="mr-1">
-          {{categories.get(categoryId)?.title}}
-        </p-tag>
-      </td>
-      <td>{{product.price | currency: product.currency}}</td>
-      <td>{{product.discount}}%</td>
-      <td>{{product.quantity}}</td>
-      <td>
-        <p-tag *ngFor="let attr of getAttributeString(product)" class="mr-1">
-          {{attr}}
-        </p-tag>
-      </td>
-      <td class="flex flex-wrap gap-3 justify-content-end">
-        <p-button
-          icon="pi pi-pencil"
-          routerLink="/edit-product"
-          [queryParams]="{id: product.id}"
-        ></p-button>
-        <p-button
-          icon="pi pi-times"
-          styleClass="p-button-danger"
-          (onClick)="deleteProduct(product.id)"
-        ></p-button>
-      </td>
-    </tr>
-  </ng-template>
-  <ng-template pTemplate="summary">
-    <div class="flex align-items-center justify-content-between">
-      In total there are {{products ? products.length : 0 }} products.
-    </div>
-  </ng-template>
-</p-table>
+  </div>
+  <p-table
+    [value]="products"
+    [lazy]="true"
+    (onLazyLoad)="fetchData()"
+    [scrollable]="true"
+    [responsive]="true"
+    [resizableColumns]="true"
+    styleClass="p-datatable-striped"
+  >
+    <ng-template pTemplate="caption">
+      <div class="flex align-items-center justify-content-between">
+        List of products
+        <p-button icon="pi pi-refresh" (onClick)="fetchData()"></p-button>
+      </div>
+    </ng-template>
+    <ng-template pTemplate="header">
+      <tr>
+        <th>Title</th>
+        <th>Active</th>
+        <th>Category</th>
+        <th>Price</th>
+        <th>Discount</th>
+        <th>Quantity</th>
+        <th>Attributes</th>
+        <th>.</th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-product>
+      <tr>
+        <td>{{product.title['ua']}}</td>
+        <td><p-tag [value]="getTitleForActive(product.active)" [severity]="getSeverityForActive(product.active)"></p-tag></td>
+        <td>
+          <p-tag *ngFor="let categoryId of product.categories" class="mr-1">
+            {{categories.get(categoryId)?.title}}
+          </p-tag>
+        </td>
+        <td>{{product.price | currency: product.currency}}</td>
+        <td>{{product.discount}}%</td>
+        <td>{{product.quantity}}</td>
+        <td>
+          <p-tag *ngFor="let attr of getAttributeString(product)" class="mr-1">
+            {{attr}}
+          </p-tag>
+        </td>
+        <td class="flex flex-wrap gap-3 justify-content-end">
+          <p-button
+            icon="pi pi-pencil"
+            routerLink="/edit-product"
+            [queryParams]="{id: product.id}"
+          ></p-button>
+          <p-button
+            icon="pi pi-times"
+            styleClass="p-button-danger"
+            (onClick)="deleteProduct(product.id)"
+          ></p-button>
+        </td>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="summary">
+      <div class="flex align-items-center justify-content-between">
+        In total there are {{products ? products.length : 0 }} products.
+      </div>
+    </ng-template>
+  </p-table>
+</p-card>

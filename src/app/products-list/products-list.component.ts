@@ -1,11 +1,12 @@
 import {Component, OnInit} from '@angular/core';
+import * as qs from "qs";
 import {fetchAPI} from "../helpers/fetchAPI";
 import {ConfirmationService, MessageService, TreeNode} from "primeng/api";
 import {ProductAdminDto} from "../../../shopshared/dto/product.dto";
 import {ProductListResponseDto} from "../../../shopshared/dto/product-list.response.dto";
-import {Category} from "../helpers/categoriesTreHelpers";
 import {CategoryDto} from "../../../shopshared/dto/category.dto";
 import {AttributeDto} from "../../../shopshared/dto/attribute.dto";
+import {ATTRIBUTE_TYPE} from "../../../shopshared/constants/product";
 
 @Component({
   selector: 'app-products-list',
@@ -13,7 +14,10 @@ import {AttributeDto} from "../../../shopshared/dto/attribute.dto";
   styleUrls: ['./products-list.component.scss']
 })
 export class ProductsListComponent implements OnInit {
+  attributeTypeEnum = ATTRIBUTE_TYPE;
   products: ProductAdminDto[] = [];
+  filters: { key: string, values: string[], selected: string[] }[] = [];
+  availableCategories: string[] = [];
   categories = new Map<string, CategoryDto>();
   attributes = new Map<string, AttributeDto>();
 
@@ -33,12 +37,25 @@ export class ProductsListComponent implements OnInit {
   }
 
   async fetchData() {
+    const attrFilters = this.filters
+      .map(({ key, selected }) => ({ key, values: selected.filter(v => v) }))
+      .filter(({ values }) => values.length > 0);
+
     const response = await fetchAPI('product/list', {
       method: 'GET',
-    });
+    }, qs.stringify({ attrs: attrFilters }));
     const json: ProductListResponseDto = await response.json();
     console.log("List:", json);
+
     this.products = json.products;
+    this.filters = Object
+      .entries(json.filters)
+      .map(([key, values]) => ({
+        key,
+        values: [...values],
+        selected: this.filters.find(({ key: k }) => k === key)?.selected ?? []
+      }));
+    this.availableCategories = json.categories;
   }
 
   getAttributeString(product: ProductAdminDto): string[] {
@@ -50,6 +67,19 @@ export class ProductsListComponent implements OnInit {
         const values = valueKeys.map((valueKey) => attr!.values.find((value) => value.key === valueKey)?.title);
         return `${attr!.title}: ${values.join(", ")}`;
       });
+  }
+
+  getAttributeValues(attribute: AttributeDto): { name: string, code: string }[] {
+    return [{
+      name: 'All',
+      code: '',
+    }, ...attribute.values
+      .map((value) => ({
+        name: value.title,
+        code: value.key,
+      }))
+      .filter(({ code }) => this.filters.find(({ key }) => key === attribute.key)?.values.includes(code) ?? false)
+    ];
   }
 
   async fetchCategories() {
@@ -95,4 +125,6 @@ export class ProductsListComponent implements OnInit {
       reject: (type: any) => {}
     })
   }
+
+  protected readonly ATTRIBUTE_TYPE = ATTRIBUTE_TYPE;
 }
