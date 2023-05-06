@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {ActivatedRoute} from "@angular/router";
+import {ActivatedRoute, Router} from "@angular/router";
 import { v4 as uuid } from 'uuid';
 import {fetchAPI} from "../helpers/fetchAPI";
 import {AttributeDto} from "../../../shopshared/dto/attribute.dto";
@@ -8,7 +8,7 @@ import {ProductAdminDto, ProductItemDto} from "../../../shopshared/dto/product.d
 import {LanguageEnum} from "../../../shopshared/constants/localization";
 import {CategoriesNodeDto} from "../../../shopshared/dto/categories-tree.dto";
 import {Category, fetchCategoryTree, mapNode} from "../helpers/categoriesTreHelpers";
-import {TreeNode} from "primeng/api";
+import {ConfirmationService, MessageService, TreeNode} from "primeng/api";
 
 interface MultiselectEntry extends AttributeDto {
   name: string,
@@ -36,7 +36,11 @@ export class EditProductComponent implements OnInit {
   tree: Category[] = [];
   files: TreeNode[] = [];
 
-  constructor(private route: ActivatedRoute) {
+  constructor(
+    private confirmationService: ConfirmationService,
+    private messageService: MessageService,
+    private route: ActivatedRoute,
+  ) {
   }
 
   async ngOnInit() {
@@ -48,7 +52,7 @@ export class EditProductComponent implements OnInit {
         });
         const json: ProductAdminDto = await res.json();
         this.product = json;
-        console.log("Product:", this.product);
+        // console.log("Product:", this.product);
       }
 
       await Promise.all([fetchProduct(), this.fetchAttributes()]);
@@ -96,8 +100,34 @@ export class EditProductComponent implements OnInit {
     }
     const json: ProductAdminDto = await res.json();
     this.product = json;
-    console.log("Product:", json);
+    // console.log("Product:", json);
     this.isLoading = false;
+  }
+
+  async deleteProduct() {
+    if (!this.product) {
+      return;
+    }
+
+    this.confirmationService.confirm({
+      message: 'Do you want to delete this record?',
+      header: 'Delete Confirmation',
+      icon: 'pi pi-info-circle',
+      accept: async () => {
+        if (!this.product) {
+          return;
+        }
+        const response = await fetchAPI(`product/delete/${this.product.id}`, {
+          method: 'POST',
+        });
+        if (!response.ok) {
+          this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Error deleting product' });
+          return;
+        }
+        history.back();
+      },
+      reject: (type: any) => {}
+    })
   }
 
   addItem() {
@@ -205,7 +235,7 @@ export class EditProductComponent implements OnInit {
 
   async fetchCategoryTree() {
     const json: CategoriesNodeDto[] = await fetchCategoryTree();
-    console.log("Category tree:", json);
+    // console.log("Category tree:", json);
     this.tree = json;
 
     // Map tree to files

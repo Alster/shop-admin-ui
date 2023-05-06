@@ -9,7 +9,7 @@
           optionLabel="name"
           optionValue="code"
           [(ngModel)]="filter.selected[0]"
-          (onChange)="fetchData()"
+          (onChange)="updateQuery()"
         ></p-dropdown>
       </div>
     </div>
@@ -17,7 +17,7 @@
   <p-table
     [value]="products"
     [lazy]="true"
-    (onLazyLoad)="fetchData()"
+    (onLazyLoad)="fetchProducts()"
     [scrollable]="true"
     [responsive]="true"
     [resizableColumns]="true"
@@ -26,7 +26,7 @@
     <ng-template pTemplate="caption">
       <div class="flex align-items-center justify-content-between">
         List of products
-        <p-button icon="pi pi-refresh" (onClick)="fetchData()"></p-button>
+        <p-button icon="pi pi-refresh" (onClick)="fetchProducts()"></p-button>
       </div>
     </ng-template>
     <ng-template pTemplate="header">
@@ -58,11 +58,15 @@
             {{attr}}
           </p-tag>
         </td>
-        <td class="flex flex-wrap gap-3 justify-content-end">
+        <td class="flex flex-wrap gap-1 justify-content-end">
           <p-button
             icon="pi pi-pencil"
             routerLink="/edit-product"
             [queryParams]="{id: product.id}"
+          ></p-button>
+          <p-button
+            icon="pi pi-clone"
+            (onClick)="cloneProduct(product.id)"
           ></p-button>
           <p-button
             icon="pi pi-times"

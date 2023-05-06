@@ -31,7 +31,7 @@ export class EditCategoriesComponent {
       method: 'GET',
     });
     const json: CategoriesNodeDto[] = await res.json();
-    console.log("Category tree:", json);
+    // console.log("Category tree:", json);
     this.tree = json;
 
     // Map tree to files

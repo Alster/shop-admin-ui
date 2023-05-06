@@ -189,6 +189,7 @@
   <div class="grid">
     <div class="col-12">
       <p-button
+        class="mr-3"
         type="button"
         label="Save"
         icon="pi pi-save"
@@ -196,6 +197,15 @@
         [disabled]="isLoading"
         [loading]="isLoading"
         (click)="updateProduct()"
+      ></p-button>
+      <p-button
+        type="button"
+        label="Delete"
+        icon="pi pi-trash"
+        styleClass="p-button-danger"
+        [disabled]="isLoading"
+        [loading]="isLoading"
+        (click)="deleteProduct()"
       ></p-button>
     </div>
   </div>
