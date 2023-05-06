@@ -48,7 +48,7 @@ export class EditProductComponent implements OnInit {
         });
         const json: ProductAdminDto = await res.json();
         this.product = json;
-        console.log(this.product);
+        console.log("Product:", this.product);
       }
 
       await Promise.all([fetchProduct(), this.fetchAttributes()]);
@@ -96,7 +96,7 @@ export class EditProductComponent implements OnInit {
     }
     const json: ProductAdminDto = await res.json();
     this.product = json;
-    console.log(json);
+    console.log("Product:", json);
     this.isLoading = false;
   }
 
@@ -205,7 +205,7 @@ export class EditProductComponent implements OnInit {
 
   async fetchCategoryTree() {
     const json: CategoriesNodeDto[] = await fetchCategoryTree();
-    console.log(json);
+    console.log("Category tree:", json);
     this.tree = json;
 
     // Map tree to files

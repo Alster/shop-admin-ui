@@ -32,7 +32,7 @@ export class ProductsListComponent implements OnInit {
       method: 'GET',
     });
     const json: ProductListResponseDto = await response.json();
-    console.log(json);
+    console.log("List:", json);
     this.products = json.products;
     this.attrStrings = new WeakMap<ProductAdminDto, string[]>();
     this.products?.forEach((product) => {
@@ -44,7 +44,6 @@ export class ProductsListComponent implements OnInit {
   }
 
   async deleteProduct(id: string) {
-    console.log("deleting product");
     this.confirmationService.confirm({
       message: 'Do you want to delete this record?',
       header: 'Delete Confirmation',
