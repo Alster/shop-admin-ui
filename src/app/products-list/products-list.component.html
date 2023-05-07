@@ -68,7 +68,10 @@
   >
     <ng-template pTemplate="caption">
       <div class="flex align-items-center justify-content-between">
-        List of products
+        <span class="p-input-icon-left">
+            <i class="pi pi-search"></i>
+            <input pInputText type="text" (input)="onTitleSearchUpdate($event.target)" placeholder="Search keyword" />
+        </span>
         <p-button icon="pi pi-refresh" (onClick)="fetchProducts()"></p-button>
       </div>
     </ng-template>
@@ -124,6 +127,11 @@
       <div class="flex align-items-center justify-content-between">
         In total there are {{totalProductsCount}} products.
       </div>
+    </ng-template>
+    <ng-template pTemplate="emptymessage">
+      <tr>
+        <td colspan="5">No products found.</td>
+      </tr>
     </ng-template>
   </p-table>
 </p-card>

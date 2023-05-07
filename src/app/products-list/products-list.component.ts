@@ -35,6 +35,7 @@ export class ProductsListComponent implements OnInit {
   rows = 0;
   sortField = "";
   sortOrder = 0;
+  searchTitleQuery = "";
 
   categoryTree: Category[] = [];
   treeNodes: TreeNode[] = [];
@@ -89,6 +90,7 @@ export class ProductsListComponent implements OnInit {
     queryParams.sortOrder = this.sortOrder;
     queryParams.first = this.first;
     queryParams.rows = this.rows;
+    queryParams.search = this.searchTitleQuery;
 
     console.log("Query params before:", queryParams);
 
@@ -104,6 +106,12 @@ export class ProductsListComponent implements OnInit {
     console.log("onSort");
   }
 
+  async onTitleSearchUpdate(event: any) {
+    console.log("onTitleSearchUpdate", event.value);
+    this.searchTitleQuery = event.value;
+    await this.updateQuery();
+  }
+
   async lazyLoadProducts(event: any) {
     console.log("lazyLoadProducts", event);
     this.sortField = event.sortField;
@@ -111,7 +119,6 @@ export class ProductsListComponent implements OnInit {
     this.first = event.first;
     this.rows = event.rows;
     await this.updateQuery();
-    // await this.fetchProducts();
   }
 
   async fetchProducts() {
@@ -126,12 +133,14 @@ export class ProductsListComponent implements OnInit {
     const sortOrder: number = +(params['sortOrder'] ?? '');
     const first: number = +(params['first'] ?? '');
     const rows: number = +(params['rows'] ?? '5');
+    const searchTitleQuery: string = params['search'] ?? '';
     console.log("Query params after: attrs:", attrFilters);
     console.log("Query params after: cat:", categoryFilters);
     console.log("Query params after: sortField:", sortField);
     console.log("Query params after: sortOrder:", sortOrder);
     console.log("Query params after: first:", first);
     console.log("Query params after: rows:", rows);
+    console.log("Query params after: search:", searchTitleQuery);
 
     const response = await fetchAPI('product/list', {
       method: 'GET',
@@ -142,6 +151,7 @@ export class ProductsListComponent implements OnInit {
       sortOrder: sortOrder,
       skip: first,
       limit: rows,
+      search: searchTitleQuery,
     }));
     this.listIsNotLoaded = false;
     if (!response.ok) {
@@ -168,6 +178,7 @@ export class ProductsListComponent implements OnInit {
     this.sortOrder = sortOrder;
     this.first = first;
     this.rows = rows;
+    this.searchTitleQuery = searchTitleQuery;
 
     // Prepare category tree
     const isVisible = (id: string) => {
