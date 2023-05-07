@@ -26,6 +26,7 @@ export class ProductsListComponent implements OnInit {
   availableCategories: string[] = [];
   categories = new Map<string, CategoryDto>();
   attributes = new Map<string, AttributeDto>();
+  totalProductsCount = 0;
 
   listIsNotLoaded = true;
 
@@ -98,6 +99,7 @@ export class ProductsListComponent implements OnInit {
         selected: attrFilters.find(({ key: k }) => k === key)?.values ?? []
       }));
     this.availableCategories = json.categories;
+    this.totalProductsCount = json.total;
   }
 
   getAttributeString(product: ProductAdminDto): string[] {
