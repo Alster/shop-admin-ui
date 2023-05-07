@@ -70,7 +70,12 @@
       <div class="flex align-items-center justify-content-between">
         <span class="p-input-icon-left">
             <i class="pi pi-search"></i>
-            <input pInputText type="text" (input)="onTitleSearchUpdate($event.target)" placeholder="Search keyword" />
+            <input
+              pInputText type="text"
+              (input)="onTitleSearchUpdate($event.target)"
+              placeholder="Search keyword"
+              [(ngModel)]="searchTitleQuery"
+            />
         </span>
         <p-button icon="pi pi-refresh" (onClick)="fetchProducts()"></p-button>
       </div>
