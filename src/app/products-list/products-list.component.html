@@ -50,11 +50,21 @@
   <p-table
     [value]="products"
     [lazy]="true"
-    (onLazyLoad)="fetchProducts()"
+    (onLazyLoad)="lazyLoadProducts($event)"
     [scrollable]="true"
     [responsive]="true"
     [resizableColumns]="true"
-    styleClass="p-datatable-striped"
+    styleClass="p-datatable-striped p-datatable-sm"
+    (onSort)="onSort()"
+    [rowHover]="true"
+    [loading]="isLoading"
+    [paginator]="true"
+    [rows]="rows"
+    [showCurrentPageReport]="true"
+    currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+    [rowsPerPageOptions]="[5, 25, 50]"
+    [(first)]="first"
+    [totalRecords]="totalProductsCount"
   >
     <ng-template pTemplate="caption">
       <div class="flex align-items-center justify-content-between">
@@ -64,12 +74,12 @@
     </ng-template>
     <ng-template pTemplate="header">
       <tr>
-        <th>Title</th>
+        <th pSortableColumn="title">Title <p-sortIcon field="title"></p-sortIcon></th>
         <th>Active</th>
         <th>Category</th>
-        <th>Price</th>
-        <th>Discount</th>
-        <th>Quantity</th>
+        <th pSortableColumn="price">Price <p-sortIcon field="price"></p-sortIcon></th>
+        <th pSortableColumn="discount">Discount <p-sortIcon field="discount"></p-sortIcon></th>
+        <th pSortableColumn="quantity">Quantity <p-sortIcon field="quantity"></p-sortIcon></th>
         <th>Attributes</th>
         <th>.</th>
       </tr>

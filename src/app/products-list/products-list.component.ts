@@ -31,11 +31,17 @@ export class ProductsListComponent implements OnInit {
   categories = new Map<string, CategoryDto>();
   attributes = new Map<string, AttributeDto>();
   totalProductsCount = 0;
+  first = 0;
+  rows = 0;
+  sortField = "";
+  sortOrder = 0;
 
   categoryTree: Category[] = [];
   treeNodes: TreeNode[] = [];
 
   listIsNotLoaded = true;
+  isRouteParamsLoaded = false;
+  isLoading = false;
 
   constructor(
     private confirmationService: ConfirmationService,
@@ -46,6 +52,7 @@ export class ProductsListComponent implements OnInit {
   }
   async ngOnInit() {
     this.route.queryParamMap.subscribe(async params => {
+      this.isRouteParamsLoaded = true;
       await this.fetchProducts();
     });
 
@@ -65,6 +72,10 @@ export class ProductsListComponent implements OnInit {
       return;
     }
 
+    console.log("Update query and navigate");
+
+    this.isLoading = true;
+
     const attrFilters: AttributeFilter[] = this.filters
       .map(({ key, selected }) => ({ key, values: selected.filter(v => v) }))
       .filter(({ values }) => values.length > 0);
@@ -74,6 +85,10 @@ export class ProductsListComponent implements OnInit {
     const queryParams: any = {};
     queryParams.attrs = JSON.stringify(attrFilters);
     queryParams.cat = JSON.stringify(categoryFilters);
+    queryParams.sortField = this.sortField;
+    queryParams.sortOrder = this.sortOrder;
+    queryParams.first = this.first;
+    queryParams.rows = this.rows;
 
     console.log("Query params before:", queryParams);
 
@@ -82,20 +97,51 @@ export class ProductsListComponent implements OnInit {
       queryParams,
       queryParamsHandling: 'merge'
     });
+    this.isLoading = false;
+  }
+
+  onSort() {
+    console.log("onSort");
+  }
+
+  async lazyLoadProducts(event: any) {
+    console.log("lazyLoadProducts", event);
+    this.sortField = event.sortField;
+    this.sortOrder = event.sortOrder;
+    this.first = event.first;
+    this.rows = event.rows;
+    await this.updateQuery();
+    // await this.fetchProducts();
   }
 
   async fetchProducts() {
+    if (!this.isRouteParamsLoaded) {
+      return;
+    }
+    console.log("Fetch products");
     const params = this.route.snapshot.queryParams;
-    const attrFilters: AttributeFilter[] = JSON.parse(params['attrs'] ?? '[]')
-    const categoryFilters: string[] = JSON.parse(params['cat'] ?? '[]')
+    const attrFilters: AttributeFilter[] = JSON.parse(params['attrs'] ?? '[]');
+    const categoryFilters: string[] = JSON.parse(params['cat'] ?? '[]');
+    const sortField: string = params['sortField'] ?? '';
+    const sortOrder: number = +(params['sortOrder'] ?? '');
+    const first: number = +(params['first'] ?? '');
+    const rows: number = +(params['rows'] ?? '5');
     console.log("Query params after: attrs:", attrFilters);
     console.log("Query params after: cat:", categoryFilters);
+    console.log("Query params after: sortField:", sortField);
+    console.log("Query params after: sortOrder:", sortOrder);
+    console.log("Query params after: first:", first);
+    console.log("Query params after: rows:", rows);
 
     const response = await fetchAPI('product/list', {
       method: 'GET',
     }, qs.stringify({
       attrs: attrFilters,
       categories: categoryFilters,
+      sortField: sortField,
+      sortOrder: sortOrder,
+      skip: first,
+      limit: rows,
     }));
     this.listIsNotLoaded = false;
     if (!response.ok) {
@@ -117,6 +163,11 @@ export class ProductsListComponent implements OnInit {
     this.totalProductsCount = json.total;
 
     this.selectedCategories = categoryFilters;
+
+    this.sortField = sortField;
+    this.sortOrder = sortOrder;
+    this.first = first;
+    this.rows = rows;
 
     // Prepare category tree
     const isVisible = (id: string) => {
