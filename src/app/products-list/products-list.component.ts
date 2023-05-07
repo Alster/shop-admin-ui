@@ -8,6 +8,9 @@ import {CategoryDto} from "../../../shopshared/dto/category.dto";
 import {AttributeDto} from "../../../shopshared/dto/attribute.dto";
 import {ATTRIBUTE_TYPE} from "../../../shopshared/constants/product";
 import {ActivatedRoute, Router} from "@angular/router";
+import {Category, fetchCategoryTree, mapNode} from "../helpers/categoriesTreHelpers";
+import {CategoriesNodeDto} from "../../../shopshared/dto/categories-tree.dto";
+import {LanguageEnum} from "../../../shopshared/constants/localization";
 
 interface AttributeFilter {
   key: string,
@@ -24,9 +27,13 @@ export class ProductsListComponent implements OnInit {
   products: ProductAdminDto[] = [];
   filters: { key: string, values: string[], selected: string[] }[] = [];
   availableCategories: string[] = [];
+  selectedCategories: string[] = [];
   categories = new Map<string, CategoryDto>();
   attributes = new Map<string, AttributeDto>();
   totalProductsCount = 0;
+
+  categoryTree: Category[] = [];
+  treeNodes: TreeNode[] = [];
 
   listIsNotLoaded = true;
 
@@ -42,7 +49,7 @@ export class ProductsListComponent implements OnInit {
       await this.fetchProducts();
     });
 
-    await Promise.all([this.fetchCategories(), this.fetchAttributes()]);
+    await Promise.all([this.fetchCategories(), this.fetchAttributes(), this.fetchCategoryTree()]);
   }
 
   getSeverityForActive(active: boolean): string {
@@ -62,8 +69,11 @@ export class ProductsListComponent implements OnInit {
       .map(({ key, selected }) => ({ key, values: selected.filter(v => v) }))
       .filter(({ values }) => values.length > 0);
 
+    const categoryFilters = this.selectedCategories;
+
     const queryParams: any = {};
     queryParams.attrs = JSON.stringify(attrFilters);
+    queryParams.cat = JSON.stringify(categoryFilters);
 
     console.log("Query params before:", queryParams);
 
@@ -77,11 +87,16 @@ export class ProductsListComponent implements OnInit {
   async fetchProducts() {
     const params = this.route.snapshot.queryParams;
     const attrFilters: AttributeFilter[] = JSON.parse(params['attrs'] ?? '[]')
+    const categoryFilters: string[] = JSON.parse(params['cat'] ?? '[]')
     console.log("Query params after: attrs:", attrFilters);
+    console.log("Query params after: cat:", categoryFilters);
 
     const response = await fetchAPI('product/list', {
       method: 'GET',
-    }, qs.stringify({ attrs: attrFilters }));
+    }, qs.stringify({
+      attrs: attrFilters,
+      categories: categoryFilters,
+    }));
     this.listIsNotLoaded = false;
     if (!response.ok) {
       this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Failed to fetch products' });
@@ -100,6 +115,30 @@ export class ProductsListComponent implements OnInit {
       }));
     this.availableCategories = json.categories;
     this.totalProductsCount = json.total;
+
+    this.selectedCategories = categoryFilters;
+
+    // Prepare category tree
+    const isVisible = (id: string) => {
+      return this.availableCategories.includes(id) || this.availableCategories.some((categoryId) => {
+        const category = this.categories.get(categoryId);
+        return category?.parents?.includes(id) ?? false;
+      });
+    };
+    this.treeNodes = [];
+    // Map tree to treeNodes
+    this.categoryTree.forEach((node) => {
+      if (!isVisible(node.id)) {
+        return;
+      }
+      this.treeNodes.push(mapNode(node, LanguageEnum.UA, isVisible));
+    });
+  }
+
+  async fetchCategoryTree() {
+    const json: CategoriesNodeDto[] = await fetchCategoryTree();
+    // console.log("Category tree:", json);
+    this.categoryTree = json;
   }
 
   getAttributeString(product: ProductAdminDto): string[] {

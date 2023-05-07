@@ -6,7 +6,7 @@ import {fetchAPI} from "./fetchAPI";
 export interface Category extends CategoriesNodeDto {
 
 }
-export const mapNode = (node: Category, language: LanguageEnum): TreeNode => {
+export const mapNode = (node: Category, language: LanguageEnum, isVisible: (id: string) => boolean = () => true): TreeNode => {
   const treeNode: TreeNode = {
     label: node.title[language],
     data: node,
@@ -15,6 +15,9 @@ export const mapNode = (node: Category, language: LanguageEnum): TreeNode => {
   };
   if (node.children) {
     node.children.forEach((child: Category) => {
+      if (!isVisible(child.id)) {
+        return;
+      }
       treeNode.children!.push(mapNode(child, language));
     });
   }

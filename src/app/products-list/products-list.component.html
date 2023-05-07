@@ -1,5 +1,38 @@
 <p-card header="Products">
   <div class="grid">
+    <div class="col-12">
+      <p-accordion [activeIndex]="-1">
+        <p-accordionTab>
+          <ng-template pTemplate="header">
+            <div class="flex align-items-center">
+              <span class="font-bold mr-3">Categories</span>
+              <p-tag class="mr-1"  *ngFor="let id of selectedCategories">
+                {{categories.get(id)?.title}}
+              </p-tag>
+            </div>
+          </ng-template>
+          <ng-template pTemplate="content">
+            <p-tree
+              [value]="treeNodes"
+              [filter]="true"
+              filterMode="strict"
+              filterPlaceholder="Strict Filter"
+            ><ng-template let-node pTemplate="default">
+              {{ node.label }}
+              &nbsp;&nbsp;
+              <p-checkbox
+                value="{{node.data.id}}"
+                [(ngModel)]="selectedCategories"
+                (onChange)="updateQuery()"
+              ></p-checkbox>
+            </ng-template>
+            </p-tree>
+          </ng-template>
+        </p-accordionTab>
+      </p-accordion>
+    </div>
+  </div>
+  <div class="grid">
     <div class="col-2" *ngFor="let filter of filters;">
       <div *ngIf="attributes.get(filter.key); let attr">
         <label class="block font-bold mb-2">{{attr.title}}</label>

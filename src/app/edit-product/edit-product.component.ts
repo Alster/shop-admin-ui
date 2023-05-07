@@ -33,8 +33,8 @@ export class EditProductComponent implements OnInit {
 
   isLoading: boolean = false;
 
-  tree: Category[] = [];
-  files: TreeNode[] = [];
+  categoryTree: Category[] = [];
+  treeNodes: TreeNode[] = [];
 
   constructor(
     private confirmationService: ConfirmationService,
@@ -172,8 +172,8 @@ export class EditProductComponent implements OnInit {
 
   changeLanguage(lang: string) {
     this.currentLanguage = lang as LanguageEnum;
-    this.files.forEach((file: TreeNode) => {
-      this.changeLabel(file);
+    this.treeNodes.forEach((treeNode: TreeNode) => {
+      this.changeLabel(treeNode);
     });
   }
 
@@ -236,17 +236,17 @@ export class EditProductComponent implements OnInit {
   async fetchCategoryTree() {
     const json: CategoriesNodeDto[] = await fetchCategoryTree();
     // console.log("Category tree:", json);
-    this.tree = json;
+    this.categoryTree = json;
 
-    // Map tree to files
-    this.tree.forEach((node) => {
-      this.files.push(mapNode(node, this.currentLanguage));
+    // Map tree to treeNodes
+    this.categoryTree.forEach((node) => {
+      this.treeNodes.push(mapNode(node, this.currentLanguage));
     });
   }
 
   findNodeById(id: string): TreeNode | undefined {
-    for (let file of this.files) {
-      const node = this._findNodeById(id, file);
+    for (let treeNode of this.treeNodes) {
+      const node = this._findNodeById(id, treeNode);
       if (node) {
         return node;
       }
