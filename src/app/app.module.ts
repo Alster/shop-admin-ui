@@ -4,32 +4,32 @@ import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import { PanelMenuModule } from 'primeng/panelmenu';
 import { TieredMenuModule } from 'primeng/tieredmenu';
-import { InputTextModule } from 'primeng/inputtext'
+import { InputTextModule } from 'primeng/inputtext';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { AppComponent } from './app.component';
 import { SideMenuComponent } from './side-menu/side-menu.component';
 import { HeaderComponent } from './header/header.component';
-import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { CreateProductComponent } from './create-product/create-product.component';
 import { EditProductComponent } from './edit-product/edit-product.component';
-import {FormsModule} from "@angular/forms";
-import {CardModule} from "primeng/card";
+import { FormsModule } from '@angular/forms';
+import { CardModule } from 'primeng/card';
 import { ProductsListComponent } from './products-list/products-list.component';
-import {TableModule} from "primeng/table";
-import {ButtonModule} from "primeng/button";
-import {TagModule} from "primeng/tag";
-import {InputSwitchModule} from "primeng/inputswitch";
-import {KeyFilterModule} from "primeng/keyfilter";
-import {MultiSelectModule} from "primeng/multiselect";
-import {DropdownModule} from "primeng/dropdown";
+import { TableModule } from 'primeng/table';
+import { ButtonModule } from 'primeng/button';
+import { TagModule } from 'primeng/tag';
+import { InputSwitchModule } from 'primeng/inputswitch';
+import { KeyFilterModule } from 'primeng/keyfilter';
+import { MultiSelectModule } from 'primeng/multiselect';
+import { DropdownModule } from 'primeng/dropdown';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
-import {ConfirmationService, MessageService} from "primeng/api";
-import {ToastModule} from "primeng/toast";
-import {CheckboxModule} from "primeng/checkbox";
+import { ConfirmationService, MessageService } from 'primeng/api';
+import { ToastModule } from 'primeng/toast';
+import { CheckboxModule } from 'primeng/checkbox';
 import { EditCategoriesComponent } from './edit-categories/edit-categories.component';
-import {TreeModule} from "primeng/tree";
-import {DragDropModule} from "primeng/dragdrop";
-import {AccordionModule} from "primeng/accordion";
+import { TreeModule } from 'primeng/tree';
+import { DragDropModule } from 'primeng/dragdrop';
+import { AccordionModule } from 'primeng/accordion';
 
 @NgModule({
   declarations: [
@@ -65,10 +65,7 @@ import {AccordionModule} from "primeng/accordion";
     DragDropModule,
     AccordionModule,
   ],
-  providers: [
-    ConfirmationService,
-    MessageService,
-  ],
-  bootstrap: [AppComponent]
+  providers: [ConfirmationService, MessageService],
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}

@@ -1,21 +1,19 @@
 import { Component } from '@angular/core';
-import {NavigationExtras, Router} from "@angular/router";
-import {fetchAPI} from "../helpers/fetchAPI";
+import { NavigationExtras, Router } from '@angular/router';
+import { fetchAPI } from '../helpers/fetchAPI';
 
 @Component({
   selector: 'app-create-product',
   templateUrl: './create-product.component.html',
-  styleUrls: ['./create-product.component.scss']
+  styleUrls: ['./create-product.component.scss'],
 })
 export class CreateProductComponent {
-  name: string = "";
-  price: number = 0;
+  name = '';
+  price = 0;
 
-  isLoading: boolean = false;
+  isLoading = false;
 
-  constructor(private router: Router) {
-
-  }
+  constructor(private router: Router) {}
 
   async createProduct() {
     this.isLoading = true;
@@ -24,7 +22,7 @@ export class CreateProductComponent {
       body: JSON.stringify({
         name: this.name,
         price: this.price,
-      })
+      }),
     });
     if (!response.ok) {
       console.error('Error creating product');
@@ -33,8 +31,8 @@ export class CreateProductComponent {
     }
     const json = await response.json();
 
-    let navigationExtras: NavigationExtras = {
-      queryParams: { 'id': json.id }
+    const navigationExtras: NavigationExtras = {
+      queryParams: { id: json.id },
     };
 
     await this.router.navigate(['/edit-product'], navigationExtras);

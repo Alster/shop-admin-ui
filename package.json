@@ -6,6 +6,7 @@
     "start": "ng serve",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
+    "lint": "eslint \"src/**/*.ts\" --fix",
     "test": "ng test"
   },
   "private": false,
@@ -30,6 +31,12 @@
     "zone.js": "~0.12.0"
   },
   "devDependencies": {
+    "eslint": "^8.0.1",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-prettier": "^4.0.0",
+    "prettier": "^2.3.2",
+    "@typescript-eslint/eslint-plugin": "^5.0.0",
+    "@typescript-eslint/parser": "^5.0.0",
     "@angular-devkit/build-angular": "^15.1.4",
     "@angular/cli": "~15.1.4",
     "@angular/compiler-cli": "^15.1.0",

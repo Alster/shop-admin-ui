@@ -1,10 +1,10 @@
 import { Component } from '@angular/core';
 import { TreeNode } from 'primeng/api';
 import ObjectId from 'bson-objectid';
-import {LanguageEnum} from "@alster/shop-shared/constants/localization";
-import {fetchAPI} from "../helpers/fetchAPI";
-import {CategoriesNodeDto} from "@alster/shop-shared/dto/categories-tree.dto";
-import {Category, mapNode} from "../helpers/categoriesTreHelpers";
+import { LanguageEnum } from '@alster/shop-shared/constants/localization';
+import { fetchAPI } from '../helpers/fetchAPI';
+import { CategoriesNodeDto } from '@alster/shop-shared/dto/categories-tree.dto';
+import { Category, mapNode } from '../helpers/categoriesTreHelpers';
 
 @Component({
   selector: 'app-edit-categories',
@@ -17,7 +17,7 @@ export class EditCategoriesComponent {
   files: TreeNode[] = [];
   selectedFile?: TreeNode;
 
-  isLoading: boolean = false;
+  isLoading = false;
 
   currentLanguage: LanguageEnum = LanguageEnum.UA;
   languages = Object.values(LanguageEnum);
@@ -68,7 +68,7 @@ export class EditCategoriesComponent {
   }
 
   deleteNode(node: TreeNode) {
-    const childrens = node.parent ? (node.parent.children || []) : this.files;
+    const childrens = node.parent ? node.parent.children || [] : this.files;
     const index = childrens.indexOf(node);
     childrens.splice(index, 1);
     this.mapFiles(this.files);
@@ -76,8 +76,8 @@ export class EditCategoriesComponent {
 
   addChild(node: TreeNode) {
     const title = {
-      "en": "New category",
-      "ua": "Нова категорія",
+      en: 'New category',
+      ua: 'Нова категорія',
     };
     const childrens = node.children || [];
     const newNode = {
@@ -96,8 +96,8 @@ export class EditCategoriesComponent {
 
   addRoot() {
     const title = {
-      "en": "New category",
-      "ua": "Нова категорія",
+      en: 'New category',
+      ua: 'Нова категорія',
     };
     const newNode = {
       label: title[this.currentLanguage],
@@ -130,7 +130,7 @@ export class EditCategoriesComponent {
   }
 
   moveNodeUp(node: TreeNode) {
-    const childrens = node.parent ? (node.parent.children || []) : this.files;
+    const childrens = node.parent ? node.parent.children || [] : this.files;
     const index = childrens.indexOf(node);
     if (index > 0) {
       const prevNode = childrens[index - 1];
@@ -141,7 +141,7 @@ export class EditCategoriesComponent {
   }
 
   moveNodeDown(node: TreeNode) {
-    const childrens = node.parent ? (node.parent.children || []) : this.files;
+    const childrens = node.parent ? node.parent.children || [] : this.files;
     const index = childrens.indexOf(node);
     if (index < childrens.length - 1) {
       const nextNode = childrens[index + 1];

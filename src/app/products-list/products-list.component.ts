@@ -1,31 +1,35 @@
-import {Component, OnInit} from '@angular/core';
-import * as qs from "qs";
-import {fetchAPI} from "../helpers/fetchAPI";
-import {ConfirmationService, MessageService, TreeNode} from "primeng/api";
-import {ProductAdminDto} from "@alster/shop-shared/dto/product.dto";
-import {ProductListResponseDto} from "@alster/shop-shared/dto/product-list.response.dto";
-import {CategoryDto} from "@alster/shop-shared/dto/category.dto";
-import {AttributeDto} from "@alster/shop-shared/dto/attribute.dto";
-import {ATTRIBUTE_TYPE} from "@alster/shop-shared/constants/product";
-import {ActivatedRoute, Router} from "@angular/router";
-import {Category, fetchCategoryTree, mapNode} from "../helpers/categoriesTreHelpers";
-import {CategoriesNodeDto} from "@alster/shop-shared/dto/categories-tree.dto";
-import {LanguageEnum} from "@alster/shop-shared/constants/localization";
+import { Component, OnInit } from '@angular/core';
+import * as qs from 'qs';
+import { fetchAPI } from '../helpers/fetchAPI';
+import { ConfirmationService, MessageService, TreeNode } from 'primeng/api';
+import { ProductAdminDto } from '@alster/shop-shared/dto/product.dto';
+import { ProductListResponseDto } from '@alster/shop-shared/dto/product-list.response.dto';
+import { CategoryDto } from '@alster/shop-shared/dto/category.dto';
+import { AttributeDto } from '@alster/shop-shared/dto/attribute.dto';
+import { ATTRIBUTE_TYPE } from '@alster/shop-shared/constants/product';
+import { ActivatedRoute, Router } from '@angular/router';
+import {
+  Category,
+  fetchCategoryTree,
+  mapNode,
+} from '../helpers/categoriesTreHelpers';
+import { CategoriesNodeDto } from '@alster/shop-shared/dto/categories-tree.dto';
+import { LanguageEnum } from '@alster/shop-shared/constants/localization';
 
 interface AttributeFilter {
-  key: string,
-  values: string[],
+  key: string;
+  values: string[];
 }
 
 @Component({
   selector: 'app-products-list',
   templateUrl: './products-list.component.html',
-  styleUrls: ['./products-list.component.scss']
+  styleUrls: ['./products-list.component.scss'],
 })
 export class ProductsListComponent implements OnInit {
   attributeTypeEnum = ATTRIBUTE_TYPE;
   products: ProductAdminDto[] = [];
-  filters: { key: string, values: string[], selected: string[] }[] = [];
+  filters: { key: string; values: string[]; selected: string[] }[] = [];
   availableCategories: string[] = [];
   selectedCategories: string[] = [];
   categories = new Map<string, CategoryDto>();
@@ -33,9 +37,9 @@ export class ProductsListComponent implements OnInit {
   totalProductsCount = 0;
   first = 0;
   rows = 0;
-  sortField = "";
+  sortField = '';
   sortOrder = 0;
-  searchTitleQuery = "";
+  searchTitleQuery = '';
 
   categoryTree: Category[] = [];
   treeNodes: TreeNode[] = [];
@@ -48,16 +52,19 @@ export class ProductsListComponent implements OnInit {
     private confirmationService: ConfirmationService,
     private messageService: MessageService,
     private router: Router,
-    private route: ActivatedRoute
-    ) {
-  }
+    private route: ActivatedRoute,
+  ) {}
   async ngOnInit() {
-    this.route.queryParamMap.subscribe(async params => {
+    this.route.queryParamMap.subscribe(async (params) => {
       this.isRouteParamsLoaded = true;
       await this.fetchProducts();
     });
 
-    await Promise.all([this.fetchCategories(), this.fetchAttributes(), this.fetchCategoryTree()]);
+    await Promise.all([
+      this.fetchCategories(),
+      this.fetchAttributes(),
+      this.fetchCategoryTree(),
+    ]);
   }
 
   getSeverityForActive(active: boolean): string {
@@ -69,16 +76,16 @@ export class ProductsListComponent implements OnInit {
   }
 
   async updateQuery() {
-    if (this.listIsNotLoaded){
+    if (this.listIsNotLoaded) {
       return;
     }
 
-    console.log("Update query and navigate");
+    console.log('Update query and navigate');
 
     this.isLoading = true;
 
     const attrFilters: AttributeFilter[] = this.filters
-      .map(({ key, selected }) => ({ key, values: selected.filter(v => v) }))
+      .map(({ key, selected }) => ({ key, values: selected.filter((v) => v) }))
       .filter(({ values }) => values.length > 0);
 
     const categoryFilters = this.selectedCategories;
@@ -92,28 +99,28 @@ export class ProductsListComponent implements OnInit {
     queryParams.rows = this.rows;
     queryParams.search = this.searchTitleQuery;
 
-    console.log("Query params before:", queryParams);
+    console.log('Query params before:', queryParams);
 
     await this.router.navigate([], {
       relativeTo: this.route,
       queryParams,
-      queryParamsHandling: 'merge'
+      queryParamsHandling: 'merge',
     });
     this.isLoading = false;
   }
 
   onSort() {
-    console.log("onSort");
+    console.log('onSort');
   }
 
   async onTitleSearchUpdate(event: any) {
-    console.log("onTitleSearchUpdate", event.value);
+    console.log('onTitleSearchUpdate', event.value);
     this.searchTitleQuery = event.value;
     await this.updateQuery();
   }
 
   async lazyLoadProducts(event: any) {
-    console.log("lazyLoadProducts", event);
+    console.log('lazyLoadProducts', event);
     this.sortField = event.sortField;
     this.sortOrder = event.sortOrder;
     this.first = event.first;
@@ -125,7 +132,7 @@ export class ProductsListComponent implements OnInit {
     if (!this.isRouteParamsLoaded) {
       return;
     }
-    console.log("Fetch products");
+    console.log('Fetch products');
     const params = this.route.snapshot.queryParams;
     const attrFilters: AttributeFilter[] = JSON.parse(params['attrs'] ?? '[]');
     const categoryFilters: string[] = JSON.parse(params['cat'] ?? '[]');
@@ -134,41 +141,47 @@ export class ProductsListComponent implements OnInit {
     const first: number = +(params['first'] ?? '');
     const rows: number = +(params['rows'] ?? '5');
     const searchTitleQuery: string = params['search'] ?? '';
-    console.log("Query params after: attrs:", attrFilters);
-    console.log("Query params after: cat:", categoryFilters);
-    console.log("Query params after: sortField:", sortField);
-    console.log("Query params after: sortOrder:", sortOrder);
-    console.log("Query params after: first:", first);
-    console.log("Query params after: rows:", rows);
-    console.log("Query params after: search:", searchTitleQuery);
+    console.log('Query params after: attrs:', attrFilters);
+    console.log('Query params after: cat:', categoryFilters);
+    console.log('Query params after: sortField:', sortField);
+    console.log('Query params after: sortOrder:', sortOrder);
+    console.log('Query params after: first:', first);
+    console.log('Query params after: rows:', rows);
+    console.log('Query params after: search:', searchTitleQuery);
 
-    const response = await fetchAPI('product/list', {
-      method: 'GET',
-    }, qs.stringify({
-      attrs: attrFilters,
-      categories: categoryFilters,
-      sortField: sortField,
-      sortOrder: sortOrder,
-      skip: first,
-      limit: rows,
-      search: searchTitleQuery,
-    }));
+    const response = await fetchAPI(
+      'product/list',
+      {
+        method: 'GET',
+      },
+      qs.stringify({
+        attrs: attrFilters,
+        categories: categoryFilters,
+        sortField: sortField,
+        sortOrder: sortOrder,
+        skip: first,
+        limit: rows,
+        search: searchTitleQuery,
+      }),
+    );
     this.listIsNotLoaded = false;
     if (!response.ok) {
-      this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Failed to fetch products' });
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Error',
+        detail: 'Failed to fetch products',
+      });
       return;
     }
     const json: ProductListResponseDto = await response.json();
     // console.log("Products list:", json);
 
     this.products = json.products;
-    this.filters = Object
-      .entries(json.filters)
-      .map(([key, values]) => ({
-        key,
-        values: [...values],
-        selected: attrFilters.find(({ key: k }) => k === key)?.values ?? []
-      }));
+    this.filters = Object.entries(json.filters).map(([key, values]) => ({
+      key,
+      values: [...values],
+      selected: attrFilters.find(({ key: k }) => k === key)?.values ?? [],
+    }));
     this.availableCategories = json.categories;
     this.totalProductsCount = json.total;
 
@@ -182,10 +195,13 @@ export class ProductsListComponent implements OnInit {
 
     // Prepare category tree
     const isVisible = (id: string) => {
-      return this.availableCategories.includes(id) || this.availableCategories.some((categoryId) => {
-        const category = this.categories.get(categoryId);
-        return category?.parents?.includes(id) ?? false;
-      });
+      return (
+        this.availableCategories.includes(id) ||
+        this.availableCategories.some((categoryId) => {
+          const category = this.categories.get(categoryId);
+          return category?.parents?.includes(id) ?? false;
+        })
+      );
     };
     this.treeNodes = [];
     // Map tree to treeNodes
@@ -204,26 +220,40 @@ export class ProductsListComponent implements OnInit {
   }
 
   getAttributeString(product: ProductAdminDto): string[] {
-    return Object
-      .entries(product.attrs)
-      .map(([nameKey, valueKeys]) => ({ attr: this.attributes.get(nameKey), valueKeys }))
+    return Object.entries(product.attrs)
+      .map(([nameKey, valueKeys]) => ({
+        attr: this.attributes.get(nameKey),
+        valueKeys,
+      }))
       .filter(({ attr }) => attr !== undefined)
       .map(({ attr, valueKeys }) => {
-        const values = valueKeys.map((valueKey) => attr!.values.find((value) => value.key === valueKey)?.title);
-        return `${attr!.title}: ${values.join(", ")}`;
+        const values = valueKeys.map(
+          (valueKey) =>
+            attr!.values.find((value) => value.key === valueKey)?.title,
+        );
+        return `${attr!.title}: ${values.join(', ')}`;
       });
   }
 
-  getAttributeValues(attribute: AttributeDto): { name: string, code: string }[] {
-    return [{
-      name: 'All',
-      code: '',
-    }, ...attribute.values
-      .map((value) => ({
-        name: value.title,
-        code: value.key,
-      }))
-      .filter(({ code }) => this.filters.find(({ key }) => key === attribute.key)?.values.includes(code) ?? false)
+  getAttributeValues(
+    attribute: AttributeDto,
+  ): { name: string; code: string }[] {
+    return [
+      {
+        name: 'All',
+        code: '',
+      },
+      ...attribute.values
+        .map((value) => ({
+          name: value.title,
+          code: value.key,
+        }))
+        .filter(
+          ({ code }) =>
+            this.filters
+              .find(({ key }) => key === attribute.key)
+              ?.values.includes(code) ?? false,
+        ),
     ];
   }
 
@@ -256,14 +286,18 @@ export class ProductsListComponent implements OnInit {
       method: 'POST',
     });
     if (!response.ok) {
-      this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Error cloning product' });
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Error',
+        detail: 'Error cloning product',
+      });
       return;
     }
     const product: ProductAdminDto = await response.json();
     this.router.navigate(['/edit-product'], {
       queryParams: {
         id: product.id,
-      }
+      },
     });
   }
 
@@ -277,14 +311,22 @@ export class ProductsListComponent implements OnInit {
           method: 'POST',
         });
         if (!response.ok) {
-          this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Error deleting product' });
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Error',
+            detail: 'Error deleting product',
+          });
           return;
         }
         await this.fetchProducts();
-        this.messageService.add({ severity: 'info', summary: 'Confirmed', detail: 'Product deleted' });
+        this.messageService.add({
+          severity: 'info',
+          summary: 'Confirmed',
+          detail: 'Product deleted',
+        });
       },
-      reject: (type: any) => {}
-    })
+      reject: (type: any) => {},
+    });
   }
 
   protected readonly ATTRIBUTE_TYPE = ATTRIBUTE_TYPE;

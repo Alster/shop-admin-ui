@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { MenuItem } from 'primeng/api'
+import { MenuItem } from 'primeng/api';
 
 @Component({
   selector: 'app-side-menu',
   templateUrl: './side-menu.component.html',
-  styleUrls: ['./side-menu.component.scss']
+  styleUrls: ['./side-menu.component.scss'],
 })
 export class SideMenuComponent implements OnInit {
   items: MenuItem[] = [];
@@ -22,17 +22,17 @@ export class SideMenuComponent implements OnInit {
             routerLink: ['/create-product'],
           },
           {
-            label: "List",
+            label: 'List',
             icon: 'pi pi-fw pi-list',
             routerLink: ['/list-product'],
           },
           {
-            label: "Categories",
+            label: 'Categories',
             icon: 'pi pi-fw pi-sitemap',
             routerLink: ['/edit-categories'],
-          }
-        ]
-      }
+          },
+        ],
+      },
     ];
   }
 }

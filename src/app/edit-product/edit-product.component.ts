@@ -1,24 +1,31 @@
-import {Component, OnInit} from '@angular/core';
-import {ActivatedRoute, Router} from "@angular/router";
+import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { v4 as uuid } from 'uuid';
-import {fetchAPI} from "../helpers/fetchAPI";
-import {AttributeDto} from "@alster/shop-shared/dto/attribute.dto";
-import {ATTRIBUTE_TYPE} from "@alster/shop-shared/constants/product";
-import {ProductAdminDto, ProductItemDto} from "@alster/shop-shared/dto/product.dto";
-import {LanguageEnum} from "@alster/shop-shared/constants/localization";
-import {CategoriesNodeDto} from "@alster/shop-shared/dto/categories-tree.dto";
-import {Category, fetchCategoryTree, mapNode} from "../helpers/categoriesTreHelpers";
-import {ConfirmationService, MessageService, TreeNode} from "primeng/api";
+import { fetchAPI } from '../helpers/fetchAPI';
+import { AttributeDto } from '@alster/shop-shared/dto/attribute.dto';
+import { ATTRIBUTE_TYPE } from '@alster/shop-shared/constants/product';
+import {
+  ProductAdminDto,
+  ProductItemDto,
+} from '@alster/shop-shared/dto/product.dto';
+import { LanguageEnum } from '@alster/shop-shared/constants/localization';
+import { CategoriesNodeDto } from '@alster/shop-shared/dto/categories-tree.dto';
+import {
+  Category,
+  fetchCategoryTree,
+  mapNode,
+} from '../helpers/categoriesTreHelpers';
+import { ConfirmationService, MessageService, TreeNode } from 'primeng/api';
 
 interface MultiselectEntry extends AttributeDto {
-  name: string,
-  code: string,
+  name: string;
+  code: string;
 }
 
 @Component({
   selector: 'app-edit-product',
   templateUrl: './edit-product.component.html',
-  styleUrls: ['./edit-product.component.scss']
+  styleUrls: ['./edit-product.component.scss'],
 })
 export class EditProductComponent implements OnInit {
   product?: ProductAdminDto;
@@ -31,7 +38,7 @@ export class EditProductComponent implements OnInit {
   currentLanguage: LanguageEnum = LanguageEnum.UA;
   languages = Object.values(LanguageEnum);
 
-  isLoading: boolean = false;
+  isLoading = false;
 
   categoryTree: Category[] = [];
   treeNodes: TreeNode[] = [];
@@ -40,11 +47,10 @@ export class EditProductComponent implements OnInit {
     private confirmationService: ConfirmationService,
     private messageService: MessageService,
     private route: ActivatedRoute,
-  ) {
-  }
+  ) {}
 
   async ngOnInit() {
-    this.route.queryParams.subscribe(async params => {
+    this.route.queryParams.subscribe(async (params) => {
       const id = params['id'];
       const fetchProduct = async () => {
         const res = await fetchAPI(`product/get/${id}`, {
@@ -53,7 +59,7 @@ export class EditProductComponent implements OnInit {
         const json: ProductAdminDto = await res.json();
         this.product = json;
         // console.log("Product:", this.product);
-      }
+      };
 
       await Promise.all([fetchProduct(), this.fetchAttributes()]);
 
@@ -62,7 +68,11 @@ export class EditProductComponent implements OnInit {
       }
 
       this.selectedAttributes = this.attributes.filter((attribute) => {
-        return (this.product?.attrs[attribute.key] && !this.product?.characteristics[attribute.key]) ?? false;
+        return (
+          (this.product?.attrs[attribute.key] &&
+            !this.product?.characteristics[attribute.key]) ??
+          false
+        );
       });
 
       this.selectedCharacteristics = this.attributes.filter((attribute) => {
@@ -121,19 +131,25 @@ export class EditProductComponent implements OnInit {
           method: 'POST',
         });
         if (!response.ok) {
-          this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Error deleting product' });
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Error',
+            detail: 'Error deleting product',
+          });
           return;
         }
         history.back();
       },
-      reject: (type: any) => {}
-    })
+      reject: (type: any) => {},
+    });
   }
 
   addItem() {
     this.product?.items.push({
       sku: uuid(),
-      attributes: Object.fromEntries(this.selectedAttributes.map((attribute) => [attribute.code, []])),
+      attributes: Object.fromEntries(
+        this.selectedAttributes.map((attribute) => [attribute.code, []]),
+      ),
     });
   }
 
@@ -163,7 +179,9 @@ export class EditProductComponent implements OnInit {
         item.attributes[attribute.key] = item.attributes[attribute.key] ?? [];
       });
       Object.keys(item.attributes).forEach((key) => {
-        if (!this.selectedAttributes.find((attribute) => attribute.key === key)) {
+        if (
+          !this.selectedAttributes.find((attribute) => attribute.key === key)
+        ) {
           delete item.attributes[key];
         }
       });
@@ -186,7 +204,9 @@ export class EditProductComponent implements OnInit {
     }
   }
 
-  getAttributeValues(attribute: AttributeDto): { name: string, code: string }[] {
+  getAttributeValues(
+    attribute: AttributeDto,
+  ): { name: string; code: string }[] {
     return attribute.values.map((value) => ({
       name: value.title,
       code: value.key,
@@ -197,11 +217,14 @@ export class EditProductComponent implements OnInit {
     if (!this.product) {
       return;
     }
-    for (let attribute of this.selectedCharacteristics) {
-      this.product.characteristics[attribute.key] = this.product.characteristics[attribute.key] ?? [];
+    for (const attribute of this.selectedCharacteristics) {
+      this.product.characteristics[attribute.key] =
+        this.product.characteristics[attribute.key] ?? [];
     }
-    for (let key of Object.keys(this.product.characteristics)) {
-      if (!this.selectedCharacteristics.find((attribute) => attribute.key === key)) {
+    for (const key of Object.keys(this.product.characteristics)) {
+      if (
+        !this.selectedCharacteristics.find((attribute) => attribute.key === key)
+      ) {
         delete this.product.characteristics[key];
       }
     }
@@ -209,17 +232,25 @@ export class EditProductComponent implements OnInit {
 
   getAttributesForItems() {
     return this.attributes.filter((attribute) => {
-      return !this.selectedCharacteristics.find((attr) => attr.key === attribute.key);
+      return !this.selectedCharacteristics.find(
+        (attr) => attr.key === attribute.key,
+      );
     });
   }
 
   getAttributesForCharacteristics() {
     return this.attributes.filter((attribute) => {
-      return !this.selectedAttributes.find((attr) => attr.key === attribute.key);
+      return !this.selectedAttributes.find(
+        (attr) => attr.key === attribute.key,
+      );
     });
   }
 
-  onItemBooleanChange(item: ProductItemDto, attributeKey: string, valueKey: string) {
+  onItemBooleanChange(
+    item: ProductItemDto,
+    attributeKey: string,
+    valueKey: string,
+  ) {
     if (!this.product) {
       return;
     }
@@ -245,7 +276,7 @@ export class EditProductComponent implements OnInit {
   }
 
   findNodeById(id: string): TreeNode | undefined {
-    for (let treeNode of this.treeNodes) {
+    for (const treeNode of this.treeNodes) {
       const node = this._findNodeById(id, treeNode);
       if (node) {
         return node;
@@ -259,7 +290,7 @@ export class EditProductComponent implements OnInit {
       return node;
     }
     if (node.children) {
-      for (let child of node.children) {
+      for (const child of node.children) {
         const res = this._findNodeById(id, child);
         if (res) {
           return res;
