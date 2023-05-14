@@ -2,11 +2,11 @@ import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from "@angular/router";
 import { v4 as uuid } from 'uuid';
 import {fetchAPI} from "../helpers/fetchAPI";
-import {AttributeDto} from "../../../shopshared/dto/attribute.dto";
-import {ATTRIBUTE_TYPE} from "../../../shopshared/constants/product";
-import {ProductAdminDto, ProductItemDto} from "../../../shopshared/dto/product.dto";
-import {LanguageEnum} from "../../../shopshared/constants/localization";
-import {CategoriesNodeDto} from "../../../shopshared/dto/categories-tree.dto";
+import {AttributeDto} from "@alster/shop-shared/dto/attribute.dto";
+import {ATTRIBUTE_TYPE} from "@alster/shop-shared/constants/product";
+import {ProductAdminDto, ProductItemDto} from "@alster/shop-shared/dto/product.dto";
+import {LanguageEnum} from "@alster/shop-shared/constants/localization";
+import {CategoriesNodeDto} from "@alster/shop-shared/dto/categories-tree.dto";
 import {Category, fetchCategoryTree, mapNode} from "../helpers/categoriesTreHelpers";
 import {ConfirmationService, MessageService, TreeNode} from "primeng/api";
 

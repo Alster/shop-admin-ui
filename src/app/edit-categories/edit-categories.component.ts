@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
 import { TreeNode } from 'primeng/api';
 import ObjectId from 'bson-objectid';
-import {LanguageEnum} from "../../../shopshared/constants/localization";
+import {LanguageEnum} from "@alster/shop-shared/constants/localization";
 import {fetchAPI} from "../helpers/fetchAPI";
-import {CategoriesNodeDto} from "../../../shopshared/dto/categories-tree.dto";
+import {CategoriesNodeDto} from "@alster/shop-shared/dto/categories-tree.dto";
 import {Category, mapNode} from "../helpers/categoriesTreHelpers";
 
 @Component({
