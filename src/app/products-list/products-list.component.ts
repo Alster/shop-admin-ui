@@ -2,19 +2,19 @@ import { Component, OnInit } from '@angular/core';
 import * as qs from 'qs';
 import { fetchAPI } from '../helpers/fetchAPI';
 import { ConfirmationService, MessageService, TreeNode } from 'primeng/api';
-import { ProductAdminDto } from '@alster/shop-shared/dto/product.dto';
-import { ProductListResponseDto } from '@alster/shop-shared/dto/product-list.response.dto';
-import { CategoryDto } from '@alster/shop-shared/dto/category.dto';
-import { AttributeDto } from '@alster/shop-shared/dto/attribute.dto';
-import { ATTRIBUTE_TYPE } from '@alster/shop-shared/constants/product';
 import { ActivatedRoute, Router } from '@angular/router';
 import {
   Category,
   fetchCategoryTree,
   mapNode,
 } from '../helpers/categoriesTreHelpers';
-import { CategoriesNodeDto } from '@alster/shop-shared/dto/categories-tree.dto';
-import { LanguageEnum } from '@alster/shop-shared/constants/localization';
+import { ProductAdminDto } from 'src/shop-shared/dto/product/product.dto';
+import { ATTRIBUTE_TYPE } from 'src/shop-shared/constants/product';
+import { CategoryDto } from '../../shop-shared/dto/category/category.dto';
+import { AttributeDto } from '../../shop-shared/dto/product/attribute.dto';
+import { ProductListResponseDto } from '../../shop-shared/dto/product/product-list.response.dto';
+import { LanguageEnum } from '../../shop-shared/constants/localization';
+import { CategoriesNodeDto } from '../../shop-shared/dto/category/categories-tree.dto';
 
 interface AttributeFilter {
   key: string;

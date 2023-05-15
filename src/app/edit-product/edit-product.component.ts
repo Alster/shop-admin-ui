@@ -1,21 +1,21 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { v4 as uuid } from 'uuid';
 import { fetchAPI } from '../helpers/fetchAPI';
-import { AttributeDto } from '@alster/shop-shared/dto/attribute.dto';
-import { ATTRIBUTE_TYPE } from '@alster/shop-shared/constants/product';
-import {
-  ProductAdminDto,
-  ProductItemDto,
-} from '@alster/shop-shared/dto/product.dto';
-import { LanguageEnum } from '@alster/shop-shared/constants/localization';
-import { CategoriesNodeDto } from '@alster/shop-shared/dto/categories-tree.dto';
 import {
   Category,
   fetchCategoryTree,
   mapNode,
 } from '../helpers/categoriesTreHelpers';
 import { ConfirmationService, MessageService, TreeNode } from 'primeng/api';
+import { AttributeDto } from '../../shop-shared/dto/product/attribute.dto';
+import {
+  ProductAdminDto,
+  ProductItemDto,
+} from '../../shop-shared/dto/product/product.dto';
+import { LanguageEnum } from 'src/shop-shared/constants/localization';
+import { ATTRIBUTE_TYPE } from '../../shop-shared/constants/product';
+import { CategoriesNodeDto } from '../../shop-shared/dto/category/categories-tree.dto';
 
 interface MultiselectEntry extends AttributeDto {
   name: string;

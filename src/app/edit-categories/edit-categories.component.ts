@@ -1,10 +1,10 @@
 import { Component } from '@angular/core';
 import { TreeNode } from 'primeng/api';
 import ObjectId from 'bson-objectid';
-import { LanguageEnum } from '@alster/shop-shared/constants/localization';
 import { fetchAPI } from '../helpers/fetchAPI';
-import { CategoriesNodeDto } from '@alster/shop-shared/dto/categories-tree.dto';
 import { Category, mapNode } from '../helpers/categoriesTreHelpers';
+import { LanguageEnum } from 'src/shop-shared/constants/localization';
+import { CategoriesNodeDto } from '../../shop-shared/dto/category/categories-tree.dto';
 
 @Component({
   selector: 'app-edit-categories',

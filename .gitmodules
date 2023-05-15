@@ -1,0 +1,3 @@
+[submodule "src/shop-shared"]
+	path = src/shop-shared
+	url = git@github.com:Alster/shop-shared.git
