@@ -3,7 +3,7 @@ export function fetchAPI(
   options: RequestInit = {},
   query = '',
 ): Promise<Response> {
-  return fetch(`http://localhost:3000/${path}${query ? '?' + query : ''}`, {
+  return fetch(`http://localhost:4300/${path}${query ? '?' + query : ''}`, {
     ...{
       headers: {
         'Content-Type': 'application/json',
