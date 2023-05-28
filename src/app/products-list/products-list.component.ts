@@ -12,9 +12,9 @@ import { ProductAdminDto } from 'src/shop-shared/dto/product/product.dto';
 import { ATTRIBUTE_TYPE } from 'src/shop-shared/constants/product';
 import { CategoryDto } from '../../shop-shared/dto/category/category.dto';
 import { AttributeDto } from '../../shop-shared/dto/product/attribute.dto';
-import { ProductListResponseDto } from '../../shop-shared/dto/product/product-list.response.dto';
 import { LanguageEnum } from '../../shop-shared/constants/localization';
 import { CategoriesNodeDto } from '../../shop-shared/dto/category/categories-tree.dto';
+import { ProductListAdminResponseDto } from '../../shop-shared/dto/product/product-list.admin.response.dto';
 
 interface AttributeFilter {
   key: string;
@@ -173,7 +173,7 @@ export class ProductsListComponent implements OnInit {
       });
       return;
     }
-    const json: ProductListResponseDto = await response.json();
+    const json: ProductListAdminResponseDto = await response.json();
     // console.log("Products list:", json);
 
     this.products = json.products;
