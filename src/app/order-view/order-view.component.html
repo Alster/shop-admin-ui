@@ -1,0 +1,62 @@
+<p-card header="View order" *ngIf="order">
+  <div class="order-row">
+    ID: {{order.id}}
+  </div>
+  <p-tag [value]="order.status" [severity]="getSeverityForStatus(order.status)"></p-tag>
+  <br/>
+  <div class="order-row">
+    Create date: {{order.createDate | date: 'dd.MM.yyyy HH:mm'}}
+  </div>
+  <br/>
+  <div class="order-row">
+    Total price: {{order.totalPrice | currency: order.currency}}
+  </div>
+  <br/>
+  <div class="order-row">
+    <div *ngFor="let item of order.itemsData">
+      <div class="order-row">
+        Product: <a href="{{getHREFToProduct(item.productId)}}">{{item.productId}}</a>
+      </div>
+      <div class="order-row">
+        Quantity: {{item.qty}}
+      </div>
+      <div class="order-row" *ngFor="let attr of getAttributesAsArray(item.attrs)">
+        {{attr}}
+      </div>
+      <br/>
+    </div>
+  </div>
+  <br/>
+  <div class="order-row">
+    Contact: {{order.firstName}} {{order.lastName}} ({{order.phoneNumber}})
+  </div>
+  <br/>
+  <div class="order-row">
+    Delivery: {{order.delivery.whereToDeliver}}
+    <div *ngIf="order.delivery.whereToDeliver === NOVA_POSHTA_DELIVERY_TYPE.OFFICE">
+      City: {{order.delivery.data.cityName}}.
+      <br/>
+      Office: {{getNVOffice(order.delivery).officeName}}
+    </div>
+    <div *ngIf="order.delivery.whereToDeliver === NOVA_POSHTA_DELIVERY_TYPE.COURIER">
+      City: {{order.delivery.data.cityName}}.
+      <br/>
+      Address: {{getNVCourier(order.delivery).street}}
+      <br/>
+      House: {{getNVCourier(order.delivery).building}}
+      <br/>
+      Room: {{getNVCourier(order.delivery).room}}
+    </div>
+    <br/>
+    <p-button
+      class="mr-3"
+      type="button"
+      label="Mark as FINISHED"
+      icon="pi pi-check-square"
+      styleClass="p-button-success"
+      [disabled]="isLoading"
+      [loading]="isLoading"
+      (click)="markOrderAsFinished()"
+    ></p-button>
+  </div>
+</p-card>

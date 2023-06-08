@@ -1,0 +1,70 @@
+<p-card header="Orders">
+  <p-table
+    [value]="orders"
+    [lazy]="true"
+    (onLazyLoad)="lazyLoadOrders($event)"
+    [scrollable]="true"
+    [responsive]="true"
+    [resizableColumns]="true"
+    styleClass="p-datatable-striped p-datatable-sm"
+    (onSort)="onSort()"
+    [rowHover]="true"
+    [loading]="isLoading"
+    [paginator]="true"
+    [rows]="rows"
+    [showCurrentPageReport]="true"
+    currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+    [rowsPerPageOptions]="[5, 25, 50]"
+    [(first)]="first"
+    [totalRecords]="totalOrdersCount"
+  >
+    <ng-template pTemplate="caption">
+      <div class="flex align-items-center justify-content-between">
+<!--        <span class="p-input-icon-left">-->
+<!--            <i class="pi pi-search"></i>-->
+<!--            <input-->
+<!--              pInputText type="text"-->
+<!--              (input)="onTitleSearchUpdate($event.target)"-->
+<!--              placeholder="Search keyword"-->
+<!--              [(ngModel)]="searchTitleQuery"-->
+<!--            />-->
+<!--        </span>-->
+        <p-button icon="pi pi-refresh" (onClick)="fetchProducts()"></p-button>
+      </div>
+    </ng-template>
+    <ng-template pTemplate="header">
+      <tr>
+        <th>ID</th>
+        <th pSortableColumn="status">Status <p-sortIcon field="status"></p-sortIcon></th>
+        <th pSortableColumn="price">Price <p-sortIcon field="price"></p-sortIcon></th>
+        <th pSortableColumn="createDate">Create date <p-sortIcon field="createDate"></p-sortIcon></th>
+        <th>.</th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-order>
+      <tr>
+        <td>{{order.id}}</td>
+        <td><p-tag [value]="order.status" [severity]="getSeverityForStatus(order.status)"></p-tag></td>
+        <td>{{order.totalPrice | currency: order.currency}}</td>
+        <td>{{order.createDate}}</td>
+        <td class="flex gap-1 justify-content-end">
+          <p-button
+            icon="pi pi-eye"
+            routerLink="/view-order"
+            [queryParams]="{id: order.id}"
+          ></p-button>
+        </td>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="summary">
+      <div class="flex align-items-center justify-content-between">
+        In total there are {{totalOrdersCount}} products.
+      </div>
+    </ng-template>
+    <ng-template pTemplate="emptymessage">
+      <tr>
+        <td colspan="5">No products found.</td>
+      </tr>
+    </ng-template>
+  </p-table>
+</p-card>

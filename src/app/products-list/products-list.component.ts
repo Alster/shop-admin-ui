@@ -54,6 +54,7 @@ export class ProductsListComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
   ) {}
+
   async ngOnInit() {
     this.route.queryParamMap.subscribe(async (params) => {
       this.isRouteParamsLoaded = true;

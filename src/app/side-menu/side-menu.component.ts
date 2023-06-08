@@ -33,6 +33,18 @@ export class SideMenuComponent implements OnInit {
           },
         ],
       },
+      {
+        label: 'Orders',
+        icon: 'pi pi-fw pi-file',
+        expanded: true,
+        items: [
+          {
+            label: 'List',
+            icon: 'pi pi-fw pi-list',
+            routerLink: ['/list-order'],
+          },
+        ],
+      },
     ];
   }
 }

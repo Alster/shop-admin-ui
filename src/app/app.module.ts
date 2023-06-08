@@ -30,6 +30,8 @@ import { EditCategoriesComponent } from './edit-categories/edit-categories.compo
 import { TreeModule } from 'primeng/tree';
 import { DragDropModule } from 'primeng/dragdrop';
 import { AccordionModule } from 'primeng/accordion';
+import { OrdersListComponent } from './orders-list/orders-list.component';
+import { OrderViewComponent } from './order-view/order-view.component';
 
 @NgModule({
   declarations: [
@@ -40,6 +42,8 @@ import { AccordionModule } from 'primeng/accordion';
     EditProductComponent,
     ProductsListComponent,
     EditCategoriesComponent,
+    OrdersListComponent,
+    OrderViewComponent,
   ],
   imports: [
     BrowserModule,
