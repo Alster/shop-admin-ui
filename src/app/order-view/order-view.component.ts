@@ -3,17 +3,14 @@ import { OrderAdminDto } from '../../shop-shared/dto/order/order.dto';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { ActivatedRoute } from '@angular/router';
 import { fetchAPI } from '../helpers/fetchAPI';
-import {
-  ProductAdminDto,
-  ProductAttributesDto,
-} from '../../shop-shared/dto/product/product.dto';
+import { ProductAttributesDto } from '../../shop-shared/dto/product/product.dto';
 import { NOVA_POSHTA_DELIVERY_TYPE } from '../../shop-shared/constants/checkout';
 import {
   DeliveryDataDto,
   DeliveryNVCourierDto,
   DeliveryNVOfficeDto,
 } from '../../shop-shared/dto/order/create-order.dto';
-import { OrderStatus } from '../../shop-shared/constants/order';
+import { ORDER_STATUS, OrderStatus } from '../../shop-shared/constants/order';
 import { STATUS_TO_SEVERITY_MAP } from '../constants/order';
 
 @Component({
@@ -25,6 +22,7 @@ export class OrderViewComponent implements OnInit {
   order?: OrderAdminDto;
   isLoading = false;
   NOVA_POSHTA_DELIVERY_TYPE = NOVA_POSHTA_DELIVERY_TYPE;
+  ORDER_STATUS = ORDER_STATUS;
 
   constructor(
     private confirmationService: ConfirmationService,

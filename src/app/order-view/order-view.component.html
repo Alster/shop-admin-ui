@@ -48,7 +48,9 @@
       Room: {{getNVCourier(order.delivery).room}}
     </div>
     <br/>
+    <br/>
     <p-button
+      *ngIf="order.status === ORDER_STATUS.CREATED"
       class="mr-3"
       type="button"
       label="Mark as FINISHED"
