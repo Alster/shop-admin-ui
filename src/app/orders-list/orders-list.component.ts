@@ -10,6 +10,7 @@ import { MessageService } from 'primeng/api';
 import { OrderListAdminResponseDto } from '../../shop-shared/dto/product/order-list.admin.response.dto';
 import { ORDER_STATUS, OrderStatus } from '../../shop-shared/constants/order';
 import { STATUS_TO_SEVERITY_MAP } from '../constants/order';
+import { ATTRIBUTE_TYPE } from '../../shop-shared/constants/product';
 
 @Component({
   selector: 'app-orders-list',
@@ -17,6 +18,8 @@ import { STATUS_TO_SEVERITY_MAP } from '../constants/order';
   styleUrls: ['./orders-list.component.scss'],
 })
 export class OrdersListComponent implements OnInit {
+  ORDER_STATUS = ORDER_STATUS;
+
   orders: OrderAdminDto[] = [];
   totalOrdersCount = 0;
   first = 0;
@@ -24,6 +27,7 @@ export class OrdersListComponent implements OnInit {
   sortField = '';
   sortOrder = 0;
   searchTitleQuery = '';
+  selectedStatus = '';
 
   listIsNotLoaded = true;
   isRouteParamsLoaded = false;
@@ -42,6 +46,19 @@ export class OrdersListComponent implements OnInit {
     });
   }
 
+  getOrderStatuses(): { name: string; code: string }[] {
+    return [
+      {
+        name: 'ANY',
+        code: '',
+      },
+      ...Object.values(ORDER_STATUS).map((status) => ({
+        name: status,
+        code: status,
+      })),
+    ];
+  }
+
   async updateQuery() {
     if (this.listIsNotLoaded) {
       return;
@@ -57,6 +74,7 @@ export class OrdersListComponent implements OnInit {
     queryParams.first = this.first;
     queryParams.rows = this.rows;
     queryParams.search = this.searchTitleQuery;
+    queryParams.status = this.selectedStatus;
 
     console.log('Query params before:', queryParams);
 
@@ -98,11 +116,13 @@ export class OrdersListComponent implements OnInit {
     const first: number = +(params['first'] ?? '');
     const rows: number = +(params['rows'] ?? '5');
     const searchTitleQuery: string = params['search'] ?? '';
+    const status: string = params['status'] ?? '';
     console.log('Query params after: sortField:', sortField);
     console.log('Query params after: sortOrder:', sortOrder);
     console.log('Query params after: first:', first);
     console.log('Query params after: rows:', rows);
     console.log('Query params after: search:', searchTitleQuery);
+    console.log('Query params after: status:', status);
 
     const response = await fetchAPI(
       'order/list',
@@ -115,6 +135,7 @@ export class OrdersListComponent implements OnInit {
         skip: first,
         limit: rows,
         search: searchTitleQuery,
+        status: status,
       }),
     );
     this.listIsNotLoaded = false;
@@ -137,9 +158,12 @@ export class OrdersListComponent implements OnInit {
     this.first = first;
     this.rows = rows;
     this.searchTitleQuery = searchTitleQuery;
+    this.selectedStatus = status;
   }
 
   getSeverityForStatus(status: OrderStatus): string {
     return STATUS_TO_SEVERITY_MAP[status];
   }
+
+  protected readonly ATTRIBUTE_TYPE = ATTRIBUTE_TYPE;
 }

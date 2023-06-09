@@ -20,15 +20,16 @@
   >
     <ng-template pTemplate="caption">
       <div class="flex align-items-center justify-content-between">
-<!--        <span class="p-input-icon-left">-->
-<!--            <i class="pi pi-search"></i>-->
-<!--            <input-->
-<!--              pInputText type="text"-->
-<!--              (input)="onTitleSearchUpdate($event.target)"-->
-<!--              placeholder="Search keyword"-->
-<!--              [(ngModel)]="searchTitleQuery"-->
-<!--            />-->
-<!--        </span>-->
+        <div>
+          <label class="block font-bold mb-2">Status</label>
+          <p-dropdown
+            [options]="getOrderStatuses()"
+            optionLabel="name"
+            optionValue="code"
+            [(ngModel)]="selectedStatus"
+            (onChange)="updateQuery()"
+          ></p-dropdown>
+        </div>
         <p-button icon="pi pi-refresh" (onClick)="fetchProducts()"></p-button>
       </div>
     </ng-template>
