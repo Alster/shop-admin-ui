@@ -101,7 +101,7 @@
             {{categories.get(categoryId)?.title}}
           </p-tag>
         </td>
-        <td>{{product.price | currency: product.currency}}</td>
+        <td>{{formatPrice(moneySmallToBig(product.price), product.currency)}}</td>
         <td>{{product.discount}}%</td>
         <td>{{product.quantity}}</td>
         <td>

@@ -12,6 +12,11 @@ import {
 } from '../../shop-shared/dto/order/create-order.dto';
 import { ORDER_STATUS, OrderStatus } from '../../shop-shared/constants/order';
 import { STATUS_TO_SEVERITY_MAP } from '../constants/order';
+import {
+  MoneyBig,
+  moneySmallToBig,
+} from '../../shop-shared/dto/primitiveTypes';
+import { formatPrice } from '../../shop-exchange-shared/formatPrice';
 
 @Component({
   selector: 'app-order-view',
@@ -23,6 +28,8 @@ export class OrderViewComponent implements OnInit {
   isLoading = false;
   NOVA_POSHTA_DELIVERY_TYPE = NOVA_POSHTA_DELIVERY_TYPE;
   ORDER_STATUS = ORDER_STATUS;
+
+  priceBig: MoneyBig = 0;
 
   constructor(
     private confirmationService: ConfirmationService,
@@ -39,6 +46,7 @@ export class OrderViewComponent implements OnInit {
         });
         const json: OrderAdminDto = await res.json();
         this.order = json;
+        this.priceBig = moneySmallToBig(this.order.totalPrice);
         // console.log("Order:", this.order);
       };
 
@@ -87,4 +95,6 @@ export class OrderViewComponent implements OnInit {
     // console.log("Order:", json);
     this.isLoading = false;
   }
+
+  protected readonly formatPrice = formatPrice;
 }

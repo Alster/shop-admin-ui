@@ -9,7 +9,7 @@
   </div>
   <br/>
   <div class="order-row">
-    Total price: {{order.totalPrice | currency: order.currency}}
+    Total price: {{formatPrice(priceBig, order.currency)}}
   </div>
   <br/>
   <div class="order-row">

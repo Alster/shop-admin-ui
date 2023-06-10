@@ -15,6 +15,8 @@ import { AttributeDto } from '../../shop-shared/dto/product/attribute.dto';
 import { LanguageEnum } from '../../shop-shared/constants/localization';
 import { CategoriesNodeDto } from '../../shop-shared/dto/category/categories-tree.dto';
 import { ProductListAdminResponseDto } from '../../shop-shared/dto/product/product-list.admin.response.dto';
+import { moneySmallToBig } from '../../shop-shared/dto/primitiveTypes';
+import { formatPrice } from '../../shop-exchange-shared/formatPrice';
 
 interface AttributeFilter {
   key: string;
@@ -331,4 +333,6 @@ export class ProductsListComponent implements OnInit {
   }
 
   protected readonly ATTRIBUTE_TYPE = ATTRIBUTE_TYPE;
+  protected readonly moneySmallToBig = moneySmallToBig;
+  protected readonly formatPrice = formatPrice;
 }

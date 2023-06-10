@@ -16,6 +16,11 @@ import {
 import { LanguageEnum } from 'src/shop-shared/constants/localization';
 import { ATTRIBUTE_TYPE } from '../../shop-shared/constants/product';
 import { CategoriesNodeDto } from '../../shop-shared/dto/category/categories-tree.dto';
+import {
+  MoneyBig,
+  moneyBigToSmall,
+  moneySmallToBig,
+} from '../../shop-shared/dto/primitiveTypes';
 
 interface MultiselectEntry extends AttributeDto {
   name: string;
@@ -43,11 +48,19 @@ export class EditProductComponent implements OnInit {
   categoryTree: Category[] = [];
   treeNodes: TreeNode[] = [];
 
+  priceBig: MoneyBig = 0;
+
   constructor(
     private confirmationService: ConfirmationService,
     private messageService: MessageService,
     private route: ActivatedRoute,
   ) {}
+
+  updateProductPrice() {
+    console.log('Price:', this.priceBig);
+    this.product!.price = moneyBigToSmall(this.priceBig);
+    console.log('Price:', this.product!.price, this.priceBig);
+  }
 
   async ngOnInit() {
     this.route.queryParams.subscribe(async (params) => {
@@ -58,6 +71,7 @@ export class EditProductComponent implements OnInit {
         });
         const json: ProductAdminDto = await res.json();
         this.product = json;
+        this.priceBig = moneySmallToBig(this.product.price);
         // console.log("Product:", this.product);
       };
 
@@ -104,7 +118,12 @@ export class EditProductComponent implements OnInit {
       body: JSON.stringify(this.product),
     });
     if (!res.ok) {
-      console.error('Error updating product');
+      const error = await res.json();
+      this.messageService.add({
+        severity: 'error',
+        summary: error.error,
+        detail: error.message,
+      });
       this.isLoading = false;
       return;
     }
