@@ -47,6 +47,9 @@
         pInputText [(ngModel)]="selectedFile.data.title[currentLanguage]"
         (ngModelChange)="selectedFile.label = $event"
       />
+      <div
+        *ngFor="let lang of languages"
+      ><b>{{lang.toUpperCase()}}</b>: {{selectedFile.data.title[lang]}}</div>
     </div>
     <div class="col-12">
       <p-button

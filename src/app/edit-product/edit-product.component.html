@@ -81,7 +81,7 @@
             ><ng-template let-node pTemplate="default">
               {{ node.label }}
               &nbsp;&nbsp;
-              <p-checkbox *ngIf="!node.children.length" value="{{node.data.id}}" [(ngModel)]="product.categories"></p-checkbox>
+              <p-checkbox value="{{node.data.id}}" [(ngModel)]="product.categories"></p-checkbox>
             </ng-template>
             </p-tree>
           </ng-template>
