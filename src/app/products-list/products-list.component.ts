@@ -268,7 +268,7 @@ export class ProductsListComponent implements OnInit {
     // console.log("Categories:", json);
     this.categories = new Map<string, CategoryDto>();
     json.forEach((category) => {
-      this.categories.set(category.id, category);
+      this.categories.set(category.publicId, category);
     });
   }
 

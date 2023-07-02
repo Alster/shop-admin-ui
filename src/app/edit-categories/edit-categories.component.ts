@@ -5,6 +5,7 @@ import { fetchAPI } from '../helpers/fetchAPI';
 import { Category, mapNode } from '../helpers/categoriesTreHelpers';
 import { LanguageEnum } from 'src/shop-shared/constants/localization';
 import { CategoriesNodeDto } from '../../shop-shared/dto/category/categories-tree.dto';
+import { generateCategoryPublicId } from '../helpers/generateCategoryPublicId';
 
 @Component({
   selector: 'app-edit-categories',
@@ -14,8 +15,8 @@ import { CategoriesNodeDto } from '../../shop-shared/dto/category/categories-tre
 })
 export class EditCategoriesComponent {
   tree: Category[] = [];
-  files: TreeNode[] = [];
-  selectedFile?: TreeNode;
+  files: TreeNode<Category>[] = [];
+  selectedFile?: TreeNode<Category>;
 
   isLoading = false;
 
@@ -85,6 +86,11 @@ export class EditCategoriesComponent {
       data: {
         title,
         id: new ObjectId().toString(),
+        publicId: '',
+        description: {},
+        children: [],
+        sort: 0,
+        active: true,
       },
       children: [],
     };
@@ -104,6 +110,11 @@ export class EditCategoriesComponent {
       data: {
         title,
         id: new ObjectId().toString(),
+        publicId: '',
+        description: {},
+        children: [],
+        sort: 0,
+        active: true,
       },
       children: [],
     };
@@ -149,5 +160,14 @@ export class EditCategoriesComponent {
       childrens[index] = nextNode;
     }
     this.mapFiles(this.files);
+  }
+
+  makePublicIdFromTitle(node: TreeNode<Category>) {
+    const category = node.data;
+    if (!category) {
+      return;
+    }
+    const publicId = generateCategoryPublicId(category);
+    category.publicId = publicId;
   }
 }

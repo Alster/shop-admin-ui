@@ -6,7 +6,7 @@
         [(selection)]="selectedFile"
         selectionMode="single"
       ><ng-template let-node pTemplate="default">
-        {{ node.label }}
+        {{ node.label }} / {{node.data?.publicId}}
         &nbsp;&nbsp;
         <span (click)="moveNodeUp(node)" class="pi pi-chevron-up up-tree-button"></span>
         <span (click)="moveNodeDown(node)" class="pi pi-chevron-down up-tree-button"></span>
@@ -21,7 +21,7 @@
               pButton
               *ngFor="let lang of languages"
               label="{{lang.toUpperCase()}}"
-              [class.p-button-secondary]="!selectedFile.data.title[lang]"
+              [class.p-button-secondary]="!selectedFile.data!.title[lang]"
               [class.p-button-success]="lang == currentLanguage"
               (click)="changeLanguage(lang)"
             ></button>
@@ -44,12 +44,26 @@
       <input
         id="name"
         type="text"
-        pInputText [(ngModel)]="selectedFile.data.title[currentLanguage]"
+        pInputText [(ngModel)]="selectedFile.data!.title[currentLanguage]"
         (ngModelChange)="selectedFile.label = $event"
       />
-      <div
-        *ngFor="let lang of languages"
-      ><b>{{lang.toUpperCase()}}</b>: {{selectedFile.data.title[lang]}}</div>
+
+      <span class="ml-2"
+            *ngFor="let lang of languages"
+      ><b>{{lang.toUpperCase()}}</b>: {{selectedFile.data!.title[lang]}}</span>
+
+      <label class="block font-bold mt-2" for="name">Public id</label>
+      <p>Це публичній идентіфикатор категорії, використовується в ссилках. Це означає, що змінювати це значення не рекомендується, бо інакше ссилки з старим ім'ям працювати не будуть.</p>
+      <input
+        id="publicId"
+        type="text"
+        pInputText [(ngModel)]="selectedFile.data!.publicId"
+      />
+      <button
+        pButton
+        label="Make from title"
+        (click)="makePublicIdFromTitle(selectedFile)"
+      ></button>
     </div>
     <div class="col-12">
       <p-button
