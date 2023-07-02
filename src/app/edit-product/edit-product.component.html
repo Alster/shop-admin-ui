@@ -67,8 +67,8 @@
           <ng-template pTemplate="header">
             <div class="flex align-items-center">
               <span class="font-bold mr-3">Categories</span>
-              <p-tag class="mr-1"  *ngFor="let publicId of product.categories">
-                {{findNodeByPublicId(publicId)?.label}}
+              <p-tag class="mr-1"  *ngFor="let id of product.categories">
+                {{findNodeById(id)?.label}}
               </p-tag>
             </div>
           </ng-template>
@@ -81,7 +81,7 @@
             ><ng-template let-node pTemplate="default">
               {{ node.label }}
               &nbsp;&nbsp;
-              <p-checkbox value="{{node.data.publicId}}" [(ngModel)]="product.categories"></p-checkbox>
+              <p-checkbox value="{{node.data.id}}" [(ngModel)]="product.categories"></p-checkbox>
             </ng-template>
             </p-tree>
           </ng-template>

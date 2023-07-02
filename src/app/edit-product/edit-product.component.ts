@@ -294,9 +294,9 @@ export class EditProductComponent implements OnInit {
     });
   }
 
-  findNodeByPublicId(id: string): TreeNode | undefined {
+  findNodeById(id: string): TreeNode | undefined {
     for (const treeNode of this.treeNodes) {
-      const node = this._findNodeByPublicId(id, treeNode);
+      const node = this._findNodeById(id, treeNode);
       if (node) {
         return node;
       }
@@ -304,13 +304,13 @@ export class EditProductComponent implements OnInit {
     return undefined;
   }
 
-  _findNodeByPublicId(id: string, node: TreeNode): TreeNode | undefined {
-    if (node.data.publicId === id) {
+  _findNodeById(id: string, node: TreeNode<Category>): TreeNode | undefined {
+    if (node.data?.id === id) {
       return node;
     }
     if (node.children) {
       for (const child of node.children) {
-        const res = this._findNodeByPublicId(id, child);
+        const res = this._findNodeById(id, child);
         if (res) {
           return res;
         }

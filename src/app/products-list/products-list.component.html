@@ -6,8 +6,8 @@
           <ng-template pTemplate="header">
             <div class="flex align-items-center">
               <span class="font-bold mr-3">Categories</span>
-              <p-tag class="mr-1"  *ngFor="let publicId of selectedCategories">
-                {{categories.get(publicId)?.title}}
+              <p-tag class="mr-1"  *ngFor="let id of selectedCategories">
+                {{categories.get(id)?.title}}
               </p-tag>
             </div>
           </ng-template>
@@ -21,7 +21,7 @@
               {{ node.label }}
               &nbsp;&nbsp;
               <p-checkbox
-                value="{{node.data.publicId}}"
+                value="{{node.data.id}}"
                 [(ngModel)]="selectedCategories"
                 (onChange)="updateQuery()"
               ></p-checkbox>
