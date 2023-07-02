@@ -5,7 +5,7 @@ import { fetchAPI } from '../helpers/fetchAPI';
 import { Category, mapNode } from '../helpers/categoriesTreHelpers';
 import { LanguageEnum } from 'src/shop-shared/constants/localization';
 import { CategoriesNodeDto } from '../../shop-shared/dto/category/categories-tree.dto';
-import { generateCategoryPublicId } from '../helpers/generateCategoryPublicId';
+import { generatePublicId } from '../helpers/generatePublicId';
 
 @Component({
   selector: 'app-edit-categories',
@@ -167,7 +167,7 @@ export class EditCategoriesComponent {
     if (!category) {
       return;
     }
-    const publicId = generateCategoryPublicId(category);
+    const publicId = generatePublicId(category.title['en']);
     category.publicId = publicId;
   }
 }

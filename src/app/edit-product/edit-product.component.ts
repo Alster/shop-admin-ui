@@ -21,6 +21,8 @@ import {
   moneyBigToSmall,
   moneySmallToBig,
 } from '../../shop-shared/dto/primitiveTypes';
+import { generatePublicId } from '../helpers/generatePublicId';
+import { generateRandomString } from '../helpers/generateRandomString';
 
 interface MultiselectEntry extends AttributeDto {
   name: string;
@@ -92,6 +94,9 @@ export class EditProductComponent implements OnInit {
       this.selectedCharacteristics = this.attributes.filter((attribute) => {
         return this.product?.characteristics[attribute.key] ?? false;
       });
+      if (!this.product?.publicId) {
+        this.makePublicIdFromTitle();
+      }
     });
     await this.fetchCategoryTree();
   }
@@ -317,5 +322,11 @@ export class EditProductComponent implements OnInit {
       }
     }
     return undefined;
+  }
+
+  makePublicIdFromTitle() {
+    const publicId = generatePublicId(this.product!.title['en']);
+    const randomString = generateRandomString(6);
+    this.product!.publicId = `${publicId}-${randomString}`;
   }
 }

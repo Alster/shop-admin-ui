@@ -29,6 +29,28 @@
       </span>
     </div>
   </div>
+  <div>
+    <label class="block font-bold mt-2" for="name">Public id</label>
+    <div class="grid">
+      <div class="col-5">
+        <input
+          id="publicId"
+          type="text"
+          pInputText [(ngModel)]="product!.publicId"
+        />
+        <button
+          pButton
+          class="ml-2"
+          label="Make from title"
+          (click)="makePublicIdFromTitle()"
+        ></button>
+      </div>
+      <div class="col-6">
+        Це публичній идентіфикатор продукта, використовується в ссилках.
+        Це означає, що змінювати це значення не рекомендується, бо інакше ссилки з старим ім'ям працювати не будуть.
+      </div>
+    </div>
+  </div>
   <div class="grid">
     <div class="col-3">
       <label class="block font-bold mb-2" for="price">Price</label>
