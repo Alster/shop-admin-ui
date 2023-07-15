@@ -1,34 +1,40 @@
 import { TreeNode } from 'primeng/api';
-import { fetchAPI } from './fetchAPI';
+
 import { LanguageEnum } from '../../shop-shared/constants/localization';
-import { CategoriesNodeDto } from '../../shop-shared/dto/category/categories-tree.dto';
+import {
+	CategoriesNodeAdminDto,
+	CategoriesNodeDto,
+} from '../../shop-shared/dto/category/categoriesTree.dto';
+import { fetchAPI } from './fetchAPI';
 
 export type Category = CategoriesNodeDto;
+export type CategoryAdmin = CategoriesNodeAdminDto;
+
 export const mapNode = (
-  node: Category,
-  language: LanguageEnum,
-  isVisible: (id: string) => boolean = () => true,
+	node: CategoryAdmin,
+	language: LanguageEnum,
+	isVisible: (id: string) => boolean = () => true,
 ): TreeNode => {
-  const treeNode: TreeNode = {
-    label: node.title[language],
-    data: node,
-    key: node.id,
-    children: [],
-  };
-  if (node.children) {
-    node.children.forEach((child: Category) => {
-      if (!isVisible(child.id)) {
-        return;
-      }
-      treeNode.children!.push(mapNode(child, language));
-    });
-  }
-  return treeNode;
+	const treeNode: TreeNode = {
+		label: node.title[language],
+		data: node,
+		key: node.id,
+		children: [],
+	};
+	if (node.children) {
+		for (const child of node.children) {
+			if (!isVisible(child.id)) {
+				continue;
+			}
+			treeNode.children!.push(mapNode(child, language));
+		}
+	}
+	return treeNode;
 };
 
-export const fetchCategoryTree = async (): Promise<CategoriesNodeDto[]> => {
-  const res = await fetchAPI(`category/tree`, {
-    method: 'GET',
-  });
-  return await res.json();
+export const fetchCategoryTree = async (): Promise<CategoriesNodeAdminDto[]> => {
+	const response = await fetchAPI(`category/tree`, {
+		method: 'GET',
+	});
+	return await response.json();
 };

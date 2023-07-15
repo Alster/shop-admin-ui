@@ -3,20 +3,20 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { EditCategoriesComponent } from './edit-categories.component';
 
 describe('EditCategoriesComponent', () => {
-  let component: EditCategoriesComponent;
-  let fixture: ComponentFixture<EditCategoriesComponent>;
+	let component: EditCategoriesComponent;
+	let fixture: ComponentFixture<EditCategoriesComponent>;
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      declarations: [EditCategoriesComponent],
-    }).compileComponents();
+	beforeEach(async () => {
+		await TestBed.configureTestingModule({
+			declarations: [EditCategoriesComponent],
+		}).compileComponents();
 
-    fixture = TestBed.createComponent(EditCategoriesComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
+		fixture = TestBed.createComponent(EditCategoriesComponent);
+		component = fixture.componentInstance;
+		fixture.detectChanges();
+	});
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
+	it('should create', () => {
+		expect(component).toBeTruthy();
+	});
 });
