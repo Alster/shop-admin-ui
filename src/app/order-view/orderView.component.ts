@@ -18,8 +18,8 @@ import { fetchAPI } from '../helpers/fetchAPI';
 
 @Component({
 	selector: 'app-order-view',
-	templateUrl: './order-view.component.html',
-	styleUrls: ['./order-view.component.scss'],
+	templateUrl: './orderView.component.html',
+	styleUrls: ['./orderView.component.scss'],
 })
 export class OrderViewComponent implements OnInit {
 	order?: OrderAdminDto;

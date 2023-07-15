@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { EditCategoriesComponent } from './edit-categories.component';
+import { EditCategoriesComponent } from './editCategories.component';
 
 describe('EditCategoriesComponent', () => {
 	let component: EditCategoriesComponent;

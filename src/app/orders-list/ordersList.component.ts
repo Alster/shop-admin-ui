@@ -12,8 +12,8 @@ import { fetchAPI } from '../helpers/fetchAPI';
 
 @Component({
 	selector: 'app-orders-list',
-	templateUrl: './orders-list.component.html',
-	styleUrls: ['./orders-list.component.scss'],
+	templateUrl: './ordersList.component.html',
+	styleUrls: ['./ordersList.component.scss'],
 })
 export class OrdersListComponent implements OnInit {
 	ORDER_STATUS = ORDER_STATUS;

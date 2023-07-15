@@ -1,17 +1,17 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { OrderViewComponent } from './order-view.component';
+import { SideMenuComponent } from './sideMenu.component';
 
-describe('OrderViewComponent', () => {
-	let component: OrderViewComponent;
-	let fixture: ComponentFixture<OrderViewComponent>;
+describe('SideMenuComponent', () => {
+	let component: SideMenuComponent;
+	let fixture: ComponentFixture<SideMenuComponent>;
 
 	beforeEach(async () => {
 		await TestBed.configureTestingModule({
-			declarations: [OrderViewComponent],
+			declarations: [SideMenuComponent],
 		}).compileComponents();
 
-		fixture = TestBed.createComponent(OrderViewComponent);
+		fixture = TestBed.createComponent(SideMenuComponent);
 		component = fixture.componentInstance;
 		fixture.detectChanges();
 	});

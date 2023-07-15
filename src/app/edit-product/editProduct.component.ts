@@ -29,8 +29,8 @@ interface MultiselectEntry extends AttributeDto {
 
 @Component({
 	selector: 'app-edit-product',
-	templateUrl: './edit-product.component.html',
-	styleUrls: ['./edit-product.component.scss'],
+	templateUrl: './editProduct.component.html',
+	styleUrls: ['./editProduct.component.scss'],
 })
 export class EditProductComponent implements OnInit {
 	product?: ProductAdminDto;

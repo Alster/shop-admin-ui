@@ -5,8 +5,8 @@ import { fetchAPI } from '../helpers/fetchAPI';
 
 @Component({
 	selector: 'app-create-product',
-	templateUrl: './create-product.component.html',
-	styleUrls: ['./create-product.component.scss'],
+	templateUrl: './createProduct.component.html',
+	styleUrls: ['./createProduct.component.scss'],
 })
 export class CreateProductComponent {
 	name = '';

@@ -1,12 +1,12 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
-import { CreateProductComponent } from './create-product/create-product.component';
-import { EditCategoriesComponent } from './edit-categories/edit-categories.component';
-import { EditProductComponent } from './edit-product/edit-product.component';
-import { OrderViewComponent } from './order-view/order-view.component';
-import { OrdersListComponent } from './orders-list/orders-list.component';
-import { ProductsListComponent } from './products-list/products-list.component';
+import { CreateProductComponent } from './create-product/createProduct.component';
+import { EditCategoriesComponent } from './edit-categories/editCategories.component';
+import { EditProductComponent } from './edit-product/editProduct.component';
+import { OrderViewComponent } from './order-view/orderView.component';
+import { OrdersListComponent } from './orders-list/ordersList.component';
+import { ProductsListComponent } from './products-list/productsList.component';
 
 const routes: Routes = [
 	{ path: 'create-product', component: CreateProductComponent },

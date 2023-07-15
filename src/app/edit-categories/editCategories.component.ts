@@ -10,8 +10,8 @@ import { generatePublicId } from '../helpers/generatePublicId';
 
 @Component({
 	selector: 'app-edit-categories',
-	templateUrl: './edit-categories.component.html',
-	styleUrls: ['./edit-categories.component.scss'],
+	templateUrl: './editCategories.component.html',
+	styleUrls: ['./editCategories.component.scss'],
 	providers: [],
 })
 export class EditCategoriesComponent {

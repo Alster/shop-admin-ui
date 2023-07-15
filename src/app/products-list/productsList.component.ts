@@ -22,8 +22,8 @@ interface IAttributeFilter {
 
 @Component({
 	selector: 'app-products-list',
-	templateUrl: './products-list.component.html',
-	styleUrls: ['./products-list.component.scss'],
+	templateUrl: './productsList.component.html',
+	styleUrls: ['./productsList.component.scss'],
 })
 export class ProductsListComponent implements OnInit {
 	attributeTypeEnum = ATTRIBUTE_TYPE;
