@@ -79,6 +79,7 @@ module.exports = {
 		"@typescript-eslint/explicit-function-return-type": "warn",
 		"@typescript-eslint/explicit-module-boundary-types": "off",
 		"@typescript-eslint/no-explicit-any": "error",
+		"@typescript-eslint/no-floating-promises": "error",
 		"no-nested-ternary": "off",
 		"simple-import-sort/imports": "warn",
 		"@typescript-eslint/member-ordering": [
