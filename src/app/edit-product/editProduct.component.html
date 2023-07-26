@@ -209,6 +209,63 @@
     </ng-template>
   </p-table>
   <br>
+  Images
+  <div *ngFor="let color of getUsedColors()">
+    <h3>{{color}}</h3>
+    <div class="grid" *ngIf="product">
+      <div class="col-3" *ngFor="let image of product.imagesByColor[color]">
+        <p-card *ngIf="image">
+          <img [src]="getImageUrl(color, image)" width="128" height="128" />
+          <p-button
+            type="button"
+            label="Delete"
+            icon="pi pi-trash"
+            styleClass="p-button-danger"
+            [disabled]="isLoading"
+            [loading]="isLoading"
+            (click)="deleteImage(color, image)"
+          ></p-button>
+        </p-card>
+      </div>
+    </div>
+    <div class="grid">
+      <div class="col-3">
+        <input type="file" (change)="fileChangeEvent(color, $event)" />
+        <image-cropper
+          [imageChangedEvent]="imageChangedEvent[color]"
+          [maintainAspectRatio]="true"
+          [aspectRatio]="1 / 1"
+          format="jpeg"
+          (imageCropped)="imageCropped(color, $event)"
+          (imageLoaded)="imageLoaded(color, $event)"
+          (cropperReady)="cropperReady(color)"
+          (loadImageFailed)="loadImageFailed(color)"
+        ></image-cropper>
+        <img [src]="croppedImage[color]" />
+        <button
+          pButton
+          class="ml-2"
+          label="Upload"
+          (click)="uploadImage(color)"
+        ></button>
+        <!--        <p-fileUpload-->
+        <!--          mode="basic"-->
+        <!--          name="color"-->
+        <!--          url="http://localhost:4300/product/uploadImage"-->
+        <!--          accept="image/"-->
+        <!--          maxFileSize="1000000"-->
+        <!--          [auto]="true"-->
+        <!--          [disabled]="isLoading"-->
+        <!--          [showUploadButton]="false"-->
+        <!--          [showCancelButton]="false"-->
+        <!--          (onUpload)="onUpload($event)"-->
+        <!--          chooseLabel="Browse"-->
+        <!--          [multiple]="true"-->
+        <!--        ></p-fileUpload>-->
+      </div>
+    </div>
+  </div>
+  <br>
   <div class="grid">
     <div class="col-12">
       <p-button

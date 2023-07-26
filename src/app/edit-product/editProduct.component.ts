@@ -1,17 +1,16 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { ImageCroppedEvent, LoadedImage } from 'ngx-image-cropper';
 import { ConfirmationService, MessageService, TreeNode } from 'primeng/api';
 import { LanguageEnum } from 'src/shop-shared/constants/localization';
 import { v4 as uuid } from 'uuid';
 
 import { ATTRIBUTE_TYPE } from '../../shop-shared/constants/product';
-import {
-	CategoriesNodeAdminDto,
-	CategoriesNodeDto,
-} from '../../shop-shared/dto/category/categoriesTree.dto';
+import { CategoriesNodeAdminDto } from '../../shop-shared/dto/category/categoriesTree.dto';
 import { MoneyBig, moneyBigToSmall, moneySmallToBig } from '../../shop-shared/dto/primitiveTypes';
 import { AttributeDto } from '../../shop-shared/dto/product/attribute.dto';
 import { ProductAdminDto, ProductItemDto } from '../../shop-shared/dto/product/product.dto';
+import getProductImageUrl from '../../shop-shared/utils/getProductImageUrl';
 import {
 	Category,
 	CategoryAdmin,
@@ -25,6 +24,12 @@ import { generateRandomString } from '../helpers/generateRandomString';
 interface MultiselectEntry extends AttributeDto {
 	name: string;
 	code: string;
+}
+
+interface ImageContainer {
+	id: string;
+	imageChangedEvent: any;
+	croppedImage: any;
 }
 
 @Component({
@@ -92,6 +97,7 @@ export class EditProductComponent implements OnInit {
 			this.selectedCharacteristics = this.attributes.filter((attribute) => {
 				return this.product?.characteristics[attribute.key] ?? false;
 			});
+
 			if (!this.product?.publicId) {
 				this.makePublicIdFromTitle();
 			}
@@ -314,5 +320,95 @@ export class EditProductComponent implements OnInit {
 		const publicId = generatePublicId(this.product!.title['en']);
 		const randomString = generateRandomString(6);
 		this.product!.publicId = `${publicId}-${randomString}`;
+	}
+
+	getUsedColors(): string[] {
+		const colors: string[] = [];
+		for (const item of this.product!.items) {
+			const color = item.attributes['color'][0];
+			if (color && !colors.includes(color)) {
+				colors.push(color);
+			}
+		}
+		return colors;
+	}
+
+	deleteImage(color: string, image: string): void {
+		if (!this.product) {
+			return;
+		}
+		this.product.imagesByColor[color] = this.product.imagesByColor[color].filter(
+			(img) => img !== image,
+		);
+	}
+
+	imageChangedEvent: Record<string, any> = {};
+	croppedImage: Record<string, any> = {};
+	croppedBlob: Record<string, any> = {};
+
+	fileChangeEvent(color: string, event: any): void {
+		console.log('fileChangeEvent', color, event);
+		this.imageChangedEvent[color] = event;
+	}
+	imageCropped(color: string, event: ImageCroppedEvent) {
+		console.log('imageCropped', color, event);
+		this.croppedBlob[color] = event.blob;
+		// this.croppedImage = this.sanitizer.bypassSecurityTrustUrl(event.objectUrl);
+		// event.blob can be used to upload the cropped image
+	}
+	imageLoaded(color: string, image: LoadedImage) {
+		console.log('imageLoaded', image, color);
+		// show cropper
+	}
+	cropperReady(color: string) {
+		console.log('cropperReady', color);
+		// cropper ready
+	}
+	loadImageFailed(color: string) {
+		console.log('loadImageFailed', color);
+		// show message
+	}
+
+	async uploadImage(color: string): Promise<void> {
+		if (!this.product) {
+			return;
+		}
+		const formData = new FormData();
+		formData.append('image', this.croppedBlob[color]);
+		formData.append('color', color);
+		formData.append('publicId', this.product.publicId);
+		const res = await this.upload(formData);
+		console.log('uploadImage', res);
+		if (!this.product.imagesByColor[color]) {
+			this.product.imagesByColor[color] = [];
+		}
+		this.product.imagesByColor[color].push(res);
+	}
+
+	async upload(formData: FormData): Promise<string> {
+		const response = await fetch(
+			`http://localhost:4300/product/uploadImage/` + this.product?.id,
+			{
+				method: 'POST',
+				body: formData,
+			},
+		);
+		// const response = await fetchAPI(`product/uploadImage`, {
+		// 	method: 'POST',
+		// 	body: formData,
+		// 	headers: {
+		// 		'Content-Type': 'multipart/form-data',
+		// 	},
+		// });
+		return await response.text();
+		// const res = await fetch(`${API_URL}/upload`, {
+		// 	method: 'POST',
+		// 	body: formData,
+		// });
+		// return await res.text();
+	}
+
+	getImageUrl(color: string, uid: string): string {
+		return getProductImageUrl(this.product?.id ?? '', uid, 'medium');
 	}
 }
