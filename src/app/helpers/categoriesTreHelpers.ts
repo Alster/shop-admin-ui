@@ -1,11 +1,11 @@
-import { TreeNode } from 'primeng/api';
+import { TreeNode } from "primeng/api";
 
-import { LanguageEnum } from '../../shop-shared/constants/localization';
+import { LanguageEnum } from "../../../shop-shared/constants/localization";
 import {
 	CategoriesNodeAdminDto,
 	CategoriesNodeDto,
-} from '../../shop-shared/dto/category/categoriesTree.dto';
-import { fetchAPI } from './fetchAPI';
+} from "../../../shop-shared/dto/category/categoriesTree.dto";
+import { fetchAPI } from "./fetchAPI";
 
 export type Category = CategoriesNodeDto;
 export type CategoryAdmin = CategoriesNodeAdminDto;
@@ -34,7 +34,7 @@ export const mapNode = (
 
 export const fetchCategoryTree = async (): Promise<CategoriesNodeAdminDto[]> => {
 	const response = await fetchAPI(`category/tree`, {
-		method: 'GET',
+		method: "GET",
 	});
 	return await response.json();
 };

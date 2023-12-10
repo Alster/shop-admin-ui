@@ -1,25 +1,29 @@
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { ImageCroppedEvent, LoadedImage } from 'ngx-image-cropper';
-import { ConfirmationService, MessageService, TreeNode } from 'primeng/api';
-import { LanguageEnum } from 'src/shop-shared/constants/localization';
-import { v4 as uuid } from 'uuid';
+import { Component, OnInit } from "@angular/core";
+import { ActivatedRoute } from "@angular/router";
+import { ImageCroppedEvent, LoadedImage } from "ngx-image-cropper";
+import { ConfirmationService, MessageService, TreeNode } from "primeng/api";
+import { LanguageEnum } from "shop-shared/constants/localization";
+import { v4 as uuid } from "uuid";
 
-import { ATTRIBUTE_TYPE } from '../../shop-shared/constants/product';
-import { CategoriesNodeAdminDto } from '../../shop-shared/dto/category/categoriesTree.dto';
-import { MoneyBig, moneyBigToSmall, moneySmallToBig } from '../../shop-shared/dto/primitiveTypes';
-import { AttributeDto } from '../../shop-shared/dto/product/attribute.dto';
-import { ProductAdminDto, ProductItemDto } from '../../shop-shared/dto/product/product.dto';
-import getProductImageUrl from '../../shop-shared/utils/getProductImageUrl';
+import { ATTRIBUTE_TYPE } from "../../../shop-shared/constants/product";
+import { CategoriesNodeAdminDto } from "../../../shop-shared/dto/category/categoriesTree.dto";
+import {
+	MoneyBig,
+	moneyBigToSmall,
+	moneySmallToBig,
+} from "../../../shop-shared/dto/primitiveTypes";
+import { AttributeDto } from "../../../shop-shared/dto/product/attribute.dto";
+import { ProductAdminDto, ProductItemDto } from "../../../shop-shared/dto/product/product.dto";
+import getProductImageUrl from "../../../shop-shared/utils/getProductImageUrl";
 import {
 	Category,
 	CategoryAdmin,
 	fetchCategoryTree,
 	mapNode,
-} from '../helpers/categoriesTreHelpers';
-import { fetchAPI } from '../helpers/fetchAPI';
-import { generatePublicId } from '../helpers/generatePublicId';
-import { generateRandomString } from '../helpers/generateRandomString';
+} from "../helpers/categoriesTreHelpers";
+import { fetchAPI } from "../helpers/fetchAPI";
+import { generatePublicId } from "../helpers/generatePublicId";
+import { generateRandomString } from "../helpers/generateRandomString";
 
 interface MultiselectEntry extends AttributeDto {
 	name: string;
@@ -33,9 +37,9 @@ interface ImageContainer {
 }
 
 @Component({
-	selector: 'app-edit-product',
-	templateUrl: './editProduct.component.html',
-	styleUrls: ['./editProduct.component.scss'],
+	selector: "app-edit-product",
+	templateUrl: "./editProduct.component.html",
+	styleUrls: ["./editProduct.component.scss"],
 })
 export class EditProductComponent implements OnInit {
 	product?: ProductAdminDto;
@@ -62,17 +66,17 @@ export class EditProductComponent implements OnInit {
 	) {}
 
 	updateProductPrice(): void {
-		console.log('Price:', this.priceBig);
+		console.log("Price:", this.priceBig);
 		this.product!.price = moneyBigToSmall(this.priceBig);
-		console.log('Price:', this.product!.price, this.priceBig);
+		console.log("Price:", this.product!.price, this.priceBig);
 	}
 
 	async ngOnInit(): Promise<void> {
 		this.route.queryParams.subscribe(async (parameters) => {
-			const id = parameters['id'];
+			const id = parameters["id"];
 			const fetchProduct = async () => {
 				const response = await fetchAPI(`product/get/${id}`, {
-					method: 'GET',
+					method: "GET",
 				});
 				const json: ProductAdminDto = await response.json();
 				this.product = json;
@@ -107,7 +111,7 @@ export class EditProductComponent implements OnInit {
 
 	async fetchAttributes(): Promise<void> {
 		const response = await fetchAPI(`product/attribute/list`, {
-			method: 'GET',
+			method: "GET",
 		});
 		const json: AttributeDto[] = await response.json();
 		this.availableAttributes = json;
@@ -123,13 +127,13 @@ export class EditProductComponent implements OnInit {
 	async updateProduct(): Promise<void> {
 		this.isLoading = true;
 		const response = await fetchAPI(`product/update/${this.product?.id}`, {
-			method: 'POST',
+			method: "POST",
 			body: JSON.stringify(this.product),
 		});
 		if (!response.ok) {
 			const error = await response.json();
 			this.messageService.add({
-				severity: 'error',
+				severity: "error",
 				summary: error.error,
 				detail: error.message,
 			});
@@ -148,21 +152,21 @@ export class EditProductComponent implements OnInit {
 		}
 
 		this.confirmationService.confirm({
-			message: 'Do you want to delete this record?',
-			header: 'Delete Confirmation',
-			icon: 'pi pi-info-circle',
+			message: "Do you want to delete this record?",
+			header: "Delete Confirmation",
+			icon: "pi pi-info-circle",
 			accept: async () => {
 				if (!this.product) {
 					return;
 				}
 				const response = await fetchAPI(`product/delete/${this.product.id}`, {
-					method: 'POST',
+					method: "POST",
 				});
 				if (!response.ok) {
 					this.messageService.add({
-						severity: 'error',
-						summary: 'Error',
-						detail: 'Error deleting product',
+						severity: "error",
+						summary: "Error",
+						detail: "Error deleting product",
 					});
 					return;
 				}
@@ -317,7 +321,7 @@ export class EditProductComponent implements OnInit {
 	}
 
 	makePublicIdFromTitle(): void {
-		const publicId = generatePublicId(this.product!.title['en']);
+		const publicId = generatePublicId(this.product!.title["en"]);
 		const randomString = generateRandomString(6);
 		this.product!.publicId = `${publicId}-${randomString}`;
 	}
@@ -325,7 +329,7 @@ export class EditProductComponent implements OnInit {
 	getUsedColors(): string[] {
 		const colors: string[] = [];
 		for (const item of this.product!.items) {
-			const color = item.attributes['color'][0];
+			const color = item.attributes["color"][0];
 			if (color && !colors.includes(color)) {
 				colors.push(color);
 			}
@@ -348,25 +352,25 @@ export class EditProductComponent implements OnInit {
 	croppedBlob: Record<string, any> = {};
 
 	fileChangeEvent(color: string, event: any): void {
-		console.log('fileChangeEvent', color, event);
+		console.log("fileChangeEvent", color, event);
 		this.imageChangedEvent[color] = event;
 	}
 	imageCropped(color: string, event: ImageCroppedEvent) {
-		console.log('imageCropped', color, event);
+		console.log("imageCropped", color, event);
 		this.croppedBlob[color] = event.blob;
 		// this.croppedImage = this.sanitizer.bypassSecurityTrustUrl(event.objectUrl);
 		// event.blob can be used to upload the cropped image
 	}
 	imageLoaded(color: string, image: LoadedImage) {
-		console.log('imageLoaded', image, color);
+		console.log("imageLoaded", image, color);
 		// show cropper
 	}
 	cropperReady(color: string) {
-		console.log('cropperReady', color);
+		console.log("cropperReady", color);
 		// cropper ready
 	}
 	loadImageFailed(color: string) {
-		console.log('loadImageFailed', color);
+		console.log("loadImageFailed", color);
 		// show message
 	}
 
@@ -376,12 +380,12 @@ export class EditProductComponent implements OnInit {
 		}
 
 		const formData = new FormData();
-		formData.append('image', this.croppedBlob[color]);
-		formData.append('productId', this.product.publicId);
+		formData.append("image", this.croppedBlob[color]);
+		formData.append("productId", this.product.publicId);
 
 		const res = await this.upload(formData);
 
-		console.log('uploadImage', res);
+		console.log("uploadImage", res);
 
 		if (!this.product.imagesByColor[color]) {
 			this.product.imagesByColor[color] = [];
@@ -398,10 +402,10 @@ export class EditProductComponent implements OnInit {
 		// 	},
 		// );
 		const response = await fetchAPI(`product/upload-product-image`, {
-			method: 'POST',
+			method: "POST",
 			body: formData,
 			headers: {
-				'Content-Type': 'multipart/form-data',
+				"Content-Type": "multipart/form-data",
 			},
 		});
 
@@ -409,6 +413,6 @@ export class EditProductComponent implements OnInit {
 	}
 
 	getImageUrl(color: string, uid: string): string {
-		return getProductImageUrl(this.product?.id ?? '', uid, 'medium');
+		return getProductImageUrl(this.product?.id ?? "", uid, "medium");
 	}
 }

@@ -19,7 +19,7 @@ module.exports = {
 				jest: true,
 			},
 			extends: [
-				"./src/shop-shared/.eslintrc.base.js",
+				"./shop-shared/.eslintrc.base.js",
 				"plugin:@angular-eslint/recommended",
 				"plugin:@angular-eslint/template/process-inline-templates",
 			],

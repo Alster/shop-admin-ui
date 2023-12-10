@@ -1,25 +1,25 @@
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { ConfirmationService, MessageService } from 'primeng/api';
+import { Component, OnInit } from "@angular/core";
+import { ActivatedRoute } from "@angular/router";
+import { ConfirmationService, MessageService } from "primeng/api";
 
-import { formatPrice } from '../../shop-exchange-shared/formatPrice';
-import { NOVA_POSHTA_DELIVERY_TYPE } from '../../shop-shared/constants/checkout';
-import { ORDER_STATUS, OrderStatus } from '../../shop-shared/constants/order';
+import { formatPrice } from "../../../shop-exchange-shared/formatPrice";
+import { NOVA_POSHTA_DELIVERY_TYPE } from "../../../shop-shared/constants/checkout";
+import { ORDER_STATUS, OrderStatus } from "../../../shop-shared/constants/order";
 import {
 	DeliveryDataDto,
 	DeliveryNVCourierDto,
 	DeliveryNVOfficeDto,
-} from '../../shop-shared/dto/order/createOrder.dto';
-import { OrderAdminDto } from '../../shop-shared/dto/order/order.dto';
-import { MoneyBig, moneySmallToBig } from '../../shop-shared/dto/primitiveTypes';
-import { ProductAttributesDto } from '../../shop-shared/dto/product/product.dto';
-import { STATUS_TO_SEVERITY_MAP } from '../constants/order';
-import { fetchAPI } from '../helpers/fetchAPI';
+} from "../../../shop-shared/dto/order/createOrder.dto";
+import { OrderAdminDto } from "../../../shop-shared/dto/order/order.dto";
+import { MoneyBig, moneySmallToBig } from "../../../shop-shared/dto/primitiveTypes";
+import { ProductAttributesDto } from "../../../shop-shared/dto/product/product.dto";
+import { STATUS_TO_SEVERITY_MAP } from "../constants/order";
+import { fetchAPI } from "../helpers/fetchAPI";
 
 @Component({
-	selector: 'app-order-view',
-	templateUrl: './orderView.component.html',
-	styleUrls: ['./orderView.component.scss'],
+	selector: "app-order-view",
+	templateUrl: "./orderView.component.html",
+	styleUrls: ["./orderView.component.scss"],
 })
 export class OrderViewComponent implements OnInit {
 	order?: OrderAdminDto;
@@ -37,10 +37,10 @@ export class OrderViewComponent implements OnInit {
 
 	async ngOnInit() {
 		this.route.queryParams.subscribe(async (parameters) => {
-			const id = parameters['id'];
+			const id = parameters["id"];
 			const fetchOrder = async () => {
 				const res = await fetchAPI(`order/get/${id}`, {
-					method: 'GET',
+					method: "GET",
 				});
 				const json: OrderAdminDto = await res.json();
 				this.order = json;
@@ -70,7 +70,7 @@ export class OrderViewComponent implements OnInit {
 
 	getAttributesAsArray(attributes: ProductAttributesDto): string[] {
 		return Object.entries(attributes).map(([key, values]) => {
-			return `${key}: ${values.join(', ')}`;
+			return `${key}: ${values.join(", ")}`;
 		});
 	}
 
@@ -81,10 +81,10 @@ export class OrderViewComponent implements OnInit {
 	async markOrderAsFinished() {
 		this.isLoading = true;
 		const res = await fetchAPI(`order/${this.order?.id}/mark_finished`, {
-			method: 'POST',
+			method: "POST",
 		});
 		if (!res.ok) {
-			console.error('Error updating order');
+			console.error("Error updating order");
 			this.isLoading = false;
 			return;
 		}

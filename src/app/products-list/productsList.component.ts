@@ -1,19 +1,19 @@
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { ConfirmationService, MessageService, TreeNode } from 'primeng/api';
-import * as qs from 'qs';
-import { ATTRIBUTE_TYPE } from 'src/shop-shared/constants/product';
-import { ProductAdminDto } from 'src/shop-shared/dto/product/product.dto';
+import { Component, OnInit } from "@angular/core";
+import { ActivatedRoute, Router } from "@angular/router";
+import { ConfirmationService, MessageService, TreeNode } from "primeng/api";
+import * as qs from "qs";
+import { ATTRIBUTE_TYPE } from "shop-shared/constants/product";
+import { ProductAdminDto } from "shop-shared/dto/product/product.dto";
 
-import { formatPrice } from '../../shop-exchange-shared/formatPrice';
-import { LanguageEnum } from '../../shop-shared/constants/localization';
-import { CategoriesNodeAdminDto } from '../../shop-shared/dto/category/categoriesTree.dto';
-import { CategoryDto } from '../../shop-shared/dto/category/category.dto';
-import { moneySmallToBig } from '../../shop-shared/dto/primitiveTypes';
-import { AttributeDto } from '../../shop-shared/dto/product/attribute.dto';
-import { ProductListAdminResponseDto } from '../../shop-shared/dto/product/productList.admin.response.dto';
-import { CategoryAdmin, fetchCategoryTree, mapNode } from '../helpers/categoriesTreHelpers';
-import { fetchAPI } from '../helpers/fetchAPI';
+import { formatPrice } from "../../../shop-exchange-shared/formatPrice";
+import { LanguageEnum } from "../../../shop-shared/constants/localization";
+import { CategoriesNodeAdminDto } from "../../../shop-shared/dto/category/categoriesTree.dto";
+import { CategoryDto } from "../../../shop-shared/dto/category/category.dto";
+import { moneySmallToBig } from "../../../shop-shared/dto/primitiveTypes";
+import { AttributeDto } from "../../../shop-shared/dto/product/attribute.dto";
+import { ProductListAdminResponseDto } from "../../../shop-shared/dto/product/productList.admin.response.dto";
+import { CategoryAdmin, fetchCategoryTree, mapNode } from "../helpers/categoriesTreHelpers";
+import { fetchAPI } from "../helpers/fetchAPI";
 
 interface IAttributeFilter {
 	key: string;
@@ -21,9 +21,9 @@ interface IAttributeFilter {
 }
 
 @Component({
-	selector: 'app-products-list',
-	templateUrl: './productsList.component.html',
-	styleUrls: ['./productsList.component.scss'],
+	selector: "app-products-list",
+	templateUrl: "./productsList.component.html",
+	styleUrls: ["./productsList.component.scss"],
 })
 export class ProductsListComponent implements OnInit {
 	attributeTypeEnum = ATTRIBUTE_TYPE;
@@ -36,9 +36,9 @@ export class ProductsListComponent implements OnInit {
 	totalProductsCount = 0;
 	first = 0;
 	rows = 0;
-	sortField = '';
+	sortField = "";
 	sortOrder = 0;
-	searchTitleQuery = '';
+	searchTitleQuery = "";
 
 	categoryTree: CategoryAdmin[] = [];
 	treeNodes: TreeNode[] = [];
@@ -72,11 +72,11 @@ export class ProductsListComponent implements OnInit {
 	}
 
 	getSeverityForActive(active: boolean): string {
-		return active ? 'success' : 'warning';
+		return active ? "success" : "warning";
 	}
 
 	getTitleForActive(active: boolean): string {
-		return active ? 'active' : 'disabled';
+		return active ? "active" : "disabled";
 	}
 
 	async updateQuery(): Promise<void> {
@@ -84,7 +84,7 @@ export class ProductsListComponent implements OnInit {
 			return;
 		}
 
-		console.log('Update query and navigate');
+		console.log("Update query and navigate");
 
 		this.isLoading = true;
 
@@ -103,28 +103,28 @@ export class ProductsListComponent implements OnInit {
 		queryParameters.rows = this.rows;
 		queryParameters.search = this.searchTitleQuery;
 
-		console.log('Query params before:', queryParameters);
+		console.log("Query params before:", queryParameters);
 
 		await this.router.navigate([], {
 			relativeTo: this.route,
 			queryParams: queryParameters,
-			queryParamsHandling: 'merge',
+			queryParamsHandling: "merge",
 		});
 		this.isLoading = false;
 	}
 
 	onSort(): void {
-		console.log('onSort');
+		console.log("onSort");
 	}
 
 	async onTitleSearchUpdate(event: any): Promise<void> {
-		console.log('onTitleSearchUpdate', event.value);
+		console.log("onTitleSearchUpdate", event.value);
 		this.searchTitleQuery = event.value;
 		await this.updateQuery();
 	}
 
 	async lazyLoadProducts(event: any): Promise<void> {
-		console.log('lazyLoadProducts', event);
+		console.log("lazyLoadProducts", event);
 		this.sortField = event.sortField;
 		this.sortOrder = event.sortOrder;
 		this.first = event.first;
@@ -136,27 +136,27 @@ export class ProductsListComponent implements OnInit {
 		if (!this.isRouteParamsLoaded) {
 			return;
 		}
-		console.log('Fetch products');
+		console.log("Fetch products");
 		const parameters = this.route.snapshot.queryParams;
-		const attributeFilters: IAttributeFilter[] = JSON.parse(parameters['attrs'] ?? '[]');
-		const categoryFilters: string[] = JSON.parse(parameters['cat'] ?? '[]');
-		const sortField: string = parameters['sortField'] ?? '';
-		const sortOrder: number = +(parameters['sortOrder'] ?? '');
-		const first: number = +(parameters['first'] ?? '');
-		const rows: number = +(parameters['rows'] ?? '5');
-		const searchTitleQuery: string = parameters['search'] ?? '';
-		console.log('Query params after: attrs:', attributeFilters);
-		console.log('Query params after: cat:', categoryFilters);
-		console.log('Query params after: sortField:', sortField);
-		console.log('Query params after: sortOrder:', sortOrder);
-		console.log('Query params after: first:', first);
-		console.log('Query params after: rows:', rows);
-		console.log('Query params after: search:', searchTitleQuery);
+		const attributeFilters: IAttributeFilter[] = JSON.parse(parameters["attrs"] ?? "[]");
+		const categoryFilters: string[] = JSON.parse(parameters["cat"] ?? "[]");
+		const sortField: string = parameters["sortField"] ?? "";
+		const sortOrder: number = +(parameters["sortOrder"] ?? "");
+		const first: number = +(parameters["first"] ?? "");
+		const rows: number = +(parameters["rows"] ?? "5");
+		const searchTitleQuery: string = parameters["search"] ?? "";
+		console.log("Query params after: attrs:", attributeFilters);
+		console.log("Query params after: cat:", categoryFilters);
+		console.log("Query params after: sortField:", sortField);
+		console.log("Query params after: sortOrder:", sortOrder);
+		console.log("Query params after: first:", first);
+		console.log("Query params after: rows:", rows);
+		console.log("Query params after: search:", searchTitleQuery);
 
 		const response = await fetchAPI(
-			'product/list',
+			"product/list",
 			{
-				method: 'GET',
+				method: "GET",
 			},
 			qs.stringify({
 				attrs: attributeFilters,
@@ -171,9 +171,9 @@ export class ProductsListComponent implements OnInit {
 		this.listIsNotLoaded = false;
 		if (!response.ok) {
 			this.messageService.add({
-				severity: 'error',
-				summary: 'Error',
-				detail: 'Failed to fetch products',
+				severity: "error",
+				summary: "Error",
+				detail: "Failed to fetch products",
 			});
 			return;
 		}
@@ -234,15 +234,15 @@ export class ProductsListComponent implements OnInit {
 				const values = valueKeys.map(
 					(valueKey) => attr!.values.find((value) => value.key === valueKey)?.title,
 				);
-				return `${attr!.title}: ${values.join(', ')}`;
+				return `${attr!.title}: ${values.join(", ")}`;
 			});
 	}
 
 	getAttributeValues(attribute: AttributeDto): { name: string; code: string }[] {
 		return [
 			{
-				name: 'All',
-				code: '',
+				name: "All",
+				code: "",
 			},
 			...attribute.values
 				.map((value) => ({
@@ -259,8 +259,8 @@ export class ProductsListComponent implements OnInit {
 	}
 
 	async fetchCategories() {
-		const response = await fetchAPI('category/list', {
-			method: 'GET',
+		const response = await fetchAPI("category/list", {
+			method: "GET",
 		});
 		const json: CategoryDto[] = await response.json();
 		// console.log("Categories:", json);
@@ -272,7 +272,7 @@ export class ProductsListComponent implements OnInit {
 
 	async fetchAttributes(): Promise<void> {
 		const response = await fetchAPI(`product/attribute/list`, {
-			method: 'GET',
+			method: "GET",
 		});
 		const json: AttributeDto[] = await response.json();
 		// console.log("Attributes:", json);
@@ -284,18 +284,18 @@ export class ProductsListComponent implements OnInit {
 
 	async cloneProduct(id: string): Promise<void> {
 		const response = await fetchAPI(`product/clone/${id}`, {
-			method: 'POST',
+			method: "POST",
 		});
 		if (!response.ok) {
 			this.messageService.add({
-				severity: 'error',
-				summary: 'Error',
-				detail: 'Error cloning product',
+				severity: "error",
+				summary: "Error",
+				detail: "Error cloning product",
 			});
 			return;
 		}
 		const product: ProductAdminDto = await response.json();
-		this.router.navigate(['/edit-product'], {
+		this.router.navigate(["/edit-product"], {
 			queryParams: {
 				id: product.id,
 			},
@@ -304,26 +304,26 @@ export class ProductsListComponent implements OnInit {
 
 	async deleteProduct(id: string) {
 		this.confirmationService.confirm({
-			message: 'Do you want to delete this record?',
-			header: 'Delete Confirmation',
-			icon: 'pi pi-info-circle',
+			message: "Do you want to delete this record?",
+			header: "Delete Confirmation",
+			icon: "pi pi-info-circle",
 			accept: async () => {
 				const response = await fetchAPI(`product/delete/${id}`, {
-					method: 'POST',
+					method: "POST",
 				});
 				if (!response.ok) {
 					this.messageService.add({
-						severity: 'error',
-						summary: 'Error',
-						detail: 'Error deleting product',
+						severity: "error",
+						summary: "Error",
+						detail: "Error deleting product",
 					});
 					return;
 				}
 				await this.fetchProducts();
 				this.messageService.add({
-					severity: 'info',
-					summary: 'Confirmed',
-					detail: 'Product deleted',
+					severity: "info",
+					summary: "Confirmed",
+					detail: "Product deleted",
 				});
 			},
 			reject: (type: any) => {},

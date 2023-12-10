@@ -1,9 +1,9 @@
 import { Component } from "@angular/core";
 import ObjectId from "bson-objectid";
 import { TreeNode } from "primeng/api";
-import { LanguageEnum } from "src/shop-shared/constants/localization";
+import { LanguageEnum } from "shop-shared/constants/localization";
 
-import { CategoriesNodeAdminDto } from "../../shop-shared/dto/category/categoriesTree.dto";
+import { CategoriesNodeAdminDto } from "../../../shop-shared/dto/category/categoriesTree.dto";
 import { CategoryAdmin, mapNode } from "../helpers/categoriesTreHelpers";
 import { fetchAPI } from "../helpers/fetchAPI";
 import { generatePublicId } from "../helpers/generatePublicId";
