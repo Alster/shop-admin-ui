@@ -45,7 +45,7 @@ export class EditProductComponent implements OnInit {
 	selectedCharacteristics: MultiselectEntry[] = [];
 
 	attributeTypeEnum = ATTRIBUTE_TYPE;
-	currentLanguage: LanguageEnum = LanguageEnum.UA;
+	currentLanguage: LanguageEnum = LanguageEnum.ua;
 	languages = Object.values(LanguageEnum);
 
 	isLoading = false;
@@ -337,6 +337,7 @@ export class EditProductComponent implements OnInit {
 		if (!this.product) {
 			return;
 		}
+
 		this.product.imagesByColor[color] = this.product.imagesByColor[color].filter(
 			(img) => img !== image,
 		);
@@ -373,12 +374,15 @@ export class EditProductComponent implements OnInit {
 		if (!this.product) {
 			return;
 		}
+
 		const formData = new FormData();
 		formData.append('image', this.croppedBlob[color]);
-		formData.append('color', color);
-		formData.append('publicId', this.product.publicId);
+		formData.append('productId', this.product.publicId);
+
 		const res = await this.upload(formData);
+
 		console.log('uploadImage', res);
+
 		if (!this.product.imagesByColor[color]) {
 			this.product.imagesByColor[color] = [];
 		}
@@ -386,26 +390,22 @@ export class EditProductComponent implements OnInit {
 	}
 
 	async upload(formData: FormData): Promise<string> {
-		const response = await fetch(
-			`http://localhost:4300/product/uploadImage/` + this.product?.id,
-			{
-				method: 'POST',
-				body: formData,
-			},
-		);
-		// const response = await fetchAPI(`product/uploadImage`, {
-		// 	method: 'POST',
-		// 	body: formData,
-		// 	headers: {
-		// 		'Content-Type': 'multipart/form-data',
+		// const response = await fetch(
+		// 	`http://localhost:4300/product/upload-product-image/` + this.product?.id,
+		// 	{
+		// 		method: 'POST',
+		// 		body: formData,
 		// 	},
-		// });
+		// );
+		const response = await fetchAPI(`product/upload-product-image`, {
+			method: 'POST',
+			body: formData,
+			headers: {
+				'Content-Type': 'multipart/form-data',
+			},
+		});
+
 		return await response.text();
-		// const res = await fetch(`${API_URL}/upload`, {
-		// 	method: 'POST',
-		// 	body: formData,
-		// });
-		// return await res.text();
 	}
 
 	getImageUrl(color: string, uid: string): string {

@@ -1,36 +1,40 @@
-import { Component } from '@angular/core';
-import ObjectId from 'bson-objectid';
-import { TreeNode } from 'primeng/api';
-import { LanguageEnum } from 'src/shop-shared/constants/localization';
+import { Component } from "@angular/core";
+import ObjectId from "bson-objectid";
+import { TreeNode } from "primeng/api";
+import { LanguageEnum } from "src/shop-shared/constants/localization";
 
-import { CategoriesNodeAdminDto } from '../../shop-shared/dto/category/categoriesTree.dto';
-import { CategoryAdmin, mapNode } from '../helpers/categoriesTreHelpers';
-import { fetchAPI } from '../helpers/fetchAPI';
-import { generatePublicId } from '../helpers/generatePublicId';
+import { CategoriesNodeAdminDto } from "../../shop-shared/dto/category/categoriesTree.dto";
+import { CategoryAdmin, mapNode } from "../helpers/categoriesTreHelpers";
+import { fetchAPI } from "../helpers/fetchAPI";
+import { generatePublicId } from "../helpers/generatePublicId";
 
 @Component({
-	selector: 'app-edit-categories',
-	templateUrl: './editCategories.component.html',
-	styleUrls: ['./editCategories.component.scss'],
+	selector: "app-edit-categories",
+	templateUrl: "./editCategories.component.html",
+	styleUrls: ["./editCategories.component.scss"],
 	providers: [],
 })
 export class EditCategoriesComponent {
 	tree: CategoriesNodeAdminDto[] = [];
 	files: TreeNode<CategoryAdmin>[] = [];
-	selectedFile?: TreeNode<CategoryAdmin>;
+	// Why array? Because of this stupid interface in primeng tree component:
+	/// selectionChange: EventEmitter<TreeNode<any> | TreeNode<any>[] | null>;
+	selectedFile: TreeNode<CategoryAdmin> | TreeNode<CategoryAdmin>[] | null = null;
 
 	isLoading = false;
 
-	currentLanguage: LanguageEnum = LanguageEnum.UA;
+	currentLanguage: LanguageEnum = LanguageEnum.ua;
 	languages = Object.values(LanguageEnum);
 
+	protected readonly Array = Array;
+
 	constructor() {
-		this.fetchTree();
+		void this.fetchTree();
 	}
 
 	async fetchTree(): Promise<void> {
 		const response = await fetchAPI(`category/tree`, {
-			method: 'GET',
+			method: "GET",
 		});
 		const json: CategoriesNodeAdminDto[] = await response.json();
 		// console.log("Category tree:", json);
@@ -45,7 +49,7 @@ export class EditCategoriesComponent {
 	async save(): Promise<void> {
 		this.isLoading = true;
 		await fetchAPI(`category/tree`, {
-			method: 'POST',
+			method: "POST",
 			body: JSON.stringify(this.tree),
 		});
 	}
@@ -78,9 +82,9 @@ export class EditCategoriesComponent {
 
 	addChild(node: TreeNode): void {
 		const title = {
-			en: 'New category',
-			ua: 'Нова категорія',
-			ru: 'Новая категория',
+			en: "New category",
+			ua: "Нова категорія",
+			ru: "Новая категория",
 		};
 		const childrens = node.children || [];
 		const newNode = {
@@ -88,7 +92,7 @@ export class EditCategoriesComponent {
 			data: {
 				title,
 				id: new ObjectId().toString(),
-				publicId: '',
+				publicId: "",
 				description: {},
 				children: [],
 				sort: 0,
@@ -104,16 +108,16 @@ export class EditCategoriesComponent {
 
 	addRoot(): void {
 		const title = {
-			en: 'New category',
-			ua: 'Нова категорія',
-			ru: 'Новая категория',
+			en: "New category",
+			ua: "Нова категорія",
+			ru: "Новая категория",
 		};
 		const newNode = {
 			label: title[this.currentLanguage],
 			data: {
 				title,
 				id: new ObjectId().toString(),
-				publicId: '',
+				publicId: "",
 				description: {},
 				children: [],
 				sort: 0,
@@ -165,12 +169,13 @@ export class EditCategoriesComponent {
 		this.mapFiles(this.files);
 	}
 
-	makePublicIdFromTitle(node: TreeNode<CategoryAdmin>): void {
+	makePublicIdFromTitle(nodes: TreeNode<CategoryAdmin> | TreeNode<CategoryAdmin>[]): void {
+		const node = Array.isArray(nodes) ? nodes[0] : nodes;
 		const category = node.data;
 		if (!category) {
 			return;
 		}
-		const publicId = generatePublicId(category.title[LanguageEnum.EN]);
+		const publicId = generatePublicId(category.title[LanguageEnum.en]);
 		category.publicId = publicId;
 	}
 }

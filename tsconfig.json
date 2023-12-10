@@ -29,5 +29,12 @@
     "strictInjectionParameters": true,
     "strictInputAccessModifiers": true,
     "strictTemplates": true
-  }
+  },
+  "include": [
+    ".eslintrc.js",
+    "**/*/.eslintrc.*.js",
+    "src/**/*",
+    "package.json",
+    "src/**/package.json"
+  ],
 }

@@ -213,7 +213,7 @@ export class ProductsListComponent implements OnInit {
 			if (!isVisible(node.id)) {
 				continue;
 			}
-			this.treeNodes.push(mapNode(node, LanguageEnum.UA, isVisible));
+			this.treeNodes.push(mapNode(node, LanguageEnum.ua, isVisible));
 		}
 	}
 

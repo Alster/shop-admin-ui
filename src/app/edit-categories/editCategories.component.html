@@ -13,7 +13,7 @@
       </ng-template>
       </p-tree>
     </div>
-    <div class="col-6" *ngIf="selectedFile">
+    <div class="col-6" *ngIf="selectedFile && !Array.isArray(selectedFile)">
       <div class="grid">
         <div class="col-12">
           <span class="p-buttonset mr-5">
@@ -22,9 +22,9 @@
               *ngFor="let lang of languages"
               label="{{lang.toUpperCase()}}"
               [class.p-button-secondary]="!selectedFile.data!.title[lang]"
-              [class.p-button-success]="lang == currentLanguage"
+              [class.p-button-success]="lang === currentLanguage"
               (click)="changeLanguage(lang)"
-            ></button>
+            > </button>
           </span>
           <p-button
             icon="pi pi-plus"
@@ -68,7 +68,7 @@
         class="ml-2"
         label="Make from title"
         (click)="makePublicIdFromTitle(selectedFile)"
-      ></button>
+      > </button>
     </div>
     <div class="col-12">
       <p-button
