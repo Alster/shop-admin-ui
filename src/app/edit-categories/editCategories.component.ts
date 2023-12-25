@@ -4,9 +4,9 @@ import { TreeNode } from "primeng/api";
 import { LanguageEnum } from "shop-shared/constants/localization";
 
 import { CategoriesNodeAdminDto } from "../../../shop-shared/dto/category/categoriesTree.dto";
+import { generatePublicId } from "../../../shop-shared/utils/generatePublicId";
 import { CategoryAdmin, mapNode } from "../helpers/categoriesTreHelpers";
 import { fetchAPI } from "../helpers/fetchAPI";
-import { generatePublicId } from "../helpers/generatePublicId";
 
 @Component({
 	selector: "app-edit-categories",

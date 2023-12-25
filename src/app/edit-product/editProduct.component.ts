@@ -14,6 +14,7 @@ import {
 } from "../../../shop-shared/dto/primitiveTypes";
 import { AttributeDto } from "../../../shop-shared/dto/product/attribute.dto";
 import { ProductAdminDto, ProductItemDto } from "../../../shop-shared/dto/product/product.dto";
+import { generatePublicId } from "../../../shop-shared/utils/generatePublicId";
 import getProductImageUrl from "../../../shop-shared/utils/getProductImageUrl";
 import {
 	Category,
@@ -22,18 +23,11 @@ import {
 	mapNode,
 } from "../helpers/categoriesTreHelpers";
 import { fetchAPI } from "../helpers/fetchAPI";
-import { generatePublicId } from "../helpers/generatePublicId";
 import { generateRandomString } from "../helpers/generateRandomString";
 
-interface MultiselectEntry extends AttributeDto {
+interface IMultiselectEntry extends AttributeDto {
 	name: string;
 	code: string;
-}
-
-interface ImageContainer {
-	id: string;
-	imageChangedEvent: any;
-	croppedImage: any;
 }
 
 @Component({
@@ -44,9 +38,9 @@ interface ImageContainer {
 export class EditProductComponent implements OnInit {
 	product?: ProductAdminDto;
 	availableAttributes: AttributeDto[] = [];
-	attributes: MultiselectEntry[] = [];
-	selectedAttributes: MultiselectEntry[] = [];
-	selectedCharacteristics: MultiselectEntry[] = [];
+	attributes: IMultiselectEntry[] = [];
+	selectedAttributes: IMultiselectEntry[] = [];
+	selectedCharacteristics: IMultiselectEntry[] = [];
 
 	attributeTypeEnum = ATTRIBUTE_TYPE;
 	currentLanguage: LanguageEnum = LanguageEnum.ua;
@@ -256,7 +250,7 @@ export class EditProductComponent implements OnInit {
 		}
 	}
 
-	getAttributesForItems(): MultiselectEntry[] {
+	getAttributesForItems(): IMultiselectEntry[] {
 		return this.attributes.filter((attribute) => {
 			return !this.selectedCharacteristics.some(
 				(attribute_) => attribute_.key === attribute.key,
@@ -264,7 +258,7 @@ export class EditProductComponent implements OnInit {
 		});
 	}
 
-	getAttributesForCharacteristics(): MultiselectEntry[] {
+	getAttributesForCharacteristics(): IMultiselectEntry[] {
 		return this.attributes.filter((attribute) => {
 			return !this.selectedAttributes.some((attribute_) => attribute_.key === attribute.key);
 		});
