@@ -15,6 +15,7 @@ import {
 import { AttributeDto } from "../../../shop-shared/dto/product/attribute.dto";
 import { ProductAdminDto, ProductItemDto } from "../../../shop-shared/dto/product/product.dto";
 import { generatePublicId } from "../../../shop-shared/utils/generatePublicId";
+import { generateRandomString } from "../../../shop-shared/utils/generateRandomString";
 import getProductImageUrl from "../../../shop-shared/utils/getProductImageUrl";
 import {
 	Category,
@@ -23,7 +24,6 @@ import {
 	mapNode,
 } from "../helpers/categoriesTreHelpers";
 import { fetchAPI } from "../helpers/fetchAPI";
-import { generateRandomString } from "../helpers/generateRandomString";
 
 interface IMultiselectEntry extends AttributeDto {
 	name: string;
