@@ -17,9 +17,9 @@
       <div class="order-row">
         Product: <a href="{{getHREFToProduct(item.productId)}}">{{item.productId}}</a>
       </div>
-      <div class="order-row">
-        Quantity: {{item.qty}}
-      </div>
+<!--      <div class="order-row">-->
+<!--        Quantity: {{item.qty}}-->
+<!--      </div>-->
       <div class="order-row" *ngFor="let attr of getAttributesAsArray(item.attributes)">
         {{attr}}
       </div>

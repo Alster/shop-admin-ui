@@ -2,6 +2,8 @@ import { Component, OnInit } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import { ConfirmationService, MessageService } from "primeng/api";
 
+import { SeverityEnum } from "@/src/app/constants/severity.enum";
+
 import { formatPrice } from "../../../shop-exchange-shared/formatPrice";
 import { NOVA_POSHTA_DELIVERY_TYPE } from "../../../shop-shared/constants/checkout";
 import { ORDER_STATUS, OrderStatus } from "../../../shop-shared/constants/order";
@@ -14,7 +16,7 @@ import { OrderAdminDto } from "../../../shop-shared/dto/order/order.dto";
 import { MoneyBig, moneySmallToBig } from "../../../shop-shared/dto/primitiveTypes";
 import { ProductAttributesDto } from "../../../shop-shared/dto/product/product.dto";
 import { STATUS_TO_SEVERITY_MAP } from "../constants/order";
-import { fetchAPI } from "../helpers/fetchAPI";
+import { fetchApi } from "../helpers/fetchApi";
 
 @Component({
 	selector: "app-order-view",
@@ -39,7 +41,7 @@ export class OrderViewComponent implements OnInit {
 		this.route.queryParams.subscribe(async (parameters) => {
 			const id = parameters["id"];
 			const fetchOrder = async () => {
-				const res = await fetchAPI(`order/get/${id}`, {
+				const res = await fetchApi(`order/get/${id}`, {
 					method: "GET",
 				});
 				const json: OrderAdminDto = await res.json();
@@ -64,7 +66,7 @@ export class OrderViewComponent implements OnInit {
 		return delivery.data as DeliveryNVCourierDto;
 	}
 
-	getSeverityForStatus(status: OrderStatus): string {
+	getSeverityForStatus(status: OrderStatus): SeverityEnum | undefined {
 		return STATUS_TO_SEVERITY_MAP[status];
 	}
 
@@ -80,7 +82,7 @@ export class OrderViewComponent implements OnInit {
 
 	async markOrderAsFinished() {
 		this.isLoading = true;
-		const res = await fetchAPI(`order/${this.order?.id}/mark_finished`, {
+		const res = await fetchApi(`order/${this.order?.id}/mark_finished`, {
 			method: "POST",
 		});
 		if (!res.ok) {

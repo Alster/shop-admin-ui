@@ -23,7 +23,7 @@ import {
 	fetchCategoryTree,
 	mapNode,
 } from "../helpers/categoriesTreHelpers";
-import { fetchAPI } from "../helpers/fetchAPI";
+import { fetchApi } from "../helpers/fetchApi";
 
 interface IMultiselectEntry extends AttributeDto {
 	name: string;
@@ -69,7 +69,7 @@ export class EditProductComponent implements OnInit {
 		this.route.queryParams.subscribe(async (parameters) => {
 			const id = parameters["id"];
 			const fetchProduct = async () => {
-				const response = await fetchAPI(`product/get/${id}`, {
+				const response = await fetchApi(`product/get/${id}`, {
 					method: "GET",
 				});
 				const json: ProductAdminDto = await response.json();
@@ -104,7 +104,7 @@ export class EditProductComponent implements OnInit {
 	}
 
 	async fetchAttributes(): Promise<void> {
-		const response = await fetchAPI(`product/attribute/list`, {
+		const response = await fetchApi(`product/attribute/list`, {
 			method: "GET",
 		});
 		const json: AttributeDto[] = await response.json();
@@ -120,7 +120,7 @@ export class EditProductComponent implements OnInit {
 
 	async updateProduct(): Promise<void> {
 		this.isLoading = true;
-		const response = await fetchAPI(`product/update/${this.product?.id}`, {
+		const response = await fetchApi(`product/update/${this.product?.id}`, {
 			method: "POST",
 			body: JSON.stringify(this.product),
 		});
@@ -153,7 +153,7 @@ export class EditProductComponent implements OnInit {
 				if (!this.product) {
 					return;
 				}
-				const response = await fetchAPI(`product/delete/${this.product.id}`, {
+				const response = await fetchApi(`product/delete/${this.product.id}`, {
 					method: "POST",
 				});
 				if (!response.ok) {
@@ -176,6 +176,7 @@ export class EditProductComponent implements OnInit {
 			attributes: Object.fromEntries(
 				this.selectedAttributes.map((attribute) => [attribute.code, []]),
 			),
+			images: [],
 		});
 	}
 
@@ -331,27 +332,27 @@ export class EditProductComponent implements OnInit {
 		return colors;
 	}
 
-	deleteImage(color: string, image: string): void {
-		if (!this.product) {
-			return;
-		}
+	// deleteImage(color: string, image: string): void {
+	// 	if (!this.product) {
+	// 		return;
+	// 	}
+	//
+	// 	this.product.imagesByColor[color] = this.product.imagesByColor[color].filter(
+	// 		(img) => img !== image,
+	// 	);
+	// }
 
-		this.product.imagesByColor[color] = this.product.imagesByColor[color].filter(
-			(img) => img !== image,
-		);
-	}
+	imageChangedEvent: Record<string, Event | null> = {};
+	croppedImage: Record<string, unknown> = {};
+	croppedBlob: Record<string, Blob> = {};
 
-	imageChangedEvent: Record<string, any> = {};
-	croppedImage: Record<string, any> = {};
-	croppedBlob: Record<string, any> = {};
-
-	fileChangeEvent(color: string, event: any): void {
+	fileChangeEvent(color: string, event: Event): void {
 		console.log("fileChangeEvent", color, event);
 		this.imageChangedEvent[color] = event;
 	}
 	imageCropped(color: string, event: ImageCroppedEvent) {
 		console.log("imageCropped", color, event);
-		this.croppedBlob[color] = event.blob;
+		this.croppedBlob[color] = event.blob as Blob;
 		// this.croppedImage = this.sanitizer.bypassSecurityTrustUrl(event.objectUrl);
 		// event.blob can be used to upload the cropped image
 	}
@@ -381,10 +382,10 @@ export class EditProductComponent implements OnInit {
 
 		console.log("uploadImage", res);
 
-		if (!this.product.imagesByColor[color]) {
-			this.product.imagesByColor[color] = [];
-		}
-		this.product.imagesByColor[color].push(res);
+		// if (!this.product.imagesByColor[color]) {
+		// 	this.product.imagesByColor[color] = [];
+		// }
+		// this.product.imagesByColor[color].push(res);
 	}
 
 	async upload(formData: FormData): Promise<string> {
@@ -395,7 +396,8 @@ export class EditProductComponent implements OnInit {
 		// 		body: formData,
 		// 	},
 		// );
-		const response = await fetchAPI(`product/upload-product-image`, {
+
+		const response = await fetchApi(`product/upload-product-image`, {
 			method: "POST",
 			body: formData,
 			headers: {

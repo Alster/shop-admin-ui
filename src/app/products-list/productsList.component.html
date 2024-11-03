@@ -52,8 +52,8 @@
     [lazy]="true"
     (onLazyLoad)="lazyLoadProducts($event)"
     [scrollable]="true"
-    [responsive]="true"
     [resizableColumns]="true"
+    [responsive]="true"
     styleClass="p-datatable-striped p-datatable-sm"
     (onSort)="onSort()"
     [rowHover]="true"
@@ -82,9 +82,9 @@
     </ng-template>
     <ng-template pTemplate="header">
       <tr>
-        <th pSortableColumn="title">Title <p-sortIcon field="title"></p-sortIcon></th>
         <th pSortableColumn="active">Active <p-sortIcon field="active"></p-sortIcon></th>
         <th>Category</th>
+        <th pSortableColumn="title">Title <p-sortIcon field="title"></p-sortIcon></th>
         <th pSortableColumn="price">Price <p-sortIcon field="price"></p-sortIcon></th>
         <th pSortableColumn="discount">Discount <p-sortIcon field="discount"></p-sortIcon></th>
         <th pSortableColumn="quantity">Quantity <p-sortIcon field="quantity"></p-sortIcon></th>
@@ -94,13 +94,13 @@
     </ng-template>
     <ng-template pTemplate="body" let-product>
       <tr>
-        <td>{{product.title['ua']}}</td>
         <td><p-tag [value]="getTitleForActive(product.active)" [severity]="getSeverityForActive(product.active)"></p-tag></td>
         <td>
           <p-tag *ngFor="let categoryId of product.categories" class="mr-1">
             {{categories.get(categoryId)?.title}}
           </p-tag>
         </td>
+        <td>{{product?.title['ua']}}</td>
         <td>{{formatPrice(moneySmallToBig(product.price), product.currency)}}</td>
         <td>{{product.discount}}%</td>
         <td>{{product.quantity}}</td>

@@ -3,10 +3,12 @@ import ObjectId from "bson-objectid";
 import { TreeNode } from "primeng/api";
 import { LanguageEnum } from "shop-shared/constants/localization";
 
+import { TranslatedText } from "@/shop-shared/dto/translatedText";
+
 import { CategoriesNodeAdminDto } from "../../../shop-shared/dto/category/categoriesTree.dto";
 import { generatePublicId } from "../../../shop-shared/utils/generatePublicId";
 import { CategoryAdmin, mapNode } from "../helpers/categoriesTreHelpers";
-import { fetchAPI } from "../helpers/fetchAPI";
+import { fetchApi } from "../helpers/fetchApi";
 
 @Component({
 	selector: "app-edit-categories",
@@ -33,7 +35,7 @@ export class EditCategoriesComponent {
 	}
 
 	async fetchTree(): Promise<void> {
-		const response = await fetchAPI(`category/tree`, {
+		const response = await fetchApi(`category/tree`, {
 			method: "GET",
 		});
 		const json: CategoriesNodeAdminDto[] = await response.json();
@@ -48,7 +50,7 @@ export class EditCategoriesComponent {
 
 	async save(): Promise<void> {
 		this.isLoading = true;
-		await fetchAPI(`category/tree`, {
+		await fetchApi(`category/tree`, {
 			method: "POST",
 			body: JSON.stringify(this.tree),
 		});
@@ -74,57 +76,23 @@ export class EditCategoriesComponent {
 	}
 
 	deleteNode(node: TreeNode): void {
-		const childrens = node.parent ? node.parent.children || [] : this.files;
-		const index = childrens.indexOf(node);
-		childrens.splice(index, 1);
+		const children = node.parent ? node.parent.children || [] : this.files;
+		const index = children.indexOf(node);
+		children.splice(index, 1);
 		this.mapFiles(this.files);
 	}
 
 	addChild(node: TreeNode): void {
-		const title = {
-			en: "New category",
-			ua: "Нова категорія",
-			ru: "Новая категория",
-		};
-		const childrens = node.children || [];
-		const newNode = {
-			label: title[this.currentLanguage],
-			data: {
-				title,
-				id: new ObjectId().toString(),
-				publicId: "",
-				description: {},
-				children: [],
-				sort: 0,
-				active: true,
-			},
-			children: [],
-		};
+		const children = node.children || [];
+		const newNode = createNewNode(this.currentLanguage);
 		this.selectedFile = newNode;
-		childrens.push(newNode);
+		children.push(newNode);
 		node.expanded = true;
 		this.mapFiles(this.files);
 	}
 
 	addRoot(): void {
-		const title = {
-			en: "New category",
-			ua: "Нова категорія",
-			ru: "Новая категория",
-		};
-		const newNode = {
-			label: title[this.currentLanguage],
-			data: {
-				title,
-				id: new ObjectId().toString(),
-				publicId: "",
-				description: {},
-				children: [],
-				sort: 0,
-				active: true,
-			},
-			children: [],
-		};
+		const newNode = createNewNode(this.currentLanguage);
 		this.selectedFile = newNode;
 		this.files.push(newNode);
 		this.mapFiles(this.files);
@@ -148,12 +116,12 @@ export class EditCategoriesComponent {
 	}
 
 	moveNodeUp(node: TreeNode): void {
-		const childrens = node.parent ? node.parent.children || [] : this.files;
-		const index = childrens.indexOf(node);
+		const children = node.parent ? node.parent.children || [] : this.files;
+		const index = children.indexOf(node);
 		if (index > 0) {
-			const previousNode = childrens[index - 1];
-			childrens[index - 1] = node;
-			childrens[index] = previousNode;
+			const previousNode = children[index - 1];
+			children[index - 1] = node;
+			children[index] = previousNode;
 		}
 		this.mapFiles(this.files);
 	}
@@ -178,4 +146,32 @@ export class EditCategoriesComponent {
 		const publicId = generatePublicId(category.title[LanguageEnum.en]);
 		category.publicId = publicId;
 	}
+}
+
+function createNewNode(currentLanguage: LanguageEnum): TreeNode<CategoryAdmin> {
+	const title: TranslatedText = {
+		[LanguageEnum.en]: "New category",
+		[LanguageEnum.ua]: "Нова категорія",
+		[LanguageEnum.ru]: "Новая категория",
+	};
+
+	const description: TranslatedText = {
+		[LanguageEnum.en]: "",
+		[LanguageEnum.ua]: "",
+		[LanguageEnum.ru]: "",
+	};
+
+	return {
+		label: title[currentLanguage],
+		data: {
+			title,
+			id: new ObjectId().toString(),
+			publicId: "",
+			description,
+			children: [],
+			sort: 0,
+			active: true,
+		},
+		children: [],
+	};
 }

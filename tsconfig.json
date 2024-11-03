@@ -2,27 +2,57 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
+    "alwaysStrict": true,
     "baseUrl": "./",
-    "outDir": "./dist/out-tsc",
-    "forceConsistentCasingInFileNames": true,
-    "strict": true,
-    "noImplicitOverride": true,
-    "noPropertyAccessFromIndexSignature": true,
-    "noImplicitReturns": true,
-    "noFallthroughCasesInSwitch": true,
-    "sourceMap": true,
     "declaration": false,
     "downlevelIteration": true,
+    "esModuleInterop": true,
+    "exactOptionalPropertyTypes": true,
     "experimentalDecorators": true,
-    "moduleResolution": "node",
+    "forceConsistentCasingInFileNames": true,
     "importHelpers": true,
-    "target": "ES2022",
-    "module": "ES2022",
-    "useDefineForClassFields": false,
     "lib": [
-      "ES2022",
+      "ESNext",
       "dom"
-    ]
+    ],
+    "module": "ES2022",
+    "moduleResolution": "node",
+    "noFallthroughCasesInSwitch": true,
+    "noImplicitAny": true,
+    "noImplicitOverride": true,
+    "noImplicitReturns": true,
+    "noImplicitThis": true,
+    "noPropertyAccessFromIndexSignature": true,
+    "paths": {
+      "@/shop-exchange-shared/*": [
+        "./shop-exchange-shared/*"
+      ],
+      "@/shop-shared/*": [
+        "./shop-shared/*"
+      ],
+      "@/shop-shared-server/*": [
+        "./shop-shared-server/*"
+      ],
+      "@/src/*": [
+        "./src/*"
+      ]
+    },
+    "pretty": true,
+    "resolveJsonModule": true,
+    "skipLibCheck": true,
+    "sourceMap": true,
+    "strict": true,
+    "strictBindCallApply": true,
+    "strictFunctionTypes": true,
+    "strictNullChecks": true,
+    "strictPropertyInitialization": true,
+    "target": "ES2022",
+    "types": [
+      "node",
+      "jest"
+    ],
+    "useDefineForClassFields": false,
+    "useUnknownInCatchVariables": true
   },
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,
@@ -30,13 +60,8 @@
     "strictInputAccessModifiers": true,
     "strictTemplates": true
   },
-  "include": [
-    ".eslintrc.js",
-    "**/*/.eslintrc.*.js",
-    "src/**/*",
-    "shop-shared/**/*",
-    "shop-exchange-shared/**/*",
-    "package.json",
-    "src/**/package.json"
+  "exclude": [
+    "**/node_modules/**",
+    "**/dist/**",
   ],
 }

@@ -10,9 +10,9 @@ import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
 import { CheckboxModule } from 'primeng/checkbox';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { DividerModule } from 'primeng/divider';
 import { DragDropModule } from 'primeng/dragdrop';
 import { DropdownModule } from 'primeng/dropdown';
-import { FileUploadModule } from 'primeng/fileupload';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { InputSwitchModule } from 'primeng/inputswitch';
 import { InputTextModule } from 'primeng/inputtext';
@@ -26,7 +26,7 @@ import { ToastModule } from 'primeng/toast';
 import { TreeModule } from 'primeng/tree';
 
 import { AppComponent } from './app.component';
-import { AppRoutingModule } from './app-routing.module';
+import { AppRoutingModule } from './appRouting.module';
 import { CreateProductComponent } from './create-product/createProduct.component';
 import { EditCategoriesComponent } from './edit-categories/editCategories.component';
 import { EditProductComponent } from './edit-product/editProduct.component';
@@ -37,6 +37,7 @@ import { ProductsListComponent } from './products-list/productsList.component';
 import { SideMenuComponent } from './side-menu/sideMenu.component';
 
 @NgModule({
+	bootstrap: [AppComponent],
 	declarations: [
 		AppComponent,
 		SideMenuComponent,
@@ -73,8 +74,8 @@ import { SideMenuComponent } from './side-menu/sideMenu.component';
 		AccordionModule,
 		NgOptimizedImage,
 		ImageCropperModule,
+		DividerModule,
 	],
 	providers: [ConfirmationService, MessageService],
-	bootstrap: [AppComponent],
 })
 export class AppModule {}

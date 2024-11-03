@@ -7,50 +7,64 @@
         [(ngModel)]="product!.active"
       ></p-inputSwitch>
     </div>
-    <div class="col-3">
-      <label class="block font-bold mb-2" for="name">Name</label>
-      <input
-        id="name"
-        type="text"
-        pInputText [(ngModel)]="product!.title[currentLanguage]"
-      />
-    </div>
-    <div class="col-2">
-      <label class="block font-bold mb-2">Languages</label>
-      <span class="p-buttonset">
-        <button
-          pButton
-          *ngFor="let lang of languages"
-          label="{{lang.toUpperCase()}}"
-          [class.p-button-secondary]="!product.title[lang]"
-          [class.p-button-success]="lang == currentLanguage"
-          (click)="changeLanguage(lang)"
-        ></button>
+    <div class="9">
+      <span class="p-buttonset mr-5">
+        <span class="mr-2">
+          <label class="block font-bold mb-2" for="name">Name</label>
+          <input
+            id="name"
+            type="text"
+            pInputText [(ngModel)]="product!.title[currentLanguage]"
+          />
+
+          <button
+            pButton
+            *ngFor="let lang of languages"
+            label="{{lang.toUpperCase()}}"
+            [class.p-button-secondary]="!product.title[lang]"
+            [class.p-button-success]="lang == currentLanguage"
+            (click)="changeLanguage(lang)"
+          ></button>
+        </span>
       </span>
     </div>
-  </div>
-  <div>
-    <label class="block font-bold mt-2" for="name">Public id</label>
-    <div class="grid">
-      <div class="col-5">
-        <input
-          id="publicId"
-          type="text"
-          pInputText [(ngModel)]="product!.publicId"
-        />
-        <button
-          pButton
-          class="ml-2"
-          label="Make from title"
-          (click)="makePublicIdFromTitle()"
-        ></button>
-      </div>
-      <div class="col-6">
-        Це публичній идентіфикатор продукта, використовується в ссилках.
-        Це означає, що змінювати це значення не рекомендується, бо інакше ссилки з старим ім'ям працювати не будуть.
-      </div>
+
+    <div class="col-2">
+      <div class="ml-2"
+           *ngFor="let lang of languages"
+      ><b>{{lang.toUpperCase()}}</b>: {{product.title[lang]}}</div>
     </div>
+
+    <p-divider class="col-12"></p-divider>
+
+    <div class="12">
+      <label class="block font-bold mt-2" for="name">Public id</label>
+      <input
+        id="publicId"
+        type="text"
+        pInputText [(ngModel)]="product!.publicId"
+      />
+
+      <button
+        pButton
+        class="ml-2"
+        label="Make PublicID from title"
+        (click)="makePublicIdFromTitle()"
+      ></button>
+    </div>
+    <div class="col-12">
+      <blockquote>
+        <p>
+          Це публичній идентіфикатор продукта, використовується в ссилках.
+          Це означає, що змінювати це значення не рекомендується, бо інакше ссилки з старим ім'ям працювати не будуть.
+        </p>
+      </blockquote>
+    </div>
+
   </div>
+
+  <p-divider></p-divider>
+
   <div class="grid">
     <div class="col-3">
       <label class="block font-bold mb-2" for="price">Price</label>
@@ -213,20 +227,21 @@
   <div *ngFor="let color of getUsedColors()">
     <h3>{{color}}</h3>
     <div class="grid" *ngIf="product">
-      <div class="col-3" *ngFor="let image of product.imagesByColor[color]">
-        <p-card *ngIf="image">
-          <img [src]="getImageUrl(color, image)" width="128" height="128" />
-          <p-button
-            type="button"
-            label="Delete"
-            icon="pi pi-trash"
-            styleClass="p-button-danger"
-            [disabled]="isLoading"
-            [loading]="isLoading"
-            (click)="deleteImage(color, image)"
-          ></p-button>
-        </p-card>
-      </div>
+      <div><b>IMAGES WILL BE HERE</b></div>
+<!--      <div class="col-3" *ngFor="let image of product.imagesByColor[color]">-->
+<!--        <p-card *ngIf="image">-->
+<!--          <img [src]="getImageUrl(color, image)" width="128" height="128" />-->
+<!--          <p-button-->
+<!--            type="button"-->
+<!--            label="Delete"-->
+<!--            icon="pi pi-trash"-->
+<!--            styleClass="p-button-danger"-->
+<!--            [disabled]="isLoading"-->
+<!--            [loading]="isLoading"-->
+<!--            (click)="deleteImage(color, image)"-->
+<!--          ></p-button>-->
+<!--        </p-card>-->
+<!--      </div>-->
     </div>
     <div class="grid">
       <div class="col-3">

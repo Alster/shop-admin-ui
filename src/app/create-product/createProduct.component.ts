@@ -1,15 +1,15 @@
-import { Component } from '@angular/core';
-import { NavigationExtras, Router } from '@angular/router';
+import { Component } from "@angular/core";
+import { NavigationExtras, Router } from "@angular/router";
 
-import { fetchAPI } from '../helpers/fetchAPI';
+import { fetchApi } from "../helpers/fetchApi";
 
 @Component({
-	selector: 'app-create-product',
-	templateUrl: './createProduct.component.html',
-	styleUrls: ['./createProduct.component.scss'],
+	selector: "app-create-product",
+	templateUrl: "./createProduct.component.html",
+	styleUrls: ["./createProduct.component.scss"],
 })
 export class CreateProductComponent {
-	name = '';
+	name = "";
 	price = 0;
 
 	isLoading = false;
@@ -18,15 +18,15 @@ export class CreateProductComponent {
 
 	async createProduct() {
 		this.isLoading = true;
-		const response = await fetchAPI('product/create', {
-			method: 'POST',
+		const response = await fetchApi("product/create", {
+			method: "POST",
 			body: JSON.stringify({
 				name: this.name,
 				price: this.price,
 			}),
 		});
 		if (!response.ok) {
-			console.error('Error creating product');
+			console.error("Error creating product");
 			this.isLoading = false;
 			return;
 		}
@@ -36,6 +36,6 @@ export class CreateProductComponent {
 			queryParams: { id: json.id },
 		};
 
-		await this.router.navigate(['/edit-product'], navigationExtras);
+		await this.router.navigate(["/edit-product"], navigationExtras);
 	}
 }

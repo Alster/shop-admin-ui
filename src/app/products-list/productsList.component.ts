@@ -5,6 +5,8 @@ import * as qs from "qs";
 import { ATTRIBUTE_TYPE } from "shop-shared/constants/product";
 import { ProductAdminDto } from "shop-shared/dto/product/product.dto";
 
+import { SeverityEnum } from "@/src/app/constants/severity.enum";
+
 import { formatPrice } from "../../../shop-exchange-shared/formatPrice";
 import { LanguageEnum } from "../../../shop-shared/constants/localization";
 import { CategoriesNodeAdminDto } from "../../../shop-shared/dto/category/categoriesTree.dto";
@@ -13,7 +15,7 @@ import { moneySmallToBig } from "../../../shop-shared/dto/primitiveTypes";
 import { AttributeDto } from "../../../shop-shared/dto/product/attribute.dto";
 import { ProductListAdminResponseDto } from "../../../shop-shared/dto/product/productList.admin.response.dto";
 import { CategoryAdmin, fetchCategoryTree, mapNode } from "../helpers/categoriesTreHelpers";
-import { fetchAPI } from "../helpers/fetchAPI";
+import { fetchApi } from "../helpers/fetchApi";
 
 interface IAttributeFilter {
 	key: string;
@@ -64,15 +66,17 @@ export class ProductsListComponent implements OnInit {
 			await this.fetchProducts();
 		});
 
+		console.log(`Fetch all start`);
 		await Promise.all([
 			this.fetchCategories(),
 			this.fetchAttributes(),
 			this.fetchCategoryTree(),
 		]);
+		console.log(`Fetch all end`);
 	}
 
-	getSeverityForActive(active: boolean): string {
-		return active ? "success" : "warning";
+	getSeverityForActive(active: boolean): SeverityEnum | undefined {
+		return active ? SeverityEnum.success : SeverityEnum.warning;
 	}
 
 	getTitleForActive(active: boolean): string {
@@ -80,11 +84,12 @@ export class ProductsListComponent implements OnInit {
 	}
 
 	async updateQuery(): Promise<void> {
+		console.log("Update query and navigate?");
 		if (this.listIsNotLoaded) {
 			return;
 		}
 
-		console.log("Update query and navigate");
+		console.log("Update query and navigate!");
 
 		this.isLoading = true;
 
@@ -133,17 +138,18 @@ export class ProductsListComponent implements OnInit {
 	}
 
 	async fetchProducts(): Promise<void> {
+		console.log(`Fetch products?`);
 		if (!this.isRouteParamsLoaded) {
 			return;
 		}
-		console.log("Fetch products");
+		console.log("Fetch products!");
 		const parameters = this.route.snapshot.queryParams;
 		const attributeFilters: IAttributeFilter[] = JSON.parse(parameters["attrs"] ?? "[]");
 		const categoryFilters: string[] = JSON.parse(parameters["cat"] ?? "[]");
 		const sortField: string = parameters["sortField"] ?? "";
 		const sortOrder: number = +(parameters["sortOrder"] ?? "");
 		const first: number = +(parameters["first"] ?? "");
-		const rows: number = +(parameters["rows"] ?? "5");
+		const rows: number = +(parameters["rows"] ?? "10");
 		const searchTitleQuery: string = parameters["search"] ?? "";
 		console.log("Query params after: attrs:", attributeFilters);
 		console.log("Query params after: cat:", categoryFilters);
@@ -153,7 +159,7 @@ export class ProductsListComponent implements OnInit {
 		console.log("Query params after: rows:", rows);
 		console.log("Query params after: search:", searchTitleQuery);
 
-		const response = await fetchAPI(
+		const response = await fetchApi(
 			"product/list",
 			{
 				method: "GET",
@@ -178,7 +184,7 @@ export class ProductsListComponent implements OnInit {
 			return;
 		}
 		const json: ProductListAdminResponseDto = await response.json();
-		// console.log("Products list:", json);
+		console.log("Products list:", json);
 
 		this.products = json.products;
 		this.filters = Object.entries(json.filters).map(([key, values]) => ({
@@ -196,6 +202,8 @@ export class ProductsListComponent implements OnInit {
 		this.first = first;
 		this.rows = rows;
 		this.searchTitleQuery = searchTitleQuery;
+
+		console.log(`Available categories: ${this.availableCategories}`);
 
 		// Prepare category tree
 		const isVisible = (id: string): boolean => {
@@ -215,11 +223,13 @@ export class ProductsListComponent implements OnInit {
 			}
 			this.treeNodes.push(mapNode(node, LanguageEnum.ua, isVisible));
 		}
+
+		console.log(`Tree nodes: ${this.treeNodes}`);
 	}
 
 	async fetchCategoryTree(): Promise<void> {
 		const json: CategoriesNodeAdminDto[] = await fetchCategoryTree();
-		// console.log("Category tree:", json);
+		console.log("Category tree:", json);
 		this.categoryTree = json;
 	}
 
@@ -259,11 +269,11 @@ export class ProductsListComponent implements OnInit {
 	}
 
 	async fetchCategories() {
-		const response = await fetchAPI("category/list", {
+		const response = await fetchApi("category/list", {
 			method: "GET",
 		});
 		const json: CategoryDto[] = await response.json();
-		// console.log("Categories:", json);
+		console.log("Categories:", json);
 		this.categories = new Map<string, CategoryDto>();
 		for (const category of json) {
 			this.categories.set(category.id, category);
@@ -271,11 +281,11 @@ export class ProductsListComponent implements OnInit {
 	}
 
 	async fetchAttributes(): Promise<void> {
-		const response = await fetchAPI(`product/attribute/list`, {
+		const response = await fetchApi(`product/attribute/list`, {
 			method: "GET",
 		});
 		const json: AttributeDto[] = await response.json();
-		// console.log("Attributes:", json);
+		console.log("Attributes:", json);
 		this.attributes = new Map<string, AttributeDto>();
 		for (const attribute of json) {
 			this.attributes.set(attribute.key, attribute);
@@ -283,7 +293,7 @@ export class ProductsListComponent implements OnInit {
 	}
 
 	async cloneProduct(id: string): Promise<void> {
-		const response = await fetchAPI(`product/clone/${id}`, {
+		const response = await fetchApi(`product/clone/${id}`, {
 			method: "POST",
 		});
 		if (!response.ok) {
@@ -308,9 +318,10 @@ export class ProductsListComponent implements OnInit {
 			header: "Delete Confirmation",
 			icon: "pi pi-info-circle",
 			accept: async () => {
-				const response = await fetchAPI(`product/delete/${id}`, {
+				const response = await fetchApi(`product/delete/${id}`, {
 					method: "POST",
 				});
+
 				if (!response.ok) {
 					this.messageService.add({
 						severity: "error",

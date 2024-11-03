@@ -3,12 +3,14 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { MessageService } from "primeng/api";
 import * as qs from "qs";
 
+import { SeverityEnum } from "@/src/app/constants/severity.enum";
+
 import { ORDER_STATUS, OrderStatus } from "../../../shop-shared/constants/order";
 import { ATTRIBUTE_TYPE } from "../../../shop-shared/constants/product";
 import { OrderAdminDto } from "../../../shop-shared/dto/order/order.dto";
 import { OrderListAdminResponseDto } from "../../../shop-shared/dto/product/orderList.admin.response.dto";
 import { STATUS_TO_SEVERITY_MAP } from "../constants/order";
-import { fetchAPI } from "../helpers/fetchAPI";
+import { fetchApi } from "../helpers/fetchApi";
 
 @Component({
 	selector: "app-orders-list",
@@ -112,7 +114,7 @@ export class OrdersListComponent implements OnInit {
 		const sortField: string = parameters["sortField"] ?? "";
 		const sortOrder: number = +(parameters["sortOrder"] ?? "");
 		const first: number = +(parameters["first"] ?? "");
-		const rows: number = +(parameters["rows"] ?? "5");
+		const rows: number = +(parameters["rows"] ?? "10");
 		const searchTitleQuery: string = parameters["search"] ?? "";
 		const status: string = parameters["status"] ?? "";
 		console.log("Query params after: sortField:", sortField);
@@ -122,7 +124,7 @@ export class OrdersListComponent implements OnInit {
 		console.log("Query params after: search:", searchTitleQuery);
 		console.log("Query params after: status:", status);
 
-		const response = await fetchAPI(
+		const response = await fetchApi(
 			"order/list",
 			{
 				method: "GET",
@@ -159,7 +161,7 @@ export class OrdersListComponent implements OnInit {
 		this.selectedStatus = status;
 	}
 
-	getSeverityForStatus(status: OrderStatus): string {
+	getSeverityForStatus(status: OrderStatus): SeverityEnum | undefined {
 		return STATUS_TO_SEVERITY_MAP[status];
 	}
 

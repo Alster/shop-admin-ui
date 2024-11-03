@@ -5,7 +5,7 @@ import {
 	CategoriesNodeAdminDto,
 	CategoriesNodeDto,
 } from "../../../shop-shared/dto/category/categoriesTree.dto";
-import { fetchAPI } from "./fetchAPI";
+import { fetchApi } from "./fetchApi";
 
 export type Category = CategoriesNodeDto;
 export type CategoryAdmin = CategoriesNodeAdminDto;
@@ -33,7 +33,7 @@ export const mapNode = (
 };
 
 export const fetchCategoryTree = async (): Promise<CategoriesNodeAdminDto[]> => {
-	const response = await fetchAPI(`category/tree`, {
+	const response = await fetchApi(`category/tree`, {
 		method: "GET",
 	});
 	return await response.json();
