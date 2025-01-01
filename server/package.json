@@ -1,0 +1,10 @@
+{
+  "name": "shop-admin-ui-server",
+  "version": "0.0.0",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "4.21.2"
+  }
+}

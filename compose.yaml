@@ -1,0 +1,16 @@
+version: "3"
+
+services:
+  shop-admin-ui:
+    hostname: unicorn-shop-admin-ui
+    image: unicorn-shop-admin-ui
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: always
+    env_file:
+      - ./.env
+    environment:
+      - NODE_ENV=production
+    ports:
+      - "4200:4200"
